@@ -1,16 +1,17 @@
 // src/components/Navbar.js
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link,useNavigate } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
 import Toolbar from '@mui/material/Toolbar';
 import HomeIcon from '@mui/icons-material/Home';
 import {Logout} from '../components/Logout'
+import AddHotelPage from '../pages/AddHotelPage';
 const Navbar = () => {
   const token = localStorage.getItem('token');
   const navigate = useNavigate()
-
+  const isSeller = localStorage.getItem('role') === 'seller';
   return (
     <div className="bg-green-800 text-white"  position="static">
       <Toolbar>
@@ -28,6 +29,8 @@ const Navbar = () => {
                     {!token && <li className='hover:text-zinc-300'
                         onClick={() => navigate("/login")}
                     >Login</li>}
+        {isSeller && <AddHotelPage/>
+        }
         {token && <Logout/>}
         </ul>
        

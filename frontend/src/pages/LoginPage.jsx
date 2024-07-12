@@ -16,6 +16,7 @@ const LoginPage = () => {
     try {
       const { data } = await login(formData);
       localStorage.setItem('token', data.token);
+      localStorage.setItem('role', data.user.role);
       navigate('/'); 
     } catch (error) {
       console.error('Login failed:', error);
