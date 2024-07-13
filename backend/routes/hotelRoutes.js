@@ -1,48 +1,79 @@
-// backend/routes/hotelRoutes.js
 const express = require('express');
-const router = express.Router();
+const multer = require('multer');
+const { check, validationResult } = require('express-validator');
 const Hotel = require('../models/Hotel');
 const auth = require('../middleware/auth');
 
-// Add a hotel
-router.post('/', auth, async (req, res) => {
-  const { name, location, description, price } = req.body;
+const router = express.Router();
 
-  try {
-    const hotel = new Hotel({
-      name,
-      location,
-      description,
-      price,
-      seller: req.user.id,
-    });
-
-    await hotel.save();
-    res.json(hotel);
-  } catch (error) {
-    res.status(500).send('Server error');
+// Set up multer for file uploads
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/');
+  },
+  filename: function (req, file, cb) {
+    cb(null, `${Date.now()}-${file.originalname}`);
   }
 });
 
-// Get all hotels
+const upload = multer({ storage: storage });
+
+// Route to add a hotel
+router.post(
+  '/',
+  [
+    auth,
+    upload.array('images', 5),
+    check('name', 'Name is required').not().isEmpty(),
+    check('price', 'Price is required').isNumeric(),
+    check('location', 'Location is required').not().isEmpty(),
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { name, price, location, roomsAvailable } = req.body;
+    const images = req.files.map((file) => file.path);
+
+    try {
+      const newHotel = new Hotel({
+        name,
+        price,
+        location,
+        roomsAvailable,
+        images,
+        user: req.user.id,
+      });
+
+      const hotel = await newHotel.save();
+      res.json(hotel);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server Error');
+    }
+  }
+);
+
+// Route to get all hotels
 router.get('/', async (req, res) => {
   try {
     const hotels = await Hotel.find();
-    res.json(hotels);
+    res.send(hotels);
   } catch (error) {
-    res.status(500).send('Server error');
+    res.status(500).send(error);
   }
 });
 
-// Get hotel by ID
-router.get('/:id', async (req, res) => {
+// Route to search hotels by location
+router.get('/search', async (req, res) => {
   try {
-    const hotel = await Hotel.findById(req.params.id);
-    if (!hotel) return res.status(404).send('Hotel not found');
-
-    res.json(hotel);
+    const { location } = req.query;
+    const hotels = await Hotel.find({ location: new RegExp(location, 'i') });
+    res.send(hotels);
   } catch (error) {
-    res.status(500).send('Server error');
+    res.status(500).send(error);
   }
 });
 

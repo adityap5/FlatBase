@@ -3,7 +3,7 @@ const express = require('express');
 const connectDB = require('./config/db');
 const cors = require('cors');
 const dotenv = require('dotenv');
-
+const hotelRouter = require('./routes/hotelRoutes');
 dotenv.config();
 
 const app = express();
@@ -17,7 +17,7 @@ app.use(express.json());
 
 // Routes
 app.use('/api/auth', require('./routes/authRoutes'));
-app.use('/api/hotels', require('./routes/hotelRoutes'));
+app.use('/api/hotels', hotelRouter);
 app.use('/api/bookings', require('./routes/bookingRoutes,'));
 
 const PORT = process.env.PORT || 5000;
