@@ -8,11 +8,11 @@ const AddHotelPage = () => {
   const [price, setPrice] = useState('');
   const [location, setLocation] = useState('');
   const [roomsAvailable, setRoomsAvailable] = useState('');
-  const [images, setImages] = useState([]);
+  const [image, setImage] = useState(null);
   const navigate = useNavigate();
 
   const handleFileChange = (e) => {
-    setImages(e.target.files);
+    setImage(e.target.files[0]);
   };
 
   const handleSubmit = async (e) => {
@@ -23,10 +23,7 @@ const AddHotelPage = () => {
     formData.append('price', price);
     formData.append('location', location);
     formData.append('roomsAvailable', roomsAvailable);
-
-    for (let i = 0; i < images.length; i++) {
-      formData.append('images', images[i]);
-    }
+    formData.append('image', image);
 
     try {
       await axios.post('http://localhost:5000/api/hotels', formData, {
@@ -91,13 +88,12 @@ const AddHotelPage = () => {
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="images" className="block text-gray-700">Images</label>
+          <label htmlFor="image" className="block text-gray-700">Image</label>
           <input
             type="file"
-            id="images"
+            id="image"
             onChange={handleFileChange}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
-            multiple
             required
           />
         </div>

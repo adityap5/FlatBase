@@ -11,7 +11,6 @@ import AddHotelPage from '../pages/AddHotelPage';
 const Navbar = () => {
   const token = localStorage.getItem('token');
   const navigate = useNavigate()
-  const isSeller = localStorage.getItem('role') === 'seller';
   return (
     <div className="bg-green-800 text-white"  position="static">
       <Toolbar>
@@ -29,8 +28,7 @@ const Navbar = () => {
                     {!token && <li className='hover:text-zinc-300'
                         onClick={() => navigate("/login")}
                     >Login</li>}
-        {isSeller && <AddHotelPage/>
-        }
+        
         {token && <Logout/>}
         </ul>
        
