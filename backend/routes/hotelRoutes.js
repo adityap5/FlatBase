@@ -50,6 +50,18 @@ router.get('/', async (req, res) => {
     }
 });
 
+router.get('/:id', async (req, res) => {
+    try {
+      const hotel = await Hotel.findById(req.params.id);
+  
+      if (!hotel) {
+        return res.status(404).json({ message: 'hotel not found' });
+      }
+      res.json(hotel);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  });
 // Route to search hotels by location
 router.get('/search', async (req, res) => {
     try {

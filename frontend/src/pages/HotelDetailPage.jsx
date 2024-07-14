@@ -27,10 +27,9 @@ const HotelDetailPage = () => {
   };
 
   const handleBooking = async () => {
-    // Use localStorage or another method to check authentication status
+   
     if (!localStorage.getItem('token')) {
-      // Redirect to login page if not authenticated
-      // Use navigate instead of useHistory in React Router v6
+   
       return navigate('/login');
     }
 
@@ -51,6 +50,7 @@ const HotelDetailPage = () => {
       {hotel && (
         <>
           <h1 className="text-3xl font-bold my-4">{hotel.name}</h1>
+          <img className="w-80" src={hotel.images} alt="Hotel" />
           <p>{hotel.description}</p>
           <p>Location: {hotel.location}</p>
           <p>Price: ₹{hotel.price}/night</p>
