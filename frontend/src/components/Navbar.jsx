@@ -8,14 +8,18 @@ import Toolbar from '@mui/material/Toolbar';
 import HomeIcon from '@mui/icons-material/Home';
 import {Logout} from '../components/Logout'
 import AddHotelPage from '../pages/AddHotelPage';
+import BookingPage from '../pages/BookingPage';
 const Navbar = () => {
   const token = localStorage.getItem('token');
   const navigate = useNavigate()
+  const handleHome =()=>{
+    navigate('/');
+  }
   return (
     <div className=" text-black px-10 py-4"  position="static">
       <Toolbar>
         <IconButton edge="start" color="inherit" aria-label="menu"  >
-          <HomeIcon />
+          <HomeIcon onClick={handleHome} />
         </IconButton>
         <Typography variant="h6" style={{ flexGrow: 1 }}>
           Hotel Booking
@@ -29,6 +33,7 @@ const Navbar = () => {
                         onClick={() => navigate("/login")}
                     >Login</li>}
         
+        {token && <p onClick={() => navigate("/bookings")} className='font-semibold hover:text-zinc-500'>My Bookings</p>}
         {token && <Logout/>}
         </ul>
        

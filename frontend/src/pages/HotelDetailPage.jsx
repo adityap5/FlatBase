@@ -1,10 +1,11 @@
 // src/pages/HotelDetailPage.js
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { getHotel, createBooking } from '../api';
 import Calendar from '../components/Calendar';
 
 const HotelDetailPage = () => {
+  const navigate = useNavigate()
   const { id } = useParams();
   const [hotel, setHotel] = useState(null);
   const [selectionRange, setSelectionRange] = useState({

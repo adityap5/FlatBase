@@ -9,6 +9,7 @@ import RegisterPage from './pages/RegisterPage';
 import LogoutPage from './pages/LogoutPage';
 import AddHotelPage from './pages/AddHotelPage';
 import SearchResultsPage from './pages/SearchResultsPage';
+import BookingPage from './pages/BookingPage';
 
 const App = () => {
   return (
@@ -22,6 +23,7 @@ const App = () => {
         <Route path="/add-hotel" element={<AddHotelPage />} />
         <Route path="/search" element={<SearchResultsPage/>} />
         <Route path="/logout" element={<LogoutPage />} />
+        <Route path="/bookings" element={<BookingPage />} />
       </Routes>
     </Router>
   );
