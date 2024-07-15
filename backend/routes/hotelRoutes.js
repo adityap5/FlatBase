@@ -11,7 +11,6 @@ const fs = require('fs');
 // Route to add a hotel
 
 router.post('/', auth, upload.single('image'), async (req, res) => {
-    console.log(req.user)
     const imageFileUrl = await cloudinary.uploader.upload(req.file.path)
    
     // delete file from upload
@@ -19,12 +18,13 @@ router.post('/', auth, upload.single('image'), async (req, res) => {
         if (err) throw err;
         else console.log("Deleted")
     })
-    const { name, price, location, roomsAvailable } = req.body;
+    const { name, price,description, location, roomsAvailable } = req.body;
     
     try {
         const newHotel = new Hotel({
             name,
             price,
+            description,
             location,
             roomsAvailable,
             images: imageFileUrl.secure_url,
@@ -66,6 +66,7 @@ router.get('/:id', async (req, res) => {
 router.get('/search', async (req, res) => {
     try {
         const { location } = req.query;
+        console.log(location)
         const hotels = await Hotel.find({ location: new RegExp(location, 'i') });
         res.send(hotels);
     } catch (error) {

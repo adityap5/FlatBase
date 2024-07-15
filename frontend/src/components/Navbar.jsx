@@ -12,9 +12,9 @@ const Navbar = () => {
   const token = localStorage.getItem('token');
   const navigate = useNavigate()
   return (
-    <div className="bg-green-800 text-white"  position="static">
+    <div className=" text-black px-10 py-4"  position="static">
       <Toolbar>
-        <IconButton edge="start" color="inherit" aria-label="menu">
+        <IconButton edge="start" color="inherit" aria-label="menu"  >
           <HomeIcon />
         </IconButton>
         <Typography variant="h6" style={{ flexGrow: 1 }}>

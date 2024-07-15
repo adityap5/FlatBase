@@ -16,6 +16,7 @@ const SearchResultsPage = () => {
   useEffect(() => {
     const fetchHotels = async () => {
       const response = await axios.get(`http://localhost:5000/api/hotels/search?location=${location}`);
+    
       setHotels(response.data);
     };
 

@@ -41,7 +41,6 @@ const HotelDetailPage = () => {
     };
 
     await createBooking(bookingData);
-    // Redirect to bookings page after successful booking
     return navigate('/bookings');
   };
 
@@ -49,15 +48,23 @@ const HotelDetailPage = () => {
     <div className="container mx-auto px-4">
       {hotel && (
         <>
+        <div className="flex justify-center items-center px-10">
+          <div className="space-y-4">
           <h1 className="text-3xl font-bold my-4">{hotel.name}</h1>
           <img className="w-80" src={hotel.images} alt="Hotel" />
-          <p>{hotel.description}</p>
+          <p className="tracking-tighter">{hotel.description}</p>
+          <div className="flex gap-10 font-semibold">
           <p>Location: {hotel.location}</p>
           <p>Price: ₹{hotel.price}/night</p>
+          </div>
+          
+          </div>
+          <div>
           <Calendar selectionRange={selectionRange} handleSelect={handleSelect} />
-          <button onClick={handleBooking} className="bg-blue-500 text-white py-2 px-4 rounded mt-4">
-            Book Now
-          </button>
+         <button onClick={handleBooking} className="bg-blue-500 text-white py-2 px-4 rounded mt-4"> Book Now</button>
+          </div>
+        </div>
+            
         </>
       )}
     </div>

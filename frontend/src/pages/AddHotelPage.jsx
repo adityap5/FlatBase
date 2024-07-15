@@ -8,6 +8,7 @@ const AddHotelPage = () => {
   const [price, setPrice] = useState('');
   const [location, setLocation] = useState('');
   const [roomsAvailable, setRoomsAvailable] = useState('');
+  const [description, setDescription] = useState('');
   const [image, setImage] = useState(null);
   const navigate = useNavigate();
 
@@ -22,6 +23,7 @@ const AddHotelPage = () => {
     formData.append('name', name);
     formData.append('price', price);
     formData.append('location', location);
+    formData.append('description', description);
     formData.append('roomsAvailable', roomsAvailable);
     formData.append('image', image);
 
@@ -50,6 +52,17 @@ const AddHotelPage = () => {
             id="name"
             value={name}
             onChange={(e) => setName(e.target.value)}
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="description" className="block text-gray-700">Hotel Description</label>
+          <input
+            type="text"
+            id="description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
             required
           />
