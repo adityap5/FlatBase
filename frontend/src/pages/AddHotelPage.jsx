@@ -80,14 +80,24 @@ const AddHotelPage = () => {
         </div>
         <div className="mb-4">
           <label htmlFor="location" className="block text-gray-700">Location</label>
-          <input
-            type="text"
-            id="location"
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
-            required
-          />
+          <select
+                  name="role"
+                  value={location}
+                  onChange={(e)=>setLocation(e.target.value)}
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
+                >
+                  <option value="chandigarh">Chandigarh</option>
+                  <option value="agra">Agra</option>
+                  <option value="jaipur">Jaipur</option>
+                  <option value="newDelhi">NewDelhi</option>
+                  <option value="banglore">Banglore</option>
+                  <option value="hyderabad">Hyderabad</option>
+                  <option value="haryana">Haryana</option>
+                  <option value="mathura">Mathura</option>
+                  <option value="varanasi">Varanasi</option>
+                  <option value="shimla">Shimla</option>
+                  <option value="noida">Noida</option>
+                </select>
         </div>
         <div className="mb-4">
           <label htmlFor="roomsAvailable" className="block text-gray-700">Rooms Available</label>

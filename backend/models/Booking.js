@@ -12,12 +12,8 @@ const BookingSchema = new mongoose.Schema({
     ref: 'User',
     required: true,
   },
-  checkInDate: {
-    type: Date,
-    required: true,
-  },
-  checkOutDate: {
-    type: Date,
+  timePeriod: {
+    type: Number,
     required: true,
   },
   totalPrice: {

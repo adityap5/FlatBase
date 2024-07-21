@@ -4,15 +4,15 @@ import { register } from '../api';
 import { useNavigate, Link } from 'react-router-dom';
 
 const RegisterPage = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [role, setRole] = useState("customer")
+  const [form, setForm] = useState({name:'', email: '', password: '',role:'customer' })
   const navigate = useNavigate();
 
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value});
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { data } = await register({ name, email, password, role });
+    const { data } = await register(form);
     localStorage.setItem('token', data.token);
     navigate('/');
   };
@@ -34,8 +34,8 @@ const RegisterPage = () => {
               </label>
               <div className="mt-2">
                 <input
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  value={form.name}
+                  onChange={handleChange}
                   id="name"
                   name="name"
                   type="text"
@@ -51,8 +51,8 @@ const RegisterPage = () => {
               </label>
               <div className="mt-2">
                 <input
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={form.email}
+                  onChange={handleChange}
                   id="email"
                   name="email"
                   type="email"
@@ -69,16 +69,11 @@ const RegisterPage = () => {
                 <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-400">
                   Password
                 </label>
-                <div className="text-sm">
-                  <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
-                    Forgot password?
-                  </a>
-                </div>
               </div>
               <div className="mt-2">
                 <input
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  value={form.password}
+                  onChange={handleChange}
                   id="password"
                   name="password"
                   type="password"
@@ -93,8 +88,8 @@ const RegisterPage = () => {
                 </label>
                 <select
                   name="role"
-                  value={role}
-                  onChange={(e) => setRole(e.target.value)}
+                  value={form.role}
+                  onChange={handleChange}
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
                 >
                   <option value="customer">Customer</option>

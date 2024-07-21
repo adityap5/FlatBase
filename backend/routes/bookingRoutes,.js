@@ -6,14 +6,13 @@ const auth = require('../middleware/auth');
 
 // Create a booking
 router.post('/', auth, async (req, res) => {
-  const { hotel, checkInDate, checkOutDate, totalPrice } = req.body;
+  const { hotel, timePeriod, totalPrice } = req.body;
 
   try {
     const booking = new Booking({
       hotel,
       user: req.user.id,
-      checkInDate,
-      checkOutDate,
+      timePeriod,
       totalPrice,
     });
 
@@ -33,5 +32,9 @@ router.get('/mybookings', auth, async (req, res) => {
     res.status(500).send('Server error');
   }
 });
+
+// router.delete('/mybookings', auth, async (req, res) =>{
+
+// })
 
 module.exports = router;
