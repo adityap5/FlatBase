@@ -22,8 +22,6 @@ const HomePage = () => {
     <div className="container mx-auto px-4">
       <h1 className="text-3xl font-bold my-4">Popular Hotels</h1>
       <Search />
-      {isSeller && <AddHotelPage/>
-        }
       <div className="grid grid-cols-3 gap-4">
         {hotels.map((hotel) => (
           <HotelCard key={hotel._id} hotel={hotel} />

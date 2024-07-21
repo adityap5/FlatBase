@@ -13,6 +13,8 @@ import BookingPage from './pages/BookingPage';
 
 const App = () => {
   return (
+    <div className="py-3 px-10">
+   
     <Router>
       <Navbar />
       <Routes>
@@ -26,6 +28,7 @@ const App = () => {
         <Route path="/bookings" element={<BookingPage />} />
       </Routes>
     </Router>
+    </div>
   );
 };
 
