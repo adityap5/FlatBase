@@ -5,17 +5,19 @@ import { getBookings } from '../api';
 
 const BookingPage = ({ userId }) => {
     const [bookings, setBookings] = useState([]);
-
+    const [bookingId, setBookingId] = useState('');
     useEffect(() => {
         const fetchHotel = async () => {
           const { data } = await getBookings();
           setBookings(data);
-          console.log(data);
+          console.log(data)
         };
     
         fetchHotel();
       }, []);
-
+const handleBooking =()=>{
+    console.log(bookings._id)
+}
     return (
         <div className="container mx-auto px-20 py-4">
             <h1 className="text-2xl font-bold mb-4">Your Bookings</h1>
@@ -25,9 +27,11 @@ const BookingPage = ({ userId }) => {
                         <>
                         <div key={bookings._id} className="bg-white p-4 shadow rounded-lg space-y-2">
                             <h2 className="text-xl pb-2 font-semibold">{bookings.hotel.name}</h2>
-                            <p>Check-in: {new Date(bookings.checkInDate).toLocaleDateString()}</p>
-                            <p>Check-out: {new Date(bookings.checkOutDate).toLocaleDateString()}</p>
-                            <p>Price: ${bookings.hotel.price}</p>
+                            <p className="text-zinc-500">location : {bookings.hotel.location}, India</p>
+                            <p>How Long: {bookings.timePeriod} month</p>
+                            <p>Price:  ₹{bookings.totalPrice}</p>
+
+                            <button onClick={handleBooking} className='bg-red-600 text-white p-2 rounded-lg text-sm'>Delete Booking</button>
                         </div>
                         </>
                     )
