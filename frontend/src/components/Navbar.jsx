@@ -34,7 +34,7 @@ const Navbar = () => {
                     {!token && <li className='hover:text-zinc-300'
                         onClick={() => navigate("/login")}
                     >Login</li>}
-        
+        {isSeller && <p onClick={() => navigate("/my-listings")} className='font-semibold hover:text-zinc-500' >My Listings</p>}
         {isBuyer && <p onClick={() => navigate("/bookings")} className='font-semibold hover:text-zinc-500'>My Bookings</p>}
         {isSeller && <p onClick={() => navigate("/add-hotel")} className='font-semibold hover:text-zinc-500' >Add Flat/Room</p>}
         {token && <Logout/>}

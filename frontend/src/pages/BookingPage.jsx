@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { getBookings } from '../api';
+import { getBookings, deleteBooking } from '../api';
 
 
 const BookingPage = ({ userId }) => {
@@ -9,6 +9,7 @@ const BookingPage = ({ userId }) => {
     useEffect(() => {
         const fetchHotel = async () => {
           const { data } = await getBookings();
+        //   const {delete} = await deleteBooking(bookingId)
           setBookings(data);
           console.log(data)
         };
@@ -16,7 +17,7 @@ const BookingPage = ({ userId }) => {
         fetchHotel();
       }, []);
 const handleBooking =()=>{
-    console.log(bookings._id)
+    console.log(bookingId)
 }
     return (
         <div className="container mx-auto px-20 py-4">
@@ -31,7 +32,8 @@ const handleBooking =()=>{
                             <p>How Long: {bookings.timePeriod} month</p>
                             <p>Price:  ₹{bookings.totalPrice}</p>
 
-                            <button onClick={handleBooking} className='bg-red-600 text-white p-2 rounded-lg text-sm'>Delete Booking</button>
+                            <button onClick={()=>setBookingId(bookings._id)} className='bg-red-600 text-white p-2 rounded-lg text-sm'>Delete Booking</button>
+                            <button onClick={handleBooking} className='bg-red-600 text-white p-2 rounded-lg text-sm'>show Booking</button>
                         </div>
                         </>
                     )

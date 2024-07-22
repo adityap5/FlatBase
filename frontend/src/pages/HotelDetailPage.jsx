@@ -14,7 +14,6 @@ const HotelDetailPage = () => {
     const fetchHotel = async () => {
       const { data } = await getHotel(id);
       setHotel(data);
-      console.log(data)
     };
 
     fetchHotel();
@@ -53,7 +52,7 @@ const HotelDetailPage = () => {
           <p className="tracking-tighter text-zinc-600">{hotel.description}</p>
           <div className="flex gap-10 font-semibold">
           <p>Location: {hotel.location},India</p> 
-          <p>Rooms available:{hotel.roomsAvailable}</p>
+          <p>Capacity: {hotel.roomsAvailable} guests</p>
           <p>Price: ₹{hotel.price}/night</p>
           </div>
           
