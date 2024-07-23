@@ -43,13 +43,33 @@ router.post('/login', async (req, res) => {
   }
 });
 
-router.get('/users', async (req,res)=>{
-try {
-  const users = await User.find();
-  res.send(users)
-} catch (error) {
-   res.status(500).send('Server error');
-}
+router.get('/users', async (req, res) => {
+  try {
+      const users = await User.find();
+      res.send(users);
+  } catch (error) {
+      res.status(500).send(error);
+  }
 });
+router.get('/users/:id', async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(404).json({ message: 'user not found' });
+    }
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+//my listings
+// router.get('/mylistings', auth, async (req, res) => {
+//   try {
+//     const mylisting = await Hotel.find({ user: req.user.id }).populate('hotel');
+//     res.json(mylisting);
+//   } catch (error) {
+//     res.status(500).send('Server error');
+//   }
+// });
 
 module.exports = router;

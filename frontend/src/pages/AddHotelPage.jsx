@@ -7,7 +7,7 @@ const AddHotelPage = () => {
   const [name, setName] = useState('');
   const [price, setPrice] = useState('');
   const [location, setLocation] = useState('');
-  const [roomsAvailable, setRoomsAvailable] = useState('');
+  const [capacity, setCapacity] = useState('');
   const [description, setDescription] = useState('');
   const [image, setImage] = useState(null);
   const navigate = useNavigate();
@@ -24,7 +24,7 @@ const AddHotelPage = () => {
     formData.append('price', price);
     formData.append('location', location);
     formData.append('description', description);
-    formData.append('roomsAvailable', roomsAvailable);
+    formData.append('capacity', capacity);
     formData.append('image', image);
 
     try {
@@ -86,26 +86,26 @@ const AddHotelPage = () => {
                   onChange={(e)=>setLocation(e.target.value)}
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
                 >
-                  <option value="chandigarh">Chandigarh</option>
-                  <option value="agra">Agra</option>
-                  <option value="jaipur">Jaipur</option>
-                  <option value="newDelhi">NewDelhi</option>
-                  <option value="banglore">Banglore</option>
-                  <option value="hyderabad">Hyderabad</option>
-                  <option value="haryana">Haryana</option>
-                  <option value="mathura">Mathura</option>
-                  <option value="varanasi">Varanasi</option>
-                  <option value="shimla">Shimla</option>
-                  <option value="noida">Noida</option>
+                  <option value="Chandigarh">Chandigarh</option>
+                  <option value="Agra">Agra</option>
+                  <option value="Jaipur">Jaipur</option>
+                  <option value="NewDelhi">NewDelhi</option>
+                  <option value="Banglore">Banglore</option>
+                  <option value="Hyderabad">Hyderabad</option>
+                  <option value="Haryana">Haryana</option>
+                  <option value="Mathura">Mathura</option>
+                  <option value="Varanasi">Varanasi</option>
+                  <option value="Shimla">Shimla</option>
+                  <option value="Noida">Noida</option>
                 </select>
         </div>
         <div className="mb-4">
-          <label htmlFor="roomsAvailable" className="block text-gray-700">Rooms Available</label>
+          <label htmlFor="capacity" className="block text-gray-700">Guests Allowed</label>
           <input
             type="number"
-            id="roomsAvailable"
-            value={roomsAvailable}
-            onChange={(e) => setRoomsAvailable(e.target.value)}
+            id="capacity"
+            value={capacity}
+            onChange={(e) => setCapacity(e.target.value)}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
             required
           />

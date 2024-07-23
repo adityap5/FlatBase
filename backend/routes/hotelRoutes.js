@@ -18,7 +18,7 @@ router.post('/', auth, upload.single('image'), async (req, res) => {
         if (err) throw err;
         else console.log("Deleted")
     })
-    const { name, price,description, location, roomsAvailable } = req.body;
+    const { name, price,description, location, capacity } = req.body;
     
     try {
         const newHotel = new Hotel({
@@ -26,7 +26,7 @@ router.post('/', auth, upload.single('image'), async (req, res) => {
             price,
             description,
             location,
-            roomsAvailable,
+            capacity,
             images: imageFileUrl.secure_url,
             seller: req.user.id,
         });

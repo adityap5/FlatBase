@@ -52,7 +52,7 @@ const HotelDetailPage = () => {
           <p className="tracking-tighter text-zinc-600">{hotel.description}</p>
           <div className="flex gap-10 font-semibold">
           <p>Location: {hotel.location},India</p> 
-          <p>Capacity: {hotel.roomsAvailable} guests</p>
+          <p>Capacity: {hotel.capacity} guests</p>
           <p>Price: ₹{hotel.price}/night</p>
           </div>
           

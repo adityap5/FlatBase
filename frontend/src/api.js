@@ -18,4 +18,5 @@ export const getHotel = (id) => API.get(`/hotels/${id}`);
 export const getHotelByLocation = (location) => API.get(`/search?location=${location}`);
 export const createBooking = (bookingData) => API.post('/bookings', bookingData);
 export const getBookings = () => API.get('/bookings/mybookings');
-export const deleteBooking = (id) => API.delete(`/bookings/mybookings/${id}`);
+export const getMyListings = () => API.get('/hotels/mylistings');
+export const deleteBooking = (id) => API.delete(`/bookings/${id}`);
