@@ -14,7 +14,7 @@ import MyListings from './pages/MyListings';
 
 const App = () => {
   return (
-    <div className="py-3 px-10">
+    <div className="px-10">
    
     <Router>
       <Navbar />

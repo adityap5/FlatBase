@@ -81,7 +81,7 @@ const AddHotelPage = () => {
         <div className="mb-4">
           <label htmlFor="location" className="block text-gray-700">Location</label>
           <select
-                  name="role"
+                  id="location"
                   value={location}
                   onChange={(e)=>setLocation(e.target.value)}
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
@@ -89,7 +89,7 @@ const AddHotelPage = () => {
                   <option value="Chandigarh">Chandigarh</option>
                   <option value="Agra">Agra</option>
                   <option value="Jaipur">Jaipur</option>
-                  <option value="NewDelhi">NewDelhi</option>
+                  <option value="NewDelhi">New Delhi</option>
                   <option value="Banglore">Banglore</option>
                   <option value="Hyderabad">Hyderabad</option>
                   <option value="Haryana">Haryana</option>
@@ -120,7 +120,7 @@ const AddHotelPage = () => {
             required
           />
         </div>
-        <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded">Add Hotel</button>
+        <button type="submit" className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-700">Add Hotel</button>
       </form>
     </div>
   );

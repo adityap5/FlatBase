@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import HotelCard from '../components/HotelCard';
+import {getHotelByLocation} from '../api'
 
 const useQuery = () => {
   return new URLSearchParams(useLocation().search);
@@ -15,9 +16,8 @@ const SearchResultsPage = () => {
 
   useEffect(() => {
     const fetchHotels = async () => {
-      const response = await axios.get(`http://localhost:5000/api/hotels/search?location=${location}`);
-    
-      setHotels(response.data);
+      const {data} = await getHotelByLocation(location);
+      setHotels(data);
     };
 
     fetchHotels();
