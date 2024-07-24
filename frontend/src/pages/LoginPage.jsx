@@ -27,7 +27,7 @@ const LoginPage = () => {
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-black">
+          <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight">
             Sign in to your account
           </h2>
         </div> 
@@ -60,7 +60,7 @@ const LoginPage = () => {
                   Password
                 </label>
                 <div className="text-sm">
-                  <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
+                  <a href="#" className="font-semibold text-[#50727B] hover:text-[#5a8490]">
                     Forgot password?
                   </a>
                 </div>
@@ -82,7 +82,7 @@ const LoginPage = () => {
             <div>
               <button
                 type="submit"
-                className="flex w-full justify-center rounded-md bg-zinc-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-zinc-400 hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                className="flex w-full justify-center rounded-md bg-[#76ABAE] px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-zinc-400 hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 Sign in
               </button>
@@ -91,7 +91,7 @@ const LoginPage = () => {
           
           <p className="mt-10 text-center text-sm text-gray-500">
             Not a member?{' '}
-            <Link to="/register" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
+            <Link to="/register" className="font-semibold leading-6 text-[#435B66] hover:text-[#5a8490]">
              Register
             </Link>
           </p>

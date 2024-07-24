@@ -21,7 +21,7 @@ const RegisterPage = () => {
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-black">
+          <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight ">
            Register
           </h2>
         </div>
@@ -29,7 +29,7 @@ const RegisterPage = () => {
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
           <form onSubmit={handleSubmit} className="space-y-6" action="#" method="POST">
           <div>
-              <label htmlFor="name" className="block text-sm font-medium leading-6 text-gray-400">
+              <label htmlFor="name" className="block text-sm font-medium leading-6 ">
                 Name
               </label>
               <div className="mt-2">
@@ -46,7 +46,7 @@ const RegisterPage = () => {
               </div>
             </div>
             <div>
-              <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-400">
+              <label htmlFor="email" className="block text-sm font-medium leading-6">
                 Email address
               </label>
               <div className="mt-2">
@@ -66,7 +66,7 @@ const RegisterPage = () => {
 
             <div>
               <div className="flex items-center justify-between">
-                <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-400">
+                <label htmlFor="password" className="block text-sm font-medium leading-6">
                   Password
                 </label>
               </div>
@@ -83,14 +83,14 @@ const RegisterPage = () => {
                 />
               </div>
               <div className="mt-2">
-              <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-400">
+              <label htmlFor="password" className="block text-sm font-medium leading-6 ">
                   Role
                 </label>
                 <select
                   name="role"
                   value={form.role}
                   onChange={handleChange}
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
+                  className="shadow  font-bold border rounded w-full p-2 text-gray-800"
                 >
                   <option value="customer">Customer</option>
                   <option value="seller">Seller</option>
@@ -101,7 +101,7 @@ const RegisterPage = () => {
             <div>
               <button
                 type="submit"
-                className="flex w-full justify-center rounded-md bg-zinc-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-zinc-400 hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                className="flex w-full justify-center rounded-md bg-[#76ABAE] px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-zinc-400 hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 Sign up
               </button>
@@ -110,7 +110,7 @@ const RegisterPage = () => {
 
           <p className="mt-10 text-center text-sm text-gray-500">
             Already a member?{' '}
-            <Link to="/login" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
+            <Link to="/login" className="font-semibold leading-6 text-[#76ABAE] hover:text-[#85c1c4]">
               Login
             </Link>
           </p>

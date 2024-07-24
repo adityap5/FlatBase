@@ -20,7 +20,7 @@ const Search = () => {
           placeholder="Search by location"
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mr-2"
         />
-        <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded">
+        <button type="submit" className="bg-[#76ABAE] text-white py-2 px-4 rounded">
           Search
         </button>
       </div>

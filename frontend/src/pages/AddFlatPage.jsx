@@ -45,7 +45,7 @@ const AddFlatPage = () => {
       <h1 className="text-3xl font-bold my-4">Add Flat</h1>
       <form onSubmit={handleSubmit} className="max-w-md mx-auto">
         <div className="mb-4">
-          <label htmlFor="name" className="block text-gray-700">Flat Name</label>
+          <label htmlFor="name" className="block">Flat Name</label>
           <input
             type="text"
             id="name"
@@ -56,7 +56,7 @@ const AddFlatPage = () => {
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="description" className="block text-gray-700">Flat Description</label>
+          <label htmlFor="description" className="block ">Flat Description</label>
           <input
             type="text"
             id="description"
@@ -67,7 +67,7 @@ const AddFlatPage = () => {
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="price" className="block text-gray-700">Price</label>
+          <label htmlFor="price" className="block ">Price</label>
           <input
             type="number"
             id="price"
@@ -78,7 +78,7 @@ const AddFlatPage = () => {
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="location" className="block text-gray-700">Location</label>
+          <label htmlFor="location" className="block ">Location</label>
           <select
                   id="location"
                   value={location}
@@ -99,7 +99,7 @@ const AddFlatPage = () => {
                 </select>
         </div>
         <div className="mb-4">
-          <label htmlFor="capacity" className="block text-gray-700">Guests Allowed</label>
+          <label htmlFor="capacity" className="block">Guests Allowed</label>
           <input
             type="number"
             id="capacity"
@@ -110,16 +110,16 @@ const AddFlatPage = () => {
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="image" className="block text-gray-700">Image</label>
+          <label htmlFor="image" className="block ">Image</label>
           <input
             type="file"
             id="image"
             onChange={handleFileChange}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
+            className="shadow appearance-none border rounded w-full py-2 px-3 "
             required
           />
         </div>
-        <button type="submit" className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-700">Add Flat</button>
+        <button type="submit" className="bg-[#76ABAE] text-white py-2 px-4 rounded hover:bg-green-700">Add Flat</button>
       </form>
     </div>
   );

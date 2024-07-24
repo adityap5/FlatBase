@@ -48,7 +48,7 @@ const FlatDetailPage = () => {
           <div className="space-y-4 w-1/2">
           <h1 className="text-3xl font-bold my-4">{flat.name}</h1>
           <img className="w-80" src={flat.images} alt="flat" />
-          <p className="tracking-tighter text-zinc-600">{flat.description}</p>
+          <p className="tracking-tighter ">{flat.description}</p>
           <div className="flex gap-10 font-semibold">
           <p>Location: {flat.location}, India</p> 
           <p>Capacity: {flat.capacity} guests</p>
@@ -67,7 +67,7 @@ const FlatDetailPage = () => {
             <button onClick={decresesMonth} className="py-2 px-4 bg-zinc-500">-</button>
             </div>
           </div>
-         <button onClick={handleBooking} className="bg-blue-500 text-white py-2 px-4 rounded mt-4"> Book Now</button>
+         <button onClick={handleBooking} className="bg-[#76ABAE] text-white py-2 px-4 rounded mt-4"> Book Now</button>
           </div>
         </div>
             

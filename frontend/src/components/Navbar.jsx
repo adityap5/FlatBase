@@ -29,13 +29,13 @@ const Navbar = () => {
   }
 
   return (
-    <div className="text-black" position="static">
+    <div className="text-white bg-[#31363F] rounded-xl mt-2" position="static">
       <Toolbar className="flex justify-between items-center">
         <IconButton onClick={handleHome} edge="start" color="inherit" aria-label="menu">
-          <HomeIcon />
+          <HomeIcon className='hover:text-[#A5C9CA]'/>
         </IconButton>
-        <Typography variant="h6" className="flex-grow">
-          Flat Booking
+        <Typography variant="h6" className="flex-grow text-[#ffff]">
+         FlatBase
         </Typography>
         <div className="md:hidden">
           <IconButton onClick={toggleDrawer(true)} edge="end" color="inherit" aria-label="menu">
@@ -44,29 +44,29 @@ const Navbar = () => {
         </div>
         <div className="hidden md:flex gap-4 cursor-pointer">
           {!token && (
-            <li className="hover:text-zinc-300" onClick={() => navigate("/register")}>
+            <p className="hover:text-zinc-300" onClick={() => navigate("/register")}>
               Register
-            </li>
+            </p>
           )}
           {!token && (
-            <li className="hover:text-zinc-300" onClick={() => navigate("/login")}>
+            <p className="hover:text-green-300" onClick={() => navigate("/login")}>
               Login
-            </li>
+            </p>
           )}
           {isSeller && (
-            <li className="font-semibold hover:text-zinc-500" onClick={() => navigate("/my-listings")}>
+            <p className="font-semibold hover:text-[#A5C9CA]" onClick={() => navigate("/my-listings")}>
               My Listings
-            </li>
+            </p>
           )}
           {isBuyer && (
-            <li className="font-semibold hover:text-zinc-500" onClick={() => navigate("/bookings")}>
+            <li className="font-semibold hover:text-[#A5C9CA]" onClick={() => navigate("/bookings")}>
               My Bookings
             </li>
           )}
           {isSeller && (
-            <li className="font-semibold hover:text-zinc-500" onClick={() => navigate("/add-flat")}>
+            <p className="font-semibold hover:text-[#A5C9CA]" onClick={() => navigate("/add-flat")}>
               Add Flat/Room
-            </li>
+            </p>
           )}
           {token && <Logout />}
         </div>
