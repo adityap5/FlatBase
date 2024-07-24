@@ -8,12 +8,12 @@ const BookingPage = ({ userId }) => {
     const navigate  = useNavigate();
 
     useEffect(() => {
-        const fetchHotel = async () => {
+        const fetchFlat = async () => {
             const { data } = await getBookings();
             setBookings(data);
         };
         
-        fetchHotel();
+        fetchFlat();
     }, []);
 
     const handleDelete = async () => {
@@ -30,8 +30,8 @@ const BookingPage = ({ userId }) => {
                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                     {bookings.map((booking) => (
                         <div key={booking._id} className="bg-white p-4 shadow rounded-xl space-y-2 hover:shadow-lg">
-                            <h2 className="text-xl pb-2 font-semibold">{booking.hotel.name}</h2>
-                            <p className="text-zinc-500">Location: {booking.hotel.location}, India</p>
+                            <h2 className="text-xl pb-2 font-semibold">{booking.flat.name}</h2>
+                            <p className="text-zinc-500">Location: {booking.flat.location}, India</p>
                             <p>How Long: {booking.timePeriod} month</p>
                             <p>Price: ₹{booking.totalPrice}</p>
                             <button 

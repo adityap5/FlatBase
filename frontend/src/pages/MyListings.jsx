@@ -18,8 +18,8 @@ function MyListings() {
                     {listing.map((listing) => (
                         <>
                         <div key={listing._id} className="bg-white p-4 shadow rounded-lg space-y-2">
-                            <h2 className="text-xl pb-2 font-semibold">{listing.hotel.name}</h2>
-                            <p className="text-zinc-500">location : {listing.hotel.location}, India</p>
+                            <h2 className="text-xl pb-2 font-semibold">{listing.flat.name}</h2>
+                            <p className="text-zinc-500">location : {listing.flat.location}, India</p>
                             <p>How Long: {listing.timePeriod} month</p>
                             <p>Price:  ₹{listing.totalPrice}</p>
 

@@ -6,11 +6,11 @@ const auth = require('../middleware/auth');
 
 
 router.post('/', auth, async (req, res) => {
-  const { hotel, timePeriod, totalPrice } = req.body;
+  const { flat, timePeriod, totalPrice } = req.body;
 
   try {
     const booking = new Booking({
-      hotel,
+      flat,
       user: req.user.id,
       timePeriod,
       totalPrice,
@@ -26,7 +26,7 @@ router.post('/', auth, async (req, res) => {
 
 router.get('/mybookings', auth, async (req, res) => {
   try {
-    const bookings = await Booking.find({ user: req.user.id }).populate('hotel');
+    const bookings = await Booking.find({ user: req.user.id }).populate('flat');
     res.json(bookings);
   } catch (error) {
     res.status(500).send('Server error');

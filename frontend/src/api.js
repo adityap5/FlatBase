@@ -1,4 +1,3 @@
-// src/api.js
 import axios from 'axios';
 
 const API = axios.create({ baseURL: 'http://localhost:5000/api' });
@@ -12,11 +11,11 @@ API.interceptors.request.use((req) => {
 
 export const register = (formData) => API.post('/auth/register', formData);
 export const login = (formData) => API.post('/auth/login', formData);
-export const addHotel = (hotelData) => API.post('/hotels', hotelData);
-export const getHotels = () => API.get('/hotels');
-export const getHotel = (id) => API.get(`/hotels/${id}`);
-export const getHotelByLocation = (location) => API.get(`/hotels/search?location=${location}`);
+export const addFlat = (flatData) => API.post('/flats', flatData);
+export const getFlats = () => API.get('/flats');
+export const getFlat = (id) => API.get(`/flats/${id}`);
+export const getFlatByLocation = (location) => API.get(`/flats/search?location=${location}`);
 export const createBooking = (bookingData) => API.post('/bookings', bookingData);
 export const getBookings = () => API.get('/bookings/mybookings');
-export const getMyListings = () => API.get('/hotels/mylistings');
+export const getMyListings = () => API.get('/flats/mylistings');
 export const deleteBooking = (id) => API.delete(`/bookings/${id}`);

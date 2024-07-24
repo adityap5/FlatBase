@@ -1,5 +1,5 @@
 const express = require('express');
-const Hotel = require('../models/Hotel');
+const Flat = require('../models/Flat');
 const auth = require('../middleware/auth');
 const cloudinary = require('../config/cloudinary');
 const upload = require('../middleware/multer');
@@ -17,7 +17,7 @@ router.post('/', auth, upload.single('image'), async (req, res) => {
     const { name, price,description, location, capacity } = req.body;
     
     try {
-        const newHotel = new Hotel({
+        const newFlat = new Flat({
             name,
             price,
             description,
@@ -27,8 +27,8 @@ router.post('/', auth, upload.single('image'), async (req, res) => {
             seller: req.user.id,
         });
 
-        const hotel = await newHotel.save();
-        res.json(hotel);
+        const flat = await newFlat.save();
+        res.json(flat);
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server Error');
@@ -39,8 +39,8 @@ router.post('/', auth, upload.single('image'), async (req, res) => {
 
 router.get('/', async (req, res) => {
     try {
-        const hotels = await Hotel.find();
-        res.send(hotels);
+        const flats = await Flat.find();
+        res.send(flats);
     } catch (error) {
         res.status(500).send(error);
     }
@@ -48,12 +48,12 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
     try {
-      const hotel = await Hotel.findById(req.params.id);
+      const flat = await Flat.findById(req.params.id);
   
-      if (!hotel) {
-        return res.status(404).json({ message: 'hotel not found' });
+      if (!flat) {
+        return res.status(404).json({ message: 'flat not found' });
       }
-      res.json(hotel);
+      res.json(flat);
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
@@ -63,8 +63,8 @@ router.get('/search', async (req, res) => {
     try {
         const { local } = req.query;
         console.log(local)
-        const hotels = await Hotel.find({ location: new RegExp(local, 'i') });
-        res.send(hotels);
+        const flats = await Flat.find({ location: new RegExp(local, 'i') });
+        res.send(flats);
     } catch (error) {
         res.status(500).send(error);
     }

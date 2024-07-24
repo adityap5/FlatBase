@@ -1,9 +1,8 @@
-// src/pages/AddHotelPage.jsx
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-const AddHotelPage = () => {
+const AddFlatPage = () => {
   const [name, setName] = useState('');
   const [price, setPrice] = useState('');
   const [location, setLocation] = useState('');
@@ -28,7 +27,7 @@ const AddHotelPage = () => {
     formData.append('image', image);
 
     try {
-      await axios.post('http://localhost:5000/api/hotels', formData, {
+      await axios.post('http://localhost:5000/api/flats', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -43,10 +42,10 @@ const AddHotelPage = () => {
 
   return (
     <div className="container mx-auto px-4">
-      <h1 className="text-3xl font-bold my-4">Add Hotel</h1>
+      <h1 className="text-3xl font-bold my-4">Add Flat</h1>
       <form onSubmit={handleSubmit} className="max-w-md mx-auto">
         <div className="mb-4">
-          <label htmlFor="name" className="block text-gray-700">Hotel Name</label>
+          <label htmlFor="name" className="block text-gray-700">Flat Name</label>
           <input
             type="text"
             id="name"
@@ -57,7 +56,7 @@ const AddHotelPage = () => {
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="description" className="block text-gray-700">Hotel Description</label>
+          <label htmlFor="description" className="block text-gray-700">Flat Description</label>
           <input
             type="text"
             id="description"
@@ -120,10 +119,10 @@ const AddHotelPage = () => {
             required
           />
         </div>
-        <button type="submit" className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-700">Add Hotel</button>
+        <button type="submit" className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-700">Add Flat</button>
       </form>
     </div>
   );
 };
 
-export default AddHotelPage;
+export default AddFlatPage;

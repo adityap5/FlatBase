@@ -1,22 +1,21 @@
-// src/pages/HotelDetailPage.js
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getHotel, createBooking } from '../api';
+import { getFlat, createBooking } from '../api';
 
-const HotelDetailPage = () => {
+const FlatDetailPage = () => {
   const navigate = useNavigate()
   const { id } = useParams();
-  const [hotel, setHotel] = useState(null);
+  const [flat, setFlat] = useState(null);
   const [month, setMonth] = useState(1)
 
 
   useEffect(() => {
-    const fetchHotel = async () => {
-      const { data } = await getHotel(id);
-      setHotel(data);
+    const fetchFlat = async () => {
+      const { data } = await getFlat(id);
+      setFlat(data);
     };
 
-    fetchHotel();
+    fetchFlat();
   }, [id]);
 
   const incresesMonth=()=>{
@@ -32,9 +31,9 @@ const HotelDetailPage = () => {
     }
 
     const bookingData = {
-      hotel: id,
+      flat: id,
       timePeriod:month,
-      totalPrice: hotel.price * month,
+      totalPrice: flat.price * month,
     };
 
     await createBooking(bookingData);
@@ -43,20 +42,20 @@ const HotelDetailPage = () => {
 
   return (
     <div className="container mx-auto px-4">
-      {hotel && (
+      {flat && (
         <>
         <div className="flex justify-center items-center px-10">
           <div className="space-y-4 w-1/2">
-          <h1 className="text-3xl font-bold my-4">{hotel.name}</h1>
-          <img className="w-80" src={hotel.images} alt="Hotel" />
-          <p className="tracking-tighter text-zinc-600">{hotel.description}</p>
+          <h1 className="text-3xl font-bold my-4">{flat.name}</h1>
+          <img className="w-80" src={flat.images} alt="flat" />
+          <p className="tracking-tighter text-zinc-600">{flat.description}</p>
           <div className="flex gap-10 font-semibold">
-          <p>Location: {hotel.location}, India</p> 
-          <p>Capacity: {hotel.capacity} guests</p>
-          <p>Price: ₹{hotel.price}/night</p>
+          <p>Location: {flat.location}, India</p> 
+          <p>Capacity: {flat.capacity} guests</p>
+          <p>Price: ₹{flat.price}/night</p>
           </div>
           
-          <p>Owners Name : {hotel.seller.name}</p>
+          <p>Owners Name : {flat.seller.name}</p>
           </div>
           <div className='w-1/2 '>
           {/* <Calendar selectionRange={selectionRange} handleSelect={handleSelect} /> */}
@@ -78,4 +77,4 @@ const HotelDetailPage = () => {
   );
 };
 
-export default HotelDetailPage;
+export default FlatDetailPage;

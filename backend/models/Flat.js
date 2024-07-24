@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const hotelSchema = new mongoose.Schema({
+const flatSchema = new mongoose.Schema({
   name: { type: String, required: true },
   price: { type: Number, required: true },
   capacity: { type: Number, required: true },
@@ -10,6 +10,6 @@ const hotelSchema = new mongoose.Schema({
   seller: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
 });
 
-const Hotel = mongoose.model('Hotel', hotelSchema);
+const Flat = mongoose.model('Flat', flatSchema);
 
-module.exports = Hotel;
+module.exports = Flat;

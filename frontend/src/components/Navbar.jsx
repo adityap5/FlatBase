@@ -35,7 +35,7 @@ const Navbar = () => {
           <HomeIcon />
         </IconButton>
         <Typography variant="h6" className="flex-grow">
-          Hotel Booking
+          Flat Booking
         </Typography>
         <div className="md:hidden">
           <IconButton onClick={toggleDrawer(true)} edge="end" color="inherit" aria-label="menu">
@@ -64,7 +64,7 @@ const Navbar = () => {
             </li>
           )}
           {isSeller && (
-            <li className="font-semibold hover:text-zinc-500" onClick={() => navigate("/add-hotel")}>
+            <li className="font-semibold hover:text-zinc-500" onClick={() => navigate("/add-flat")}>
               Add Flat/Room
             </li>
           )}
@@ -100,7 +100,7 @@ const Navbar = () => {
               </li>
             )}
             {isSeller && (
-              <li className="font-semibold hover:text-zinc-500" onClick={() => navigate("/add-hotel")}>
+              <li className="font-semibold hover:text-zinc-500" onClick={() => navigate("/add-flat")}>
                 Add Flat/Room
               </li>
             )}

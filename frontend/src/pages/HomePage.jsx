@@ -1,28 +1,27 @@
-// src/pages/HomePage.jsx
 import React, { useState, useEffect } from 'react';
-import HotelCard from '../components/HotelCard';
+import FlatCard from '../components/FlatCard';
 import Search from '../components/Search';
-import {getHotels} from '../api'
+import {getFlats} from '../api'
 
 const HomePage = () => {
-  const [hotels, setHotels] = useState([]);
+  const [flats, setFlats] = useState([]);
 
   useEffect(() => {
-    const fetchHotels = async () => {
-      const {data} = await getHotels();
-      setHotels(data);
+    const fetchFlats = async () => {
+      const {data} = await getFlats();
+      setFlats(data);
     };
 
-    fetchHotels();
+    fetchFlats();
   }, []);
 
   return (
     <div className="container mx-auto px-4">
-      <h1 className="text-3xl font-bold my-4">Popular Hotels</h1>
+      <h1 className="text-3xl font-bold my-4">Popular Flats</h1>
       <Search />
       <div className="grid grid-cols-4 gap-6">
-        {hotels.map((hotel) => (
-          <HotelCard key={hotel._id} hotel={hotel} />
+        {flats.map((flat) => (
+          <FlatCard key={flat._id} flat={flat} />
         ))}
       </div>
     </div>

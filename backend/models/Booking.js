@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 
 const BookingSchema = new mongoose.Schema({
-  hotel: {
+  flat: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Hotel',
+    ref: 'Flat',
     required: true,
   },
   user: {
