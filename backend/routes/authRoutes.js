@@ -1,4 +1,3 @@
-// backend/routes/authRoutes.js
 const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
@@ -7,7 +6,7 @@ const bcrypt = require('bcryptjs');
 const dotenv = require('dotenv');
 
 dotenv.config();
-// Register
+
 router.post('/register', async (req, res)=> {
   const { name, email, password ,role} = req.body;
   try {
@@ -22,7 +21,7 @@ router.post('/register', async (req, res)=> {
     }
 });
 
-// Login
+
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
 

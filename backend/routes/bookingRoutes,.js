@@ -1,10 +1,10 @@
-// backend/routes/bookingRoutes.js
+
 const express = require('express');
 const router = express.Router();
 const Booking = require('../models/Booking');
 const auth = require('../middleware/auth');
 
-// Create a booking
+
 router.post('/', auth, async (req, res) => {
   const { hotel, timePeriod, totalPrice } = req.body;
 
@@ -23,7 +23,7 @@ router.post('/', auth, async (req, res) => {
   }
 });
 
-// Get bookings for a user
+
 router.get('/mybookings', auth, async (req, res) => {
   try {
     const bookings = await Booking.find({ user: req.user.id }).populate('hotel');

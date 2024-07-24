@@ -1,4 +1,3 @@
-// routes/hotelRoutes.js
 const express = require('express');
 const Hotel = require('../models/Hotel');
 const auth = require('../middleware/auth');
@@ -7,13 +6,10 @@ const upload = require('../middleware/multer');
 const router = express.Router();
 const fs = require('fs');
 
-
-// Route to add a hotel
-
 router.post('/', auth, upload.single('image'), async (req, res) => {
     const imageFileUrl = await cloudinary.uploader.upload(req.file.path)
    
-    // delete file from upload
+    // delete file from upload folder
     fs.unlink((req.file.path), function (err) {
         if (err) throw err;
         else console.log("Deleted")
@@ -40,7 +36,7 @@ router.post('/', auth, upload.single('image'), async (req, res) => {
 
 });
 
-// Route to get all hotels
+
 router.get('/', async (req, res) => {
     try {
         const hotels = await Hotel.find();
@@ -62,7 +58,7 @@ router.get('/:id', async (req, res) => {
       res.status(500).json({ message: error.message });
     }
   });
-// Route to search hotels by location
+
 router.get('/search', async (req, res) => {
     try {
         const { local } = req.query;
