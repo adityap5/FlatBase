@@ -1,4 +1,3 @@
-// src/components/Search.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -12,8 +11,8 @@ const Search = () => {
   };
 
   return (
-    <form onSubmit={handleSearch} className="mb-4">
-      <div className="flex">
+    <form onSubmit={handleSearch} className="mb-8">
+      <div className="flex px-8">
         <input
           type="text"
           value={location}

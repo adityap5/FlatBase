@@ -51,7 +51,7 @@ const HotelDetailPage = () => {
           <img className="w-80" src={hotel.images} alt="Hotel" />
           <p className="tracking-tighter text-zinc-600">{hotel.description}</p>
           <div className="flex gap-10 font-semibold">
-          <p>Location: {hotel.location},India</p> 
+          <p>Location: {hotel.location}, India</p> 
           <p>Capacity: {hotel.capacity} guests</p>
           <p>Price: ₹{hotel.price}/night</p>
           </div>

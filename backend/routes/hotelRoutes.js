@@ -65,9 +65,9 @@ router.get('/:id', async (req, res) => {
 // Route to search hotels by location
 router.get('/search', async (req, res) => {
     try {
-        const { location } = req.query;
-        console.log(location)
-        const hotels = await Hotel.find({ location: new RegExp(location, 'i') });
+        const { local } = req.query;
+        console.log(local)
+        const hotels = await Hotel.find({ location: new RegExp(local, 'i') });
         res.send(hotels);
     } catch (error) {
         res.status(500).send(error);

@@ -1,46 +1,113 @@
 // src/components/Navbar.js
-import React from 'react';
-import { Link,useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
-// import Button from '@mui/material/Button';
 import Toolbar from '@mui/material/Toolbar';
 import HomeIcon from '@mui/icons-material/Home';
-import {Logout} from '../components/Logout'
-import BookingPage from '../pages/BookingPage';
-import AddHotelPage from '../pages/AddHotelPage';
+import MenuIcon from '@mui/icons-material/Menu';
+import CloseIcon from '@mui/icons-material/Close';
+import Drawer from '@mui/material/Drawer';
+import { Logout } from '../components/Logout';
+
 const Navbar = () => {
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const token = localStorage.getItem('token');
   const isSeller = localStorage.getItem('role') === 'seller';
   const isBuyer = localStorage.getItem('role') === 'customer';
-  const navigate = useNavigate()
-  const handleHome =()=>{
+  const navigate = useNavigate();
+  
+  const handleHome = () => {
     navigate('/');
   }
+
+  const toggleDrawer = (open) => (event) => {
+    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+      return;
+    }
+    setDrawerOpen(open);
+  }
+
   return (
-    <div className=" text-black"  position="static">
-      <Toolbar>
-        <IconButton  onClick={handleHome}  edge="start" color="inherit" aria-label="menu"  >
-          <HomeIcon/>
+    <div className="text-black" position="static">
+      <Toolbar className="flex justify-between items-center">
+        <IconButton onClick={handleHome} edge="start" color="inherit" aria-label="menu">
+          <HomeIcon />
         </IconButton>
-        <Typography variant="h6" style={{ flexGrow: 1 }}>
+        <Typography variant="h6" className="flex-grow">
           Hotel Booking
         </Typography>
-        <ul className="flex gap-4 cursor-pointer">
-        {!token &&<li className='hover:text-zinc-300'
-                        onClick={() => navigate("/register")}
-                    >Register</li> }
-
-                    {!token && <li className='hover:text-zinc-300'
-                        onClick={() => navigate("/login")}
-                    >Login</li>}
-        {isSeller && <p onClick={() => navigate("/my-listings")} className='font-semibold hover:text-zinc-500' >My Listings</p>}
-        {isBuyer && <p onClick={() => navigate("/bookings")} className='font-semibold hover:text-zinc-500'>My Bookings</p>}
-        {isSeller && <p onClick={() => navigate("/add-hotel")} className='font-semibold hover:text-zinc-500' >Add Flat/Room</p>}
-        {token && <Logout/>}
-        </ul>
-       
+        <div className="md:hidden">
+          <IconButton onClick={toggleDrawer(true)} edge="end" color="inherit" aria-label="menu">
+            <MenuIcon />
+          </IconButton>
+        </div>
+        <div className="hidden md:flex gap-4 cursor-pointer">
+          {!token && (
+            <li className="hover:text-zinc-300" onClick={() => navigate("/register")}>
+              Register
+            </li>
+          )}
+          {!token && (
+            <li className="hover:text-zinc-300" onClick={() => navigate("/login")}>
+              Login
+            </li>
+          )}
+          {isSeller && (
+            <li className="font-semibold hover:text-zinc-500" onClick={() => navigate("/my-listings")}>
+              My Listings
+            </li>
+          )}
+          {isBuyer && (
+            <li className="font-semibold hover:text-zinc-500" onClick={() => navigate("/bookings")}>
+              My Bookings
+            </li>
+          )}
+          {isSeller && (
+            <li className="font-semibold hover:text-zinc-500" onClick={() => navigate("/add-hotel")}>
+              Add Flat/Room
+            </li>
+          )}
+          {token && <Logout />}
+        </div>
       </Toolbar>
+      <Drawer anchor="right" open={drawerOpen} onClose={toggleDrawer(false)}>
+        <div className="w-64 p-4 flex flex-col">
+          <div className="flex justify-end">
+            <IconButton onClick={toggleDrawer(false)}>
+              <CloseIcon />
+            </IconButton>
+          </div>
+          <ul className="flex flex-col gap-4 mt-4 cursor-pointer">
+            {!token && (
+              <li className="hover:text-zinc-300" onClick={() => navigate("/register")}>
+                Register
+              </li>
+            )}
+            {!token && (
+              <li className="hover:text-zinc-300" onClick={() => navigate("/login")}>
+                Login
+              </li>
+            )}
+            {isSeller && (
+              <li className="font-semibold hover:text-zinc-500" onClick={() => navigate("/my-listings")}>
+                My Listings
+              </li>
+            )}
+            {isBuyer && (
+              <li className="font-semibold hover:text-zinc-500" onClick={() => navigate("/bookings")}>
+                My Bookings
+              </li>
+            )}
+            {isSeller && (
+              <li className="font-semibold hover:text-zinc-500" onClick={() => navigate("/add-hotel")}>
+                Add Flat/Room
+              </li>
+            )}
+            {token && <Logout />}
+          </ul>
+        </div>
+      </Drawer>
     </div>
   );
 };
