@@ -2,7 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
-Body{
-    background-color : #222831;
-    color:#EEEEEE
+Body {
+    background-color: #222831;
+    color: #EEEEEE
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #222831;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #555;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #363636;
 }
