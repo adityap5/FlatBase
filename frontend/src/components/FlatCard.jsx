@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Button from './Button';
 
 const FlatCard = ({ flat }) => {
   return (
@@ -10,9 +11,9 @@ const FlatCard = ({ flat }) => {
         <p className="text-gray-400 overflow-hidden tracking-tighter text-sm md:text-base">
           {flat.description.substring(0, 86)}..
         </p>
-        <p className="mt-2 font-bold text-base md:text-lg text-slate-200">Price: ₹{flat.price} night</p>
-        <Link to={`/flat/${flat._id}`} className="text-[#76ABAE] mt-2 block">
-          View Details
+        <p className="mt-2 mb-4 font-bold text-base md:text-lg ">Price: ₹{flat.price} night</p>
+        <Link to={`/flat/${flat._id}`}>
+          <Button name={"View Details"}/>
         </Link>
       </div>
     </div>

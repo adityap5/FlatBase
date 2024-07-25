@@ -59,7 +59,7 @@ router.get('/:id', async (req, res) => {
     }
   });
 
-router.get('/search', async (req, res) => {
+router.get('/search?location', async (req, res) => {
     try {
         const { local } = req.query;
         console.log(local)

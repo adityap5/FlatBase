@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Button from './Button';
 
 const Search = () => {
   const [location, setLocation] = useState('');
@@ -20,9 +21,7 @@ const Search = () => {
           placeholder="Search by location"
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mr-2"
         />
-        <button type="submit" className="bg-[#76ABAE] text-white py-2 px-4 rounded">
-          Search
-        </button>
+        <Button type="submit" name={"Search"}/>
       </div>
     </form>
   );

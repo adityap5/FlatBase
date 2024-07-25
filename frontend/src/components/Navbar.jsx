@@ -59,9 +59,9 @@ const Navbar = () => {
             </p>
           )}
           {isBuyer && (
-            <li className="font-semibold hover:text-[#A5C9CA]" onClick={() => navigate("/bookings")}>
+            <p className="font-semibold hover:text-[#A5C9CA]" onClick={() => navigate("/bookings")}>
               My Bookings
-            </li>
+            </p>
           )}
           {isSeller && (
             <p className="font-semibold hover:text-[#A5C9CA]" onClick={() => navigate("/add-flat")}>

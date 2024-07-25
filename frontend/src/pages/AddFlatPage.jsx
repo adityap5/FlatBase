@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import Button from '../components/Button';
 
 const AddFlatPage = () => {
   const [name, setName] = useState('');
@@ -119,7 +120,7 @@ const AddFlatPage = () => {
             required
           />
         </div>
-        <button type="submit" className="bg-[#76ABAE] text-white py-2 px-4 rounded hover:bg-green-700">Add Flat</button>
+        <Button type="submit" name={"Add Flat"}/>
       </form>
     </div>
   );
