@@ -24,7 +24,7 @@ const HomePage = () => {
       <h1 className="text-3xl font-bold my-4">Popular Flats</h1>
       <Search />
       <Loader loading={loading}/>
-      <div className="grid grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-4">
         {flats.map((flat) => (
           <FlatCard key={flat._id} flat={flat} />
         ))}

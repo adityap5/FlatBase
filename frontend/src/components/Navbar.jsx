@@ -71,11 +71,11 @@ const Navbar = () => {
           {token && <Logout />}
         </div>
       </Toolbar>
-      <Drawer anchor="right" open={drawerOpen} onClose={toggleDrawer(false)}>
-        <div className="w-64 p-4 flex flex-col">
+      <Drawer  anchor="right" open={drawerOpen} onClose={toggleDrawer(false)}>
+        <div className="w-64 p-4 flex flex-col bg-[#222831] text-[#EEEEEE]">
           <div className="flex justify-end">
             <IconButton onClick={toggleDrawer(false)}>
-              <CloseIcon />
+              <CloseIcon className="text-[#EEEEEE]" />
             </IconButton>
           </div>
           <ul className="flex flex-col gap-4 mt-4 cursor-pointer">
@@ -85,7 +85,7 @@ const Navbar = () => {
               </li>
             )}
             {!token && (
-              <li className="hover:text-zinc-300" onClick={() => navigate("/login")}>
+              <li className="hover:text-green-300" onClick={() => navigate("/login")}>
                 Login
               </li>
             )}
@@ -104,7 +104,7 @@ const Navbar = () => {
                 Add Flat/Room
               </li>
             )}
-            {token && <Logout />}
+            {token && <Logout/>}
           </ul>
         </div>
       </Drawer>

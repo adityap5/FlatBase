@@ -11,6 +11,7 @@ import SearchResultsPage from './pages/SearchResultsPage';
 import BookingPage from './pages/BookingPage';
 import MyListings from './pages/MyListings';
 import { useEffect } from 'react';
+import { Footer } from './components/Footer';
 
 const App = () => {
   const [loading,setLoading]=useState(true)
@@ -22,7 +23,7 @@ const App = () => {
   }, [])
   
   return (
-    <div className="px-10">
+    <div className="container px-8">
  {loading ? <div className="h-screen flex justify-center items-center"><h1>DISCOVER BOOK LIVE</h1></div> : 
  <Router>
  <Navbar />
@@ -38,8 +39,9 @@ const App = () => {
    <Route path="/my-listings" element={<MyListings />} />
  </Routes>
 </Router>
+
 }
-    
+<Footer/>
     </div>
   );
 };

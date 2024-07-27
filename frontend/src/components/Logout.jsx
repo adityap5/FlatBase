@@ -8,7 +8,7 @@ export function Logout() {
       navigate("/logout");
     };
   return (
-    <button onClick={handleLogout} className="text-sm font-semibold leading-6 hover:text-red-400">
+    <button onClick={handleLogout} className="text-sm font-semibold leading-6 hover:text-red-500 md:hover:text-red-500">
       Logout
     </button>
   );

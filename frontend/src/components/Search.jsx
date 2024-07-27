@@ -8,7 +8,7 @@ const Search = () => {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    navigate(`/search?location=${location}`);
+    navigate(`/search?location=${location}`); 
   };
 
   return (

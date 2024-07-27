@@ -59,15 +59,21 @@ router.get('/:id', async (req, res) => {
     }
   });
 
-router.get('/search?location', async (req, res) => {
+  router.get('/search', async (req, res) => {
     try {
-        const { local } = req.query;
-        console.log(local)
-        const flats = await Flat.find({ location: new RegExp(local, 'i') });
+        const { location } = req.query; 
+        console.log(`Searching for flats in location: ${location}`);
+        const flats = await Flat.find({ location: { $regex: /location/i } });
+        if (!flats.length) {
+            console.log('No flats found');
+            return res.status(404).send({ message: 'No flats found' });
+        }
         res.send(flats);
     } catch (error) {
-        res.status(500).send(error);
+        console.error('Error during search:', error);
+        res.status(500).send({ message: 'Server error', error });
     }
 });
+
 
 module.exports = router;
