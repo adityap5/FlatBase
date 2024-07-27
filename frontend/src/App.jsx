@@ -12,6 +12,7 @@ import BookingPage from './pages/BookingPage';
 import MyListings from './pages/MyListings';
 import { useEffect } from 'react';
 import { Footer } from './components/Footer';
+import Checkout from './pages/Checkout';
 
 const App = () => {
   const [loading,setLoading]=useState(true)
@@ -37,11 +38,12 @@ const App = () => {
    <Route path="/logout" element={<LogoutPage />} />
    <Route path="/bookings" element={<BookingPage />} />
    <Route path="/my-listings" element={<MyListings />} />
+   <Route path="/checkout/:id" element={<Checkout />} />
  </Routes>
 </Router>
 
 }
-<Footer/>
+{/* <Footer/> */}
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getBookings, deleteBooking } from '../api';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,Link } from 'react-router-dom';
 import Button from '../components/Button';
 
 const BookingPage = ({ userId }) => {
@@ -21,7 +21,10 @@ const BookingPage = ({ userId }) => {
         await deleteBooking(bookingId);
         console.log('Booking deleted');
     };
-
+    const handleCheckout =() => {
+        console.log('Booking checkout')
+        navigate('/checkout');
+    }
     return (
         <div className="container mx-auto px-4 py-4 md:px-20">
             <h1 className="text-2xl font-bold mb-4">Your Bookings</h1>
@@ -33,7 +36,13 @@ const BookingPage = ({ userId }) => {
                             <p className="text-zinc-500">Location: {booking.flat.location}, India</p>
                             <p>How Long: {booking.timePeriod} month</p>
                             <p>Price: ₹{booking.totalPrice}</p>
+                            <div className='flex justify-between md:gap-10'>
                             <Button onClick={() => setBookingId(booking._id)}  name={"Delete Booking"}/>
+                            <Link to={`/checkout/${booking._id}`}>
+                                 <Button name={"Checkout"}/>
+                            </Link>
+                           
+                            </div>
                             <button 
                                 onClick={handleDelete} 
                                 className='bg-red-600 p-2 rounded-lg text-sm mt-2'

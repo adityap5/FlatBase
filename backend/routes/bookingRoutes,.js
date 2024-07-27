@@ -32,6 +32,15 @@ router.get('/mybookings', auth, async (req, res) => {
     res.status(500).send('Server error');
   }
 });
+router.get('/:id', async (req, res) => {
+  try {
+    const booking = await Booking.findById(req.params.id)
+    res.json(booking);
+  
+  } catch (error) {
+    res.status(500).send('Server error');
+  }
+});
 
 router.delete('/:id', auth, async (req, res) =>{
   try {
