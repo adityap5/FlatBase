@@ -34,7 +34,7 @@ function Checkout() {
                         <hr />
                         <div className="space-y-3 font-semibold mb-4 ">
                             <div className="flex justify-between pt-3 ">
-                                <span>Price</span>
+                                <span>Price for {flat.timePeriod} month{flat.timePeriod > 1 && 's'}</span>
                                 <span>₹{flat.totalPrice} </span>
                             </div>
                             <div className="flex justify-between pt-3">

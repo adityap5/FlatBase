@@ -2,15 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getFlat, createBooking } from '../api';
 import Loader from '../components/Loader';
+import { Container, Box, Typography, IconButton, Paper } from '@mui/material';
+import { Add, Remove } from '@mui/icons-material';
+import Button from '../components/Button';
 
 const FlatDetailPage = () => {
-
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { id } = useParams();
   const [flat, setFlat] = useState(null);
-  const [month, setMonth] = useState(1)
-  const [loading, setLoading] = useState(true)
-
+  const [month, setMonth] = useState(1);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchFlat = async () => {
@@ -22,12 +23,13 @@ const FlatDetailPage = () => {
     fetchFlat();
   }, [id]);
 
-  const incresesMonth = () => {
-    setMonth(month + 1)
-  }
-  const decresesMonth = () => {
-    setMonth(month - 1)
-  }
+  const increaseMonth = () => {
+    setMonth(month + 1);
+  };
+
+  const decreaseMonth = () => {
+    setMonth(month > 1 ? month - 1 : 1);
+  };
 
   const handleBooking = async () => {
     if (!localStorage.getItem('token')) {
@@ -45,40 +47,49 @@ const FlatDetailPage = () => {
   };
 
   return (
-    <div className="container mx-auto px-4">
-      <Loader loading={loading}/>
+    <Container className="mx-auto px-4 py-8">
+      <Loader loading={loading} />
       {flat && (
-        <>
-          <div className="flex justify-center items-center px-10">
-            <div className="space-y-4 w-1/2">
-              <h1 className="text-3xl font-bold my-4">{flat.name}</h1>
-              <img className="w-80" src={flat.images} alt="flat" />
-              <p className="tracking-tighter ">{flat.description}</p>
-              <div className="flex gap-10 font-semibold">
-                <p>Location: {flat.location}, India</p>
-                <p>Capacity: {flat.capacity} guests</p>
-                <p>Price: ₹{flat.price}/night</p>
-              </div>
-
-              <p>Owners Name : {flat.seller.name}</p>
-            </div>
-            <div className='w-1/2 '>
-              {/* <Calendar selectionRange={selectionRange} handleSelect={handleSelect} /> */}
-              <div className="flex gap-4">
-                <h1 className="text-4xl ">Book Flat for : </h1>
-                <p className="text-4xl">{month} month</p>
-                <div className=" text-white">
-                  <button onClick={incresesMonth} className="py-2 px-4 bg-zinc-500 mr-4">+</button>
-                  <button onClick={decresesMonth} className="py-2 px-4 bg-zinc-500">-</button>
-                </div>
-              </div>
-              <button onClick={handleBooking} className="bg-[#76ABAE] text-white py-2 px-4 rounded mt-4"> Book Now</button>
-            </div>
-          </div>
-
-        </>
+        <Paper elevation={3} className="p-4">
+          <Box className="flex flex-col md:flex-row justify-center items-center md:gap-10">
+            <Box className="space-y-4 w-full md:w-1/2">
+              <h1 className="font-bold text-2xl">
+                {flat.name}
+              </h1>
+              <img className="w-full md:w-80" src={flat.images} alt="flat" />
+              <p variant="body1" className="text-lg">
+                {flat.description}
+              </p>
+              <Box className="flex flex-col md:flex-row gap-4 font-semibold">
+                <p className="text-zinc-600">Location: {flat.location}, India</p>
+                <p className="text-zinc-600">Capacity: {flat.capacity} guests</p>
+                <p className="text-zinc-600">Price: ₹{flat.price}/night</p>
+              </Box>
+              <p>Owner's Name: {flat.seller.name}</p>
+            </Box>
+            <Box className="w-full md:w-1/2 mt-6 md:mt-0">
+              <Box className="flex items-center gap-4">
+                <h2 className="text-2xl">Book Flat for:</h2>
+                <span className="text-xl">{month} month{month > 1 && 's'}</span>
+                <Box className="flex items-center ">
+                  <button className="rounded-full bg-zinc-600 text-white" onClick={increaseMonth}>
+                    <Add />
+                  </button>
+                  <button className="rounded-full bg-zinc-600 text-white ml-1" onClick={decreaseMonth} color="primary">
+                    <Remove />
+                  </button>
+                </Box>
+              </Box>
+              <Button
+                onClick={handleBooking}
+                name={"BOOK NOW"}
+              />
+              
+            </Box>
+          </Box>
+        </Paper>
       )}
-    </div>
+    </Container>
   );
 };
 

@@ -9,7 +9,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
 import Drawer from '@mui/material/Drawer';
 import { Logout } from '../components/Logout';
-
+import logo from '/logo.png';
 const Navbar = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const token = localStorage.getItem('token');
@@ -32,11 +32,11 @@ const Navbar = () => {
     <div className="text-white bg-[#31363F] rounded-xl mt-2" position="static">
       <Toolbar className="flex justify-between items-center">
         <IconButton onClick={handleHome} edge="start" color="inherit" aria-label="menu">
-          <HomeIcon className='hover:text-[#A5C9CA]'/>
+          <img className ="w-5" src={logo} alt="logo" />
         </IconButton>
-        <Typography variant="h6" className="flex-grow text-[#ffff]">
+        <h1 className="flex-grow text-3xl font-zain">
          FlatBase
-        </Typography>
+        </h1>
         <div className="md:hidden">
           <IconButton onClick={toggleDrawer(true)} edge="end" color="inherit" aria-label="menu">
             <MenuIcon />

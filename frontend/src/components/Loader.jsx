@@ -1,12 +1,12 @@
 import React from 'react'
-import RingLoader from "react-spinners/RingLoader";
+import DotLoader from "react-spinners/DotLoader";
 function Loader({loading}) {
   return (
-    <div className="flex justify-center items-center">
-        <RingLoader
+    <div className="flex justify-center items-center py-4">
+        <DotLoader
           loading={loading}
           color="#76ABAE"
-          size={90}
+          size={60}
           speedMultiplier={3}
         />
       </div>
