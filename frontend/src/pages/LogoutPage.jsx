@@ -28,7 +28,7 @@ const LogoutPage = () => {
         </p>
         <div className="mt-6 space-y-4">
           <button
-            className=" bg-zinc-700 rounded-xl py-2 px-8 text-center"
+            className=" bg-zinc-700 rounded-xl py-2 px-8 mr-1 text-center"
             onClick={handleHome}
           >
           <HomeIcon /> Go to Home

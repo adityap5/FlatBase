@@ -1,4 +1,4 @@
-# FlatBase
+# 🏠FlatBase
 
 FlatBase is a Flat booking platform designed to provide users with a seamless experience for booking accommodations based on location. The application includes features for user registration and login, assigning different roles to sellers and customers, enabling users to book accommodations easily, and allowing sellers to list their properties with image uploads.
 
@@ -118,7 +118,6 @@ The application should now be running on `http://localhost:5173`.
 - Multer: For handling file uploads
 - Cloudinary: For image storage
 - dotenv: For managing environment variables
-- dotenv: For managing environment variables
 - cors: Secure cross-origin requests and data transfers between browsers and servers
 
 ### Frontend
@@ -139,4 +138,4 @@ Contributions are welcome! Please fork the repository and submit a pull request 
 
 Feel free to reach out with any questions or suggestions!
 
-Happy Coding!
+Happy Coding!⚡

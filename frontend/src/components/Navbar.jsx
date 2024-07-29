@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import Toolbar from '@mui/material/Toolbar';
-import HomeIcon from '@mui/icons-material/Home';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
 import Drawer from '@mui/material/Drawer';
@@ -42,7 +41,7 @@ const Navbar = () => {
             <MenuIcon />
           </IconButton>
         </div>
-        <div className="hidden md:flex gap-4 cursor-pointer">
+        <div className="hidden md:flex gap-4 text-lg cursor-pointer">
           {!token && (
             <p className="hover:text-zinc-300" onClick={() => navigate("/register")}>
               Register

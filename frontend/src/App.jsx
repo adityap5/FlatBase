@@ -43,7 +43,7 @@ const App = () => {
 </Router>
 
 }
-{/* <Footer/> */}
+<Footer/>
     </div>
   );
 };
