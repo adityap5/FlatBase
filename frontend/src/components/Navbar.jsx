@@ -53,7 +53,7 @@ const Navbar = () => {
             </p>
           )}
           {isSeller && (
-            <p className="font-semibold hover:text-[#A5C9CA]" onClick={() => navigate("/my-listings")}>
+            <p className="font-semibold hover:text-[#A5C9CA]" onClick={() => navigate("/mylistings")}>
               My Listings
             </p>
           )}
@@ -89,7 +89,7 @@ const Navbar = () => {
               </li>
             )}
             {isSeller && (
-              <li className="font-semibold hover:text-zinc-500" onClick={() => navigate("/my-listings")}>
+              <li className="font-semibold hover:text-zinc-500" onClick={() => navigate("/mylistings")}>
                 My Listings
               </li>
             )}

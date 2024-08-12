@@ -14,8 +14,8 @@ const FlatCard = ({ flat }) => {
       </div>
       <div className="absolute inset-0 pt-20 items-center justify-center bg-gray-800 bg-opacity-75 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-500">
    
-        <p className="text-gray-400  overflow-hidden tracking-tighter text-xl md:text-base">
-          {flat.description.substring(0, 130)}....
+        <p className="text-gray-400 line-clamp-2 overflow-hidden tracking-tighter text-xl md:text-base">
+          {flat.description}
         </p>
 
    

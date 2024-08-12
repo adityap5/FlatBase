@@ -4,6 +4,8 @@ const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const dotenv = require('dotenv');
+const Flat = require('../models/Flat');
+const auth = require('../middleware/auth');
 
 dotenv.config();
 
@@ -62,13 +64,17 @@ router.get('/users/:id', async (req, res) => {
   }
 });
 //my listings
-// router.get('/mylistings', auth, async (req, res) => {
-//   try {
-//     const mylisting = await Hotel.find({ user: req.user.id }).populate('hotel');
-//     res.json(mylisting);
-//   } catch (error) {
-//     res.status(500).send('Server error');
-//   }
-// });
+router.get('/mylistings', auth, async (req, res) => {
+  
+  let id = req.user.id;
+ 
+  try {
+    const mylisting = await Flat.find({seller : id})
+    
+    res.json(mylisting);
+  } catch (error) {
+    res.status(500).send('Server error');
+  }
+});
 
 module.exports = router;

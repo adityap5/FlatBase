@@ -59,6 +59,15 @@ router.get('/:id', async (req, res) => {
     }
   });
 
+  // router.get('/mylistings', auth, async (req, res) => {
+  //   console.log(user)
+  //   try {
+  //     const listings = await Flat.find({ user: req.user.id }).populate('flat');
+  //     res.json(listings);
+  //   } catch (error) {
+  //     res.status(500).send('Server error');
+  //   }
+  // });
   router.get('/search', async (req, res) => {
     try {
         const { location } = req.query; 
