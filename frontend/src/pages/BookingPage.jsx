@@ -22,7 +22,7 @@ const BookingPage = ({ userId }) => {
         console.log('Booking deleted');
     };
     const handleCheckout =() => {
-        console.log('Booking checkout')
+       
         navigate('/checkout');
     }
     return (

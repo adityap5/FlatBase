@@ -18,5 +18,7 @@ export const getFlatByLocation = (location) => API.get(`/flats/search?location=$
 export const createBooking = (bookingData) => API.post('/bookings', bookingData);
 export const getBookings = () => API.get('/bookings/mybookings');
 export const getMyListings = () => API.get('/auth/mylistings');
+export const updateListing = (id) => API.put(`/flats/update/${id}`);
+export const deleteListing = (id) => API.delete(`/flats/delete/${id}`);
 export const deleteBooking = (id) => API.delete(`/bookings/${id}`);
 export const getBooking = (id) => API.get(`/bookings/${id}`);

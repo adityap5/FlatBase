@@ -13,6 +13,7 @@ import MyListings from './pages/MyListings';
 import { useEffect } from 'react';
 import { Footer } from './components/Footer';
 import Checkout from './pages/Checkout';
+import UpdatePage from './pages/UpdatePage';
 
 const App = () => {
   const [loading,setLoading]=useState(true)
@@ -39,6 +40,7 @@ const App = () => {
    <Route path="/bookings" element={<BookingPage />} />
    <Route path="/mylistings" element={<MyListings />} />
    <Route path="/checkout/:id" element={<Checkout />} />
+   <Route path="/updatePage/:id" element={<UpdatePage />} />
  </Routes>
 </Router>
 

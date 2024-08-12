@@ -59,15 +59,7 @@ router.get('/:id', async (req, res) => {
     }
   });
 
-  // router.get('/mylistings', auth, async (req, res) => {
-  //   console.log(user)
-  //   try {
-  //     const listings = await Flat.find({ user: req.user.id }).populate('flat');
-  //     res.json(listings);
-  //   } catch (error) {
-  //     res.status(500).send('Server error');
-  //   }
-  // });
+
   router.get('/search', async (req, res) => {
     try {
         const { location } = req.query; 
@@ -83,6 +75,48 @@ router.get('/:id', async (req, res) => {
         res.status(500).send({ message: 'Server error', error });
     }
 });
+router.put('/update/:id',async (req,res)=>{
+    const { name, price,capacity,location,description } = req.body;
+    try {
+        let flat = await Flat.findById(req.params.id);
+        if (!flat) {
+          return res.status(404).json({ msg: 'flat not found' });
+        }
+        console.log(flat)
+        console.log(flat.seller)
+        if (flat.seller !== req.user.id) {
+            console.log(flat.seller,req.user.id)
+          return res.status(401).json({ msg: 'User not authorized' });
+        }
+    
+        flat = await Flat.findByIdAndUpdate(
+          req.params.id,
+          { $set: { name, price,capacity,location,description  } },
+          { new: true }
+        );
+    
+        res.json(flat);
+      } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server error');
+      }
+})
+router.delete('/delete/:id', async (req,res)=>{
+    try {
+        let flat = await Flat.findById(req.params.id)
 
+        if(!flat){
+            return res.status(404).json({ msg: 'Flat not found' });
+        }
+        if (flat.seller !== req.user.id) {
+            console.log(flat.seller,req.user.id)
+          return res.status(401).json({ msg: 'User not authorized' });
+        }
+        
+    } catch (error) {
+        console.error(err.message);
+        res.status(500).send('Server error');
+    }
+})
 
 module.exports = router;

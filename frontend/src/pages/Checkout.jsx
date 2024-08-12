@@ -3,7 +3,7 @@ import FlatCard from '../components/FlatCard';
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getBooking } from '../api';
-import Loader from '../components/Loader';
+// import Loader from '../components/Loader';
 
 function Checkout() {
     const navigate = useNavigate()
