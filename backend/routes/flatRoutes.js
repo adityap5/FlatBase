@@ -82,12 +82,8 @@ router.put('/update/:id',async (req,res)=>{
         if (!flat) {
           return res.status(404).json({ msg: 'flat not found' });
         }
-        console.log(flat)
-        console.log(flat.seller)
-        if (flat.seller !== req.user.id) {
-            console.log(flat.seller,req.user.id)
-          return res.status(401).json({ msg: 'User not authorized' });
-        }
+       
+        
     
         flat = await Flat.findByIdAndUpdate(
           req.params.id,

@@ -11,12 +11,16 @@ function UpdatePage() {
     const [location, setLocation] = useState('');
     const [capacity, setCapacity] = useState('');
     const [description, setDescription] = useState('');
-    const [flat, setFlat] = useState('');
     const navigate = useNavigate();
     useEffect(() => {
         const fetchFlat = async () => {
           const { data } = await getFlat(id);
-          setFlat(data);
+          setName(data.name || '');
+            setPrice(data.price || '');
+            setLocation(data.location || '');
+            setCapacity(data.capacity || '');
+            setDescription(data.description || '');
+  
          
         };
     
@@ -26,17 +30,18 @@ function UpdatePage() {
     const handleSubmit = async (e) => {
       e.preventDefault();
   
-      const formData = new FormData();
-      formData.append('name', name);
-      formData.append('price', price);
-      formData.append('location', location);
-      formData.append('description', description);
-      formData.append('capacity', capacity);
-   
+      const formData = {
+        name,
+        price,
+        location,
+        description,
+        capacity,
+      };
   
       try {
-        await updateListing(formData, {
+        await updateListing(id,formData, {
           headers: {
+            'Content-Type': 'application/json',
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
         });
@@ -57,7 +62,6 @@ function UpdatePage() {
             type="text"
             id="name"
             value={name}
-            placeholder={flat.name}
             onChange={(e) => setName(e.target.value)}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
             required
@@ -68,7 +72,7 @@ function UpdatePage() {
           <input
             type="text"
             id="description"
-            value={flat.description}
+            value={description}
             onChange={(e) => setDescription(e.target.value)}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
             required
@@ -79,7 +83,7 @@ function UpdatePage() {
           <input
             type="number"
             id="price"
-            value={flat.price}
+            value={price}
             onChange={(e) => setPrice(e.target.value)}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
             required
@@ -89,7 +93,7 @@ function UpdatePage() {
           <label htmlFor="location" className="block ">Location</label>
           <select
                   id="location"
-                  value={flat.location}
+                  value={location}
                   onChange={(e)=>setLocation(e.target.value)}
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
                 >
@@ -111,7 +115,7 @@ function UpdatePage() {
           <input
             type="number"
             id="capacity"
-            value={flat.capacity}
+            value={capacity}
             onChange={(e) => setCapacity(e.target.value)}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
             required
