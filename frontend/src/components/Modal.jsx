@@ -11,7 +11,7 @@ export default function Modal({ isOpen, setIsOpen, header, footer, children }) {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="max-w-2xl grow rounded-lg bg-white p-4 shadow-lg"
+        className="max-w-2xl grow rounded-lg bg-zinc-300 p-4 shadow-lg"
       >
         {header}
         <div className="-mx-4 my-3 flex flex-wrap gap-4 border-y px-4 py-4">
