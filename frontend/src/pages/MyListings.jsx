@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { getMyListings,deleteListing } from '../api'
 import Button from '../components/Button';
 import { useNavigate, Link } from 'react-router-dom';
-import DeleteModal from '../components/DeleteModal';
+import DeleteModal from '../components/Modal';
 
 function MyListings() {
   const [listing, setListing] = useState([])

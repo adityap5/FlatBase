@@ -1,6 +1,6 @@
 // src/components/Navbar.js
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,NavLink } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import Toolbar from '@mui/material/Toolbar';
@@ -43,29 +43,34 @@ const Navbar = () => {
         </div>
         <div className="hidden md:flex gap-4 text-lg cursor-pointer">
           {!token && (
-            <p className="hover:text-zinc-300" onClick={() => navigate("/register")}>
+            <NavLink className={({isActive})=>isActive ?'text-[#A5C9CA] font-semibold': 'font-semibold hover:text-[#A5C9CA]'} 
+             to="/register">
               Register
-            </p>
+            </NavLink>
           )}
           {!token && (
-            <p className="hover:text-green-300" onClick={() => navigate("/login")}>
+            <NavLink className={({isActive})=>isActive ?'text-[#A5C9CA] font-semibold': 'font-semibold hover:text-green-300'}  to="/login">
               Login
-            </p>
+            </NavLink>
           )}
           {isSeller && (
-            <p className="font-semibold hover:text-[#A5C9CA]" onClick={() => navigate("/mylistings")}>
+            <NavLink 
+            className={({isActive})=>isActive ?'text-[#A5C9CA] font-semibold': 'font-semibold hover:text-[#A5C9CA]'} 
+            to="/mylistings">
               My Listings
-            </p>
+            </NavLink>
           )}
           {isBuyer && (
-            <p className="font-semibold hover:text-[#A5C9CA]" onClick={() => navigate("/bookings")}>
+            <NavLink className={({isActive})=>isActive ?'text-[#A5C9CA] font-semibold': 'font-semibold hover:text-[#A5C9CA]'}
+              to="/bookings">
               My Bookings
-            </p>
+            </NavLink>
           )}
           {isSeller && (
-            <p className="font-semibold hover:text-[#A5C9CA]" onClick={() => navigate("/add-flat")}>
+            <NavLink className={({isActive})=>isActive ?'text-[#A5C9CA] font-semibold': 'font-semibold hover:text-[#A5C9CA]'} 
+             to="/add-flat">
               Add Flat/Room
-            </p>
+            </NavLink>
           )}
           {token && <Logout />}
         </div>
@@ -79,29 +84,29 @@ const Navbar = () => {
           </div>
           <ul className="flex flex-col gap-4 mt-4 cursor-pointer">
             {!token && (
-              <li className="hover:text-zinc-300" onClick={() => navigate("/register")}>
+              <NavLink className={({isActive})=>isActive ?'text-[#A5C9CA] font-semibold': 'font-semibold hover:text-[#A5C9CA]'}  to="/register">
                 Register
-              </li>
+              </NavLink>
             )}
             {!token && (
-              <li className="hover:text-green-300" onClick={() => navigate("/login")}>
+              <NavLink className={({isActive})=>isActive ?'text-[#A5C9CA] font-semibold': 'font-semibold hover:text-green-300'} to="/login">
                 Login
-              </li>
+              </NavLink>
             )}
             {isSeller && (
-              <li className="font-semibold hover:text-zinc-500" onClick={() => navigate("/mylistings")}>
+              <NavLink className={({isActive})=>isActive ?'text-[#A5C9CA] font-semibold': 'font-semibold hover:text-[#A5C9CA]'} to="/mylistings">
                 My Listings
-              </li>
+              </NavLink>
             )}
             {isBuyer && (
-              <li className="font-semibold hover:text-zinc-500" onClick={() => navigate("/bookings")}>
+              <NavLink className={({isActive})=>isActive ?'text-[#A5C9CA] font-semibold': 'font-semibold hover:text-[#A5C9CA]'} to="/bookings">
                 My Bookings
-              </li>
+              </NavLink>
             )}
             {isSeller && (
-              <li className="font-semibold hover:text-zinc-500" onClick={() => navigate("/add-flat")}>
+              <NavLink className={({isActive})=>isActive ?'text-[#A5C9CA] font-semibold': 'font-semibold hover:text-[#A5C9CA]'} to="/add-flat">
                 Add Flat/Room
-              </li>
+              </NavLink>
             )}
             {token && <Logout/>}
           </ul>
