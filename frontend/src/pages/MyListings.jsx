@@ -45,7 +45,7 @@ function MyListings() {
   return (
     <div className="container mx-auto px-4 py-4 md:px-20">
       <h1 className="text-2xl font-bold mb-4">Your Listings</h1>
-      {listings.length > 0 ? (
+      {listings.length > 0 ?
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
           {listings.map((listing) => (
             <div key={listing._id} className="p-4 shadow rounded-xl hover:shadow-lg">
@@ -64,15 +64,17 @@ function MyListings() {
                 <Link to={`/updatePage/${listing._id}`}>
                   <Button name={"Update ✍🏻"} />
                 </Link>
-                <Button  name={"Delete Listing 🗑️"} />
+                <Button name={"Delete Listing 🗑️"} />
               </div>
             </div>
           ))}
         </div>
-      ) : (
-        <p>You have no listings.</p>
-      )}
-<button onClick={() => openModal()}> op</button>
+        : <>
+
+          <p>You have no listings.</p>
+        </>
+      }
+      <button onClick={() => openModal()}> op</button>
       {isOpen && (
         <Modal
           header={<div className="text-xl font-bold text-black">Are you sure you want to delete?</div>}

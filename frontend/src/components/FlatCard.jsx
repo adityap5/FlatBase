@@ -1,11 +1,11 @@
-import React, { Suspense } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import Button from './Button';
 
 const FlatCard = ({ flat }) => {
   // const   renderLoader = () => <div className="loader"></div>;
   return (
-    // <Suspense fallback={renderLoader()}>
+  
  <div className="relative group  max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl rounded-xl overflow-hidden shadow-lg mb-4 hover:shadow-xl transition-shadow duration-300">
       <img className="h-56 w-full object-cover" src={flat.images} alt="Flat" /> 
       
@@ -30,7 +30,7 @@ const FlatCard = ({ flat }) => {
         </div>   
       </div>
    
-    // </Suspense>
+  
    
   );
 };
