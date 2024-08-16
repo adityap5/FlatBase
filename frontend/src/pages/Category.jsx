@@ -13,7 +13,7 @@ const Category = () => {
     const fetchFlats = async () => {
       const { data } = await getFlats();
       setFlats(data);
-        setSortedFlats(data);
+      setSortedFlats(data);
     };
 
     fetchFlats();
