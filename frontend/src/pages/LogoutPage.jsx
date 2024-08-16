@@ -24,7 +24,7 @@ const LogoutPage = () => {
         </Typography>
 
         <p  className="mt-4 text-lg">
-          We hope to see you again soon!!
+          We hope to see you again soon !!
         </p>
         <div className="mt-6 space-y-4">
           <button
