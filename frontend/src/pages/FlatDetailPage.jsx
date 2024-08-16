@@ -2,31 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getFlat, createBooking } from '../api';
 import Loader from '../components/Loader';
-import { Container, Box, Typography, IconButton, Paper } from '@mui/material';
+import { Container, Box, Paper } from '@mui/material';
 import { Add, Remove } from '@mui/icons-material';
 import Button from '../components/Button';
-// import { ToastContainer, toast } from 'react-toastify';
-// import 'react-toastify/dist/ReactToastify.css';
-// import { Bounce } from 'react-toastify';
+
 const FlatDetailPage = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [flat, setFlat] = useState(null);
   const [month, setMonth] = useState(1);
   const [loading, setLoading] = useState(true);
-
-  // const notify = () =>
-  //   toast.success('Removed from cart!', {
-  //     position: 'top-right',
-  //     autoClose: 1000,
-  //     hideProgressBar: false,
-  //     closeOnClick: true,
-  //     pauseOnHover: true,
-  //     draggable: true,
-  //     progress: undefined,
-  //     theme: 'dark',
-  //     transition: Bounce,
-  //   });
 
   useEffect(() => {
     const fetchFlat = async () => {
@@ -55,7 +40,7 @@ const FlatDetailPage = () => {
       timePeriod: month,
       totalPrice: flat.price * month,
     };
-
+console.log(bookingData);
     await createBooking(bookingData);
     return  navigate('/bookings');
   };
@@ -95,7 +80,7 @@ const FlatDetailPage = () => {
                 </Box>
               </Box>
               <Button
-                onClick={handleBooking}
+                onClick={()=>{handleBooking()}}
                 name={"BOOK NOW"}
               />
             </Box>
