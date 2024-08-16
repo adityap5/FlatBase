@@ -15,6 +15,7 @@ import { Footer } from './components/Footer';
 import Error404  from './components/Error404';
 import Checkout from './pages/Checkout';
 import UpdatePage from './pages/UpdatePage';
+import Category from './pages/Category';
 
 const App = () => {
   const [loading,setLoading]=useState(true)
@@ -42,6 +43,7 @@ const App = () => {
    <Route path="/mylistings" element={<MyListings />} />
    <Route path="/checkout/:id" element={<Checkout />} />
    <Route path="/updatePage/:id" element={<UpdatePage />} />
+   <Route path="/category" element={<Category />} />
    <Route path="/*" component={<Error404/>} />
  </Routes>
 </Router>

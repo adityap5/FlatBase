@@ -42,6 +42,10 @@ const Navbar = () => {
           </IconButton>
         </div>
         <div className="hidden md:flex gap-4 text-lg cursor-pointer">
+          <NavLink className={({isActive})=>isActive ?'text-[#A5C9CA] font-semibold': 'font-semibold hover:text-[#A5C9CA]'}
+          to="/category">
+          Category
+          </NavLink>
           {!token && (
             <NavLink className={({isActive})=>isActive ?'text-[#A5C9CA] font-semibold': 'font-semibold hover:text-[#A5C9CA]'} 
              to="/register">
@@ -83,6 +87,10 @@ const Navbar = () => {
             </IconButton>
           </div>
           <ul className="flex flex-col gap-4 mt-4 cursor-pointer">
+          <NavLink className={({isActive})=>isActive ?'text-[#A5C9CA] font-semibold': 'font-semibold hover:text-[#A5C9CA]'}
+          to="/category">
+          Category
+          </NavLink>
             {!token && (
               <NavLink className={({isActive})=>isActive ?'text-[#A5C9CA] font-semibold': 'font-semibold hover:text-[#A5C9CA]'}  to="/register">
                 Register
