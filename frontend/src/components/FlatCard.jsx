@@ -21,7 +21,7 @@ const FlatCard = ({ flat }) => {
    
     
         <div className="flex justify-between mt-2">
-        <p className="mt-2 mb-4 font-bold text-base md:text-lg ">Price:  ₹{flat.price} night</p>
+        <p className="mt-2 mb-4 font-bold text-base md:text-lg ">Price:  ₹{flat.price} / month</p>
         
         <Link className="" to={`/flat/${flat._id}`}>
           <Button name={"View Details"}/>

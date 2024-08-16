@@ -62,7 +62,7 @@ console.log(bookingData);
               <Box className="flex flex-col md:flex-row gap-4 font-semibold">
                 <p className="text-zinc-600">Location: {flat.location}, India</p>
                 <p className="text-zinc-600">Capacity: {flat.capacity} guests</p>
-                <p className="text-zinc-600">Price: ₹{flat.price}/night</p>
+                <p className="text-zinc-600">Price: ₹{flat.price} / month</p>
               </Box>
               <p>Owner's Name: {flat.seller}</p>
             </Box>
