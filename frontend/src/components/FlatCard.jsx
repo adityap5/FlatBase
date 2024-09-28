@@ -6,15 +6,15 @@ const FlatCard = ({ flat }) => {
   // const   renderLoader = () => <div className="loader"></div>;
   return (
   
- <div className="relative group  max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl rounded-xl overflow-hidden shadow-lg mb-4 hover:shadow-xl transition-shadow duration-300">
+ <div className="relative group bg-zinc-300 max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl rounded-xl overflow-hidden shadow-lg mb-4 hover:shadow-xl transition-shadow duration-300">
       <img className="h-56 w-full object-cover" src={flat.images} alt="Flat" /> 
       
       <div className="px-4 py-4 md:px-6 md:py-6">
       <h1 className="font-bold font-zain text-2xl md:text-3xl mb-2">Rooms in {flat.location}</h1>
       </div>
-      <div className="absolute inset-0 pt-20 items-center justify-center bg-gray-800 bg-opacity-75 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-500">
+      <div className="absolute inset-0 pt-20 items-center justify-center bg-zinc-500 bg-opacity-75 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-500">
    
-        <p className="text-gray-400 line-clamp-2 overflow-hidden tracking-tighter text-xl md:text-base">
+        <p className="text-zinc-200 line-clamp-2 overflow-hidden tracking-tighter text-xl md:text-base">
           {flat.description}
         </p>
 

@@ -2,16 +2,16 @@ import { Typography } from "@material-tailwind/react";
  
 const LINKS = [
   {
-    title: "Product",
-    items: ["Overview", "Features", "Solutions", "Tutorials"],
+    title: "Support",
+    items: ["Help Centre", "Anti-discrimination","Flat cover", "Disability support", "Cancellation options"],
   },
   {
-    title: "Company",
-    items: ["About us", "Careers", "Press", "News"],
+    title: "Hoisting",
+    items: ["flatBase your Home","Hoisting resources" ,"Community forum", "Press", "News"],
   },
   {
-    title: "Resource",
-    items: ["Blog", "Newsletter", "Events", "Help center"],
+    title: "FlatBase",
+    items: ["About us","Careers","Blog", "Newsletter", "Investors", "New features"],
   },
 ];
  
@@ -19,7 +19,7 @@ const currentYear = new Date().getFullYear();
  
 export function Footer() {
   return (
-    <footer className="relative w-full mt-72">
+    <footer className="relative w-full mt-72 text-black">
       <div className="mx-auto w-full">
         <div className="grid grid-cols-1 justify-between gap-4 md:grid-cols-2">
           <Typography variant="h5" className="mb-6">

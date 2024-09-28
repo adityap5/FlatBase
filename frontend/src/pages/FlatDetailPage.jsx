@@ -12,6 +12,34 @@ const FlatDetailPage = () => {
   const [flat, setFlat] = useState(null);
   const [month, setMonth] = useState(1);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+ 
+
+  const handleBooking = async () => {
+    if (!localStorage.getItem('token')) {
+      navigate('/login');
+      return;
+    }
+
+    try {
+      const bookingData = {
+        flat: id,
+        timePeriod: month,
+        totalPrice: flat.price * month,
+      };
+
+      const response = await createBooking(bookingData);
+      
+      if (response.status === 201) {
+        navigate('/bookings');
+      } else {
+        setError('Failed to create booking. Please try again.');
+      }
+    } catch (err) {
+      console.error('Error creating booking:', err);
+      setError('An error occurred while creating the booking. Please try again.');
+    }
+  };
 
   useEffect(() => {
     const fetchFlat = async () => {
@@ -31,63 +59,49 @@ const FlatDetailPage = () => {
     setMonth(month > 1 ? month - 1 : 1);
   };
 
-  const handleBooking = async () => {
-    if (!localStorage.getItem('token')) {
-      return navigate('/login');
-    }
-    const bookingData = {
-      flat: id,
-      timePeriod: month,
-      totalPrice: flat.price * month,
-    };
-console.log(bookingData);
-    await createBooking(bookingData);
-    return  navigate('/bookings');
-  };
-
+ 
   return (
-    <Container className="mx-auto px-4 py-8">
+    <div className="w-full">
       <Loader loading={loading} />
       {flat && (
-        <Paper elevation={3} className="p-4">
-          <Box className="flex flex-col md:flex-row justify-center items-center md:gap-10">
-            <Box className="space-y-4 w-full md:w-1/2">
-              <h1 className="font-bold text-2xl">
-                {flat.name}
-              </h1>
-              <img className="w-full md:w-80" src={flat.images} alt="flat" />
-              <p variant="body1" className="text-lg">
-                {flat.description}
-              </p>
-              <Box className="flex flex-col md:flex-row gap-4 font-semibold">
-                <p className="text-zinc-600">Location: {flat.location}, India</p>
-                <p className="text-zinc-600">Capacity: {flat.capacity} guests</p>
-                <p className="text-zinc-600">Price: ₹{flat.price} / month</p>
-              </Box>
-              <p>Owner's Name: {flat.seller}</p>
+        <Paper elevation={6} className="p-6">
+          <Box className="flex flex-col md:flex-row justify-between items-start md:gap-12">
+            <Box className="w-full md:w-1/2">
+              <img className="w-3/5 h-auto rounded-lg mx-auto" src={flat.images} alt={flat.name} />
             </Box>
-            <Box className="w-full md:w-1/2 mt-6 md:mt-0">
-              <Box className="flex items-center gap-4">
-                <h2 className="text-2xl">Book Flat for:</h2>
-                <span className="text-xl">{month} month{month > 1 && 's'}</span>
-                <Box className="flex items-center ">
-                  <button className="rounded-full bg-zinc-600 text-white" onClick={increaseMonth}>
-                    <Add />
+            <Box className="w-full md:w-1/2 mt-8 md:mt-0">
+              <h1 className="font-bold text-6xl">{flat.name}</h1>
+              <p className="text-2xl text-gray-600">{flat.location}, India</p>
+              <h4 className='text-zinc-500 mt-4 '>Details</h4>
+              <p className="text-xl">{flat.description}</p>
+              <Box className="font-semibold flex gap-8 mt-4">
+                <p className="text-zinc-600 text-xl">Capacity: {flat.capacity} guests</p>
+                <p className="text-zinc-600 text-xl">Price: ₹{flat.price} / month</p>
+              </Box>
+                <p className="text-zinc-600 text-xl">Owner&apos;s Name: {flat.seller}</p>
+              <Box className="mt-8 flex flex-col justify-center">
+                <h2 className="text-3xl mb-4">Book Flat for:</h2>
+                <Box className="flex items-center gap-6 mb-4">
+                  <button className="rounded-full bg-zinc-400 text-white p-2" onClick={decreaseMonth}>
+                    <Remove fontSize="small" />
                   </button>
-                  <button className="rounded-full bg-zinc-600 text-white ml-1" onClick={decreaseMonth} color="primary">
-                    <Remove />
+                  <span className="text-2xl">{month} month{month > 1 && 's'}</span>
+                  <button className="rounded-full bg-zinc-400 text-white p-2" onClick={increaseMonth}>
+                    <Add fontSize="small" />
                   </button>
                 </Box>
               </Box>
               <Button
-                onClick={()=>{handleBooking()}}
+                onClick={() => handleBooking}
                 name={"BOOK NOW"}
+                className="mt-6 text-xl"
+                css={'w-full'}
               />
             </Box>
           </Box>
         </Paper>
       )}
-    </Container>
+    </div>
   );
 };
 

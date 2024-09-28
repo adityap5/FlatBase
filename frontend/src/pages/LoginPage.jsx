@@ -1,5 +1,5 @@
 // src/pages/LoginPage.js
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { login } from '../api';
 import { useNavigate ,Link} from 'react-router-dom';
 
@@ -37,7 +37,7 @@ const LoginPage = () => {
           onSubmit={handleSubmit}
           className="space-y-6" action="#" method="POST">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-400">
+              <label htmlFor="email" className="block text-sm font-medium leading-6">
                 Email address
               </label>
               <div className="mt-2">
@@ -56,11 +56,11 @@ const LoginPage = () => {
 
             <div>
               <div className="flex items-center justify-between">
-                <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-400">
+                <label htmlFor="password" className="block text-sm font-medium leading-6 ">
                   Password
                 </label>
                 <div className="text-sm">
-                  <a href="#" className="font-semibold text-[#50727B] hover:text-[#5a8490]">
+                  <a href="#" className="font-semibold text-[#50727B] hover:text-black">
                     Forgot password?
                   </a>
                 </div>
@@ -91,7 +91,7 @@ const LoginPage = () => {
           
           <p className="mt-10 text-center text-sm text-gray-500">
             Not a member?{' '}
-            <Link to="/register" className="font-semibold leading-6 text-[#435B66] hover:text-[#5a8490]">
+            <Link to="/register" className="font-semibold leading-6 text-[#435B66] hover:text-black">
              Register
             </Link>
           </p>

@@ -3,7 +3,7 @@ import React from 'react';
 const HomeCardShimmer = () => {
   return (
     <>
-     {Array.from({ length: 20 }).map((el, i) => {
+     {Array.from({ length: 8 }).map((el, i) => {
         return <div key={i} className="animate-pulse bg-gray-500  rounded-xl">
         
         <div className="h-56 w-full bg-gray-700 rounded-xl"></div>

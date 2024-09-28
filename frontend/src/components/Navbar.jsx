@@ -28,7 +28,7 @@ const Navbar = () => {
   }
 
   return (
-    <div className="text-white bg-[#31363F] rounded-xl mt-2" position="static">
+    <div className="text-white bg-zinc-400 rounded-xl mt-2" >
       <Toolbar className="flex justify-between items-center">
         <IconButton onClick={handleHome} edge="start" color="inherit" aria-label="menu">
           <img className ="w-5" src={logo} alt="logo" />

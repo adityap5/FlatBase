@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { getFlats } from '../api'
 import FlatCard from '../components/FlatCard';
 import HomeCardShimmer from '../components/HomeCardShimmer';
@@ -43,16 +43,16 @@ const Category = () => {
 
   return (
     <div className="p-4">
-      <div className=" flex justify-end mb-4">
+      <div className="flex justify-end mb-4">
         <select
           value={sortOption}
           onChange={(e) => setSortOption(e.target.value)}
-          className="bg-zinc-500 p-2 border rounded"
+          className="bg-zinc-500 p-2 border rounded text-white selection:bg-[#76ABAE]"
         >
-          <option value="select">Select</option>
-          <option value="price-low">Price: Low to High</option>
-          <option value="price-high">Price: High to Low</option>
-          <option value="location">Location (A-Z)</option>
+          <option value="select" className="hover:bg-[#76ABAE]">Select</option>
+          <option value="price-low" className="hover:bg-[#76ABAE]">Price: Low to High</option>
+          <option value="price-high" className="hover:bg-[#76ABAE]">Price: High to Low</option>
+          <option value="location" className="hover:bg-[#76ABAE]">Location (A-Z)</option>
         </select>
       </div>
     
