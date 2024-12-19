@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { getBookings, deleteBooking } from '../api';
 import { useNavigate,Link } from 'react-router-dom';
 import Button from '../components/Button';
 
 const BookingPage = ({ userId }) => {
     const [bookings, setBookings] = useState([]);
-    const [bookingId, setBookingId] = useState('');
     const navigate  = useNavigate();
 
     useEffect(() => {
@@ -17,12 +16,12 @@ const BookingPage = ({ userId }) => {
         fetchFlat();
     }, []);
 
-    const handleDelete = async () => {
+    const handleDelete = async (bookingId) => {
         await deleteBooking(bookingId);
         console.log('Booking deleted');
+        setBookings(bookings.filter(booking => booking._id !== bookingId));
     };
     const handleCheckout =() => {
-       
         navigate('/checkout');
     }
     return (
@@ -39,18 +38,11 @@ const BookingPage = ({ userId }) => {
                             <p>Price: ₹{booking.totalPrice}</p>
                             </div>
                             <div className='flex justify-between md:gap-10'>
-                            <Button onClick={() => setBookingId(booking._id)}  name={"Delete Booking"}/>
+                            <Button onClick={() => handleDelete(booking._id)}  name={"Delete Booking"}/>
                             <Link to={`/checkout/${booking._id}`}>
                                  <Button name={"Checkout"}/>
                             </Link>
-                           
                             </div>
-                            <button 
-                                onClick={handleDelete} 
-                                className='bg-red-600 p-2 rounded-lg text-sm mt-2'
-                            >
-                                Are you sure?
-                            </button>
                         </div>
                     ))}
                 </div>

@@ -21,6 +21,9 @@ function Checkout() {
     
         fetchFlat();
       }, [id]);
+      const bill =()=>{
+            console.log('bill pay kar');
+      }
   return (
     <div>
       <div className="grid-cols-3 relative mt-10">
@@ -66,6 +69,7 @@ function Checkout() {
                                     backgroundColor: '#5B8D91'
                                 }
                             }}
+                            onClick={bill}
                         >
                             Proceed to Pay
                         </Button>

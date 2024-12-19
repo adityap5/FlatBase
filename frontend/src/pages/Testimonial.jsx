@@ -26,7 +26,7 @@ const Testimonial = () => {
         <div className="flex flex-col items-center p-4">
           <img src="https://images.unsplash.com/photo-1654944989990-9da8fa364ca1?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Happy guest" className="w-96 h-64 object-cover mb-4 rounded-lg" />
           <div className="text-center">
-            <p className="text-lg font-semibold">John Doe</p>
+            <p className="text-lg font-semibold">Janet </p>
             <p className="text-sm italic mt-2">&ldquo;The stay was absolutely fantastic! The amenities were top-notch and the staff was incredibly friendly. I&apos;ll definitely be coming back!&rdquo;</p>
           </div>
         </div>
@@ -53,7 +53,7 @@ const Testimonial = () => {
         <div className="flex flex-col items-center p-4">
           <img src="https://images.unsplash.com/photo-1654512504066-e5af36ceaa27?q=80&w=1888&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Delighted guest" className="w-96 h-64 object-cover mb-4 rounded-lg" />
           <div className="text-center">
-            <p className="text-lg font-semibold">Mike Johnson</p>
+            <p className="text-lg font-semibold">Sara Johnson</p>
             <p className="text-sm italic mt-2">&ldquo;The location was perfect, and the service was impeccable. I couldn&apos;t have asked for a better experience. Will definitely return!&rdquo;</p>
           </div>
         </div>
@@ -62,7 +62,7 @@ const Testimonial = () => {
         <div className="flex flex-col items-center p-4">
           <img src="https://images.unsplash.com/photo-1650612546797-4b8cf3625a11?q=80&w=1949&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Delighted guest" className="w-96 h-64 object-cover mb-4 rounded-lg" />
           <div className="text-center">
-            <p className="text-lg font-semibold">Mike Johnson</p>
+            <p className="text-lg font-semibold">Chloe James</p>
             <p className="text-sm italic mt-2">&ldquo;The location was perfect, and the service was impeccable. I couldn&apos;t have asked for a better experience. Will definitely return!&rdquo;</p>
           </div>
         </div>

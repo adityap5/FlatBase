@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { Button } from '@mui/material';
+
 import { useNavigate, useParams } from 'react-router-dom';
 import { getFlat, createBooking } from '../api';
 import Loader from '../components/Loader';
 import { Container, Box, Paper } from '@mui/material';
 import { Add, Remove } from '@mui/icons-material';
-import Button from '../components/Button';
+// import Button from '../components/Button';
 
 const FlatDetailPage = () => {
   const navigate = useNavigate();
@@ -13,14 +15,14 @@ const FlatDetailPage = () => {
   const [month, setMonth] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
- 
+
 
   const handleBooking = async () => {
+
     if (!localStorage.getItem('token')) {
       navigate('/login');
       return;
     }
-
     try {
       const bookingData = {
         flat: id,
@@ -28,18 +30,21 @@ const FlatDetailPage = () => {
         totalPrice: flat.price * month,
       };
 
+
       const response = await createBooking(bookingData);
-      
-      if (response.status === 201) {
+
+      if (response.status === 201 || response.status === 200) {
+
         navigate('/bookings');
       } else {
         setError('Failed to create booking. Please try again.');
       }
     } catch (err) {
-      console.error('Error creating booking:', err);
+      console.error('Error creating booking:', err.response?.data || err.message);
       setError('An error occurred while creating the booking. Please try again.');
     }
   };
+
 
   useEffect(() => {
     const fetchFlat = async () => {
@@ -59,7 +64,7 @@ const FlatDetailPage = () => {
     setMonth(month > 1 ? month - 1 : 1);
   };
 
- 
+
   return (
     <div className="w-full">
       <Loader loading={loading} />
@@ -78,7 +83,7 @@ const FlatDetailPage = () => {
                 <p className="text-zinc-600 text-xl">Capacity: {flat.capacity} guests</p>
                 <p className="text-zinc-600 text-xl">Price: ₹{flat.price} / month</p>
               </Box>
-                <p className="text-zinc-600 text-xl">Owner&apos;s Name: {flat.seller}</p>
+              <p className="text-zinc-600 text-xl">Owner&apos;s Name: {flat.seller}</p>
               <Box className="mt-8 flex flex-col justify-center">
                 <h2 className="text-3xl mb-4">Book Flat for:</h2>
                 <Box className="flex items-center gap-6 mb-4">
@@ -92,11 +97,22 @@ const FlatDetailPage = () => {
                 </Box>
               </Box>
               <Button
-                onClick={() => handleBooking}
-                name={"BOOK NOW"}
-                className="mt-6 text-xl"
-                css={'w-full'}
-              />
+                // name={"BOOK NOW"}
+                variant='contained'
+                className='w-full mt-6'
+                sx={{
+                  py: '0.75rem',
+                  backgroundColor: '#76ABAE',
+                  fontSize: '1.25rem',
+                  fontWeight: 'bold',
+                  '&:hover': {
+                    backgroundColor: '#5B8D91'
+                  }
+                }}
+                onClick={handleBooking}
+              >
+                BOOK NOW
+              </Button>
             </Box>
           </Box>
         </Paper>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { addFlat } from '../api';
 import { useNavigate } from 'react-router-dom';
 import Button from '../components/Button';
 
@@ -17,7 +18,7 @@ const AddFlatPage = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); 
 
     const formData = new FormData();
     formData.append('name', name);
@@ -28,12 +29,12 @@ const AddFlatPage = () => {
     formData.append('image', image);
 
     try {
-      await axios.post('http://localhost:5000/api/flats', formData, {
+      await addFlat(formData), { //axios.post('http://localhost:5000/api/flats' , formData
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
-      });
+      };
 
       navigate('/');
     } catch (err) {
