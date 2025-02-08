@@ -1,7 +1,8 @@
+import React, { useState, useEffect } from 'react';
 import { Button, IconButton } from '@mui/material';
 import FlatCard from '../components/FlatCard';
-import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import axios from 'axios';
 import { getBooking } from '../api';
 // import Loader from '../components/Loader';
 
@@ -11,6 +12,12 @@ function Checkout() {
   const [flat, setFlat] = useState(null);
 
   const [loading, setLoading] = useState(true)
+  const loadRazorpay = async () => {
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.async = true;
+    document.body.appendChild(script);
+};
 
     useEffect(() => {
         const fetchFlat = async () => {
@@ -18,12 +25,52 @@ function Checkout() {
           setFlat(data);
           setLoading(false);
         };
-    
+        loadRazorpay();
         fetchFlat();
       }, [id]);
-      const bill =()=>{
-            console.log('bill pay kar');
-      }
+      const handlePayment = async () => {
+        if (!flat) return;
+    
+        const token = localStorage.getItem("token"); // Retrieve token
+    
+        try {
+            const { data: order } = await axios.post(
+                'http://localhost:5000/api/bookings/create-order',
+                { amount: flat.totalPrice + 999 + Math.round(flat.totalPrice / flat.timePeriod) },
+                {
+                    headers: { Authorization: `Bearer ${token}` }, // Send token in headers
+                    withCredentials: true,
+                }
+            );
+    
+            const options = {
+                key: "rzp_test_POjN4Ulq8Q6my8",
+                amount: order.amount,
+                currency: order.currency,
+                name: "Flat Booking",
+                description: "Booking Payment",
+                order_id: order.id,
+                handler: async (response) => {
+                    try {
+                        const verifyRes = await axios.post('http://localhost:5000/api/bookings/verify-payment', response);
+                        if (verifyRes.data.success) {
+                            alert("Payment Successful!");
+                        } else {
+                            alert("Payment Verification Failed!");
+                        }
+                    } catch (error) {
+                        console.error("Payment verification failed", error);
+                    }
+                },
+                theme: { color: "#3399cc" },
+            };
+    
+            const paymentObject = new window.Razorpay(options);
+            paymentObject.open();
+        } catch (error) {
+            console.error("Payment failed", error);
+        }
+    };
   return (
     <div>
       <div className="grid-cols-3 relative mt-10">
@@ -69,7 +116,7 @@ function Checkout() {
                                     backgroundColor: '#5B8D91'
                                 }
                             }}
-                            onClick={bill}
+                            onClick={handlePayment}
                         >
                             Proceed to Pay
                         </Button>
