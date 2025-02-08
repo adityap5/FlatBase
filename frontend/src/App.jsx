@@ -1,21 +1,22 @@
-import { useState } from 'react';
+import { useState,useEffect ,Suspense, lazy} from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import NavScrollTop from './components/NavScrollTop';
 import Navbar from './components/Navbar';
-import HomePage from './pages/HomePage';
-import FlatDetailPage from './pages/FlatDetailPage';
-import LoginPage from './pages/LoginPage';
-import RegisterPage from './pages/RegisterPage';
-import LogoutPage from './pages/LogoutPage';
-import AddFlatPage from './pages/AddFlatPage';
-import SearchResultsPage from './pages/SearchResultsPage';
-import BookingPage from './pages/BookingPage';
-import MyListings from './pages/MyListings';
-import { useEffect } from 'react';
-import { Footer } from './components/Footer';
-import Error404 from './components/Error404';
-import Checkout from './pages/Checkout';
-import UpdatePage from './pages/UpdatePage';
-import Category from './pages/Category';
+
+const HomePage = lazy(() => import("./pages/HomePage"));
+const FlatDetailPage = lazy(() => import("./pages/FlatDetailPage"));
+const LoginPage = lazy(() => import("./pages/LoginPage"));
+const RegisterPage = lazy(() => import("./pages/RegisterPage"));
+const LogoutPage = lazy(() => import("./pages/LogoutPage"));
+const AddFlatPage = lazy(() => import("./pages/AddFlatPage"));
+const SearchResultsPage = lazy(() => import("./pages/SearchResultsPage"));
+const BookingPage = lazy(() => import("./pages/BookingPage"));
+const MyListings = lazy(() => import("./pages/MyListings"));
+const Checkout = lazy(() => import("./pages/Checkout"));
+const UpdatePage = lazy(() => import("./pages/UpdatePage"));
+const Category = lazy(() => import("./pages/Category"));
+import Error404 from "./components/Error404";
+import {Footer} from "./components/Footer";
 
 const App = () => {
   const [loading, setLoading] = useState(true)
@@ -23,7 +24,7 @@ const App = () => {
   useEffect(() => {
     setTimeout(() => {
       setLoading(false)
-    }, 800);
+    }, 1000);
   }, [])
 
   return (
@@ -37,6 +38,8 @@ const App = () => {
         {loading ? <div className="h-screen flex justify-center items-center">
           <h1>DISCOVER BOOK LIVE</h1></div> :
           <Router>
+             <NavScrollTop>
+            <Suspense fallback={<div />}>
             <Navbar />
             <Routes>
               <Route path="/" element={<HomePage />} />
@@ -53,11 +56,14 @@ const App = () => {
               <Route path="/category" element={<Category />} />
               <Route path="/*" component={<Error404 />} />
             </Routes>
+            <Footer />
+            </Suspense>
+            </NavScrollTop>
           </Router>
 
 
         }
-        <Footer />
+     
 
       </div>
     </>
