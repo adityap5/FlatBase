@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { useState, useEffect } from 'react';
 import FlatCard from '../components/FlatCard';
+// import ScrollToTop from '../components/ScrollToTop.jsx';
 import Search from '../components/Search';
 import { getFlats } from '../api'
 import Loader from '../components/Loader';
@@ -46,6 +47,7 @@ const HomePage = () => {
 
     </div>
     <Testimonial/>
+    {/* <ScrollToTop /> */}
     </>
   );
 };
