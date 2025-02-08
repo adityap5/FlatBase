@@ -31,18 +31,28 @@ router.post('/create-order', auth, async (req, res) => {
 });
 
 // Verify Razorpay Payment
-router.post('/verify-payment', async (req, res) => {
-  const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+router.post('/verify-payment', auth, async (req, res) => {
+    try {
+        const { razorpay_order_id, razorpay_payment_id, razorpay_signature, bookingId } = req.body;
 
-  const generated_signature = crypto.createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
-      .update(`${razorpay_order_id}|${razorpay_payment_id}`)
-      .digest('hex');
+        // Verify payment signature
+        const generated_signature = crypto
+            .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
+            .update(`${razorpay_order_id}|${razorpay_payment_id}`)
+            .digest('hex');
 
-  if (generated_signature === razorpay_signature) {
-      res.json({ success: true, message: 'Payment verified' });
-  } else {
-      res.status(400).json({ success: false, message: 'Invalid signature' });
-  }
+        if (generated_signature !== razorpay_signature) {
+            return res.status(400).json({ success: false, message: 'Payment verification failed' });
+        }
+
+        // ✅ Delete the booking from MongoDB after successful payment
+        await Booking.findByIdAndDelete(bookingId);
+
+        return res.json({ success: true, message: 'Payment successful, booking deleted' });
+    } catch (error) {
+        console.error('Payment verification error:', error);
+        res.status(500).json({ success: false, message: 'Server error during payment verification' });
+    }
 });
 
 router.post('/', auth, async (req, res) => {

@@ -31,16 +31,13 @@ function Checkout() {
       const handlePayment = async () => {
         if (!flat) return;
     
-        const token = localStorage.getItem("token"); // Retrieve token
+        const token = localStorage.getItem("token");
     
         try {
             const { data: order } = await axios.post(
                 'http://localhost:5000/api/bookings/create-order',
                 { amount: flat.totalPrice + 999 + Math.round(flat.totalPrice / flat.timePeriod) },
-                {
-                    headers: { Authorization: `Bearer ${token}` }, // Send token in headers
-                    withCredentials: true,
-                }
+                { headers: { Authorization: `Bearer ${token}` } }
             );
     
             const options = {
@@ -52,9 +49,16 @@ function Checkout() {
                 order_id: order.id,
                 handler: async (response) => {
                     try {
-                        const verifyRes = await axios.post('http://localhost:5000/api/bookings/verify-payment', response);
+                        const verifyRes = await axios.post('http://localhost:5000/api/bookings/verify-payment', 
+                            { 
+                                ...response, 
+                                bookingId: flat._id // Send booking ID to delete it
+                            }, 
+                            { headers: { Authorization: `Bearer ${token}` } }
+                        );
+    
                         if (verifyRes.data.success) {
-                            alert("Payment Successful!");
+                            navigate('/success'); // ✅ Redirect to success page
                         } else {
                             alert("Payment Verification Failed!");
                         }

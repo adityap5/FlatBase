@@ -17,7 +17,7 @@ const UpdatePage = lazy(() => import("./pages/UpdatePage"));
 const Category = lazy(() => import("./pages/Category"));
 import Error404 from "./components/Error404";
 import {Footer} from "./components/Footer";
-
+const Success = lazy(() => import("./components/Success"))
 const App = () => {
   const [loading, setLoading] = useState(true)
 
@@ -55,6 +55,7 @@ const App = () => {
               <Route path="/updatePage/:id" element={<UpdatePage />} />
               <Route path="/category" element={<Category />} />
               <Route path="/*" component={<Error404 />} />
+              <Route path="/success" element={<Success />} />
             </Routes>
             <Footer />
             </Suspense>
