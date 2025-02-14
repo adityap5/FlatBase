@@ -40,7 +40,7 @@ const HomePage = () => {
       {/* <Search /> */}
      
         <div className="grid grid-cols-1 gap-6 md:grid-cols-4">
-          {!flats.length ? <HomeCardShimmer /> : flats.map((flat) => (
+          {!flats.length ? <HomeCardShimmer /> : flats.slice(4,12).map((flat) => (
             <FlatCard key={flat._id} flat={flat} />
           ))}
         </div>
