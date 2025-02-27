@@ -35,7 +35,7 @@ function Checkout() {
     
         try {
             const { data: order } = await axios.post(
-                'http://localhost:5000/api/bookings/create-order',
+                'https://flatbase.onrender.com/api/bookings/create-order',
                 { amount: flat.totalPrice + 999 + Math.round(flat.totalPrice / flat.timePeriod) },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
@@ -49,7 +49,7 @@ function Checkout() {
                 order_id: order.id,
                 handler: async (response) => {
                     try {
-                        const verifyRes = await axios.post('http://localhost:5000/api/bookings/verify-payment', 
+                        const verifyRes = await axios.post('https://flatbase.onrender.com/api/bookings/verify-payment', 
                             { 
                                 ...response, 
                                 bookingId: flat._id // Send booking ID to delete it

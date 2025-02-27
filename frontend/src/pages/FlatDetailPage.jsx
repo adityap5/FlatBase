@@ -22,27 +22,31 @@ const FlatDetailPage = () => {
     if (!localStorage.getItem('token')) {
       navigate('/login');
       return;
-    }
-    try {
-      const bookingData = {
-        flat: id,
-        timePeriod: month,
-        totalPrice: flat.price * month,
-      };
-
-
-      const response = await createBooking(bookingData);
-
-      if (response.status === 201 || response.status === 200) {
-
-        navigate('/bookings');
-      } else {
-        setError('Failed to create booking. Please try again.');
+    }else if(localStorage.getItem('role') == 'customer'){
+      try {
+        const bookingData = {
+          flat: id,
+          timePeriod: month,
+          totalPrice: flat.price * month,
+        };
+  
+  
+        const response = await createBooking(bookingData);
+  
+        if (response.status === 201 || response.status === 200) {
+  
+          navigate('/bookings');
+        } else {
+          setError('Failed to create booking. Please try again.');
+        }
+      } catch (err) {
+        console.error('Error creating booking:', err.response?.data || err.message);
+        setError('An error occurred while creating the booking. Please try again.');
       }
-    } catch (err) {
-      console.error('Error creating booking:', err.response?.data || err.message);
-      setError('An error occurred while creating the booking. Please try again.');
+    }else{
+      navigate('/');
     }
+    
   };
 
 

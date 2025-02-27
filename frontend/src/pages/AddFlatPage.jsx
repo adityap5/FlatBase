@@ -29,7 +29,7 @@ const AddFlatPage = () => {
     formData.append('image', image);
 
     try {
-      await axios.post('http://localhost:5000/api/flats', formData, {
+      await axios.post('https://flatbase.onrender.com/api/flats', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${localStorage.getItem('token')}`,

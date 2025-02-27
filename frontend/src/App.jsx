@@ -2,7 +2,6 @@ import { useState,useEffect ,Suspense, lazy} from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import NavScrollTop from './components/NavScrollTop';
 import Navbar from './components/Navbar';
-
 const HomePage = lazy(() => import("./pages/HomePage"));
 const FlatDetailPage = lazy(() => import("./pages/FlatDetailPage"));
 const LoginPage = lazy(() => import("./pages/LoginPage"));
