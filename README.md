@@ -2,6 +2,14 @@
 
 FlatBase is a Flat booking platform designed to provide users with a seamless experience for booking accommodations based on location. The application includes features for user registration and login, assigning different roles to sellers and customers, enabling users to book accommodations easily, and allowing sellers to list their properties with image uploads.
 
+## Id to use Project
+for customer - 
+email - raman@gmail.com
+password - raman@gmail.com
+
+for seller -
+email - ravi@gmail.com
+password - ravi@gmail.com
 ## Features
 
 - User Registration and Login
