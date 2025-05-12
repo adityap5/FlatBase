@@ -12,7 +12,7 @@ connectDB();
 
 
 // CORS Middleware (Allow requests from frontend)
-app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
+app.use(cors({ origin: process.BASE_URL, credentials: true }));
 app.use(express.json());
 
 // Routes
