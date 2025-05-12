@@ -13,7 +13,7 @@ connectDB();
 
 // CORS Middleware (Allow requests from frontend)
 
-app.use(cors({ origin: "https://flatbase-1.onrender.com/", credentials: true }));
+app.use(cors({ origin: "https://flatbase-1.onrender.com", credentials: true }));
 
 app.use(express.json());
 
