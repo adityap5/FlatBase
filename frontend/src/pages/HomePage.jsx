@@ -1,55 +1,61 @@
-/* eslint-disable no-unused-vars */
-import { useState, useEffect } from 'react';
-import FlatCard from '../components/FlatCard';
-// import ScrollToTop from '../components/ScrollToTop.jsx';
-import Search from '../components/Search';
-import { getFlats } from '../api'
-import Loader from '../components/Loader';
-import HomeCardShimmer from '../components/HomeCardShimmer';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchFlats } from '../redux/flatsSlice';
-import Banner from './Banner';
-import Testimonial from './Testimonial';
-const HomePage = () => {
-  const dispatch = useDispatch();
-  // const [flats, setFlats] = useState([]);
-  // const [loading, setLoading] = useState(true);
+"use client"
 
-  const { flats, loading } = useSelector((state) => state.flats);
+import { useEffect } from "react"
+import { motion } from "framer-motion"
+import FlatCard from "../components/FlatCard"
+import HomeCardShimmer from "../components/HomeCardShimmer"
+import { useDispatch, useSelector } from "react-redux"
+import { fetchFlats } from "../redux/flatsSlice"
+import Banner from "./Banner"
+import Testimonial from "./Testimonial"
+
+const HomePage = () => {
+  const dispatch = useDispatch()
+  const { flats, loading } = useSelector((state) => state.flats)
 
   useEffect(() => {
-    dispatch(fetchFlats()); 
-  }, [dispatch]);
+    dispatch(fetchFlats())
+  }, [dispatch])
 
-  // useEffect(() => {
-  //   const fetchFlats = async () => {
-  //     const { data } = await getFlats();
-  //     setFlats(data);
-  //     setLoading(false);
-  //   };
-
-  //   fetchFlats();
-  // }, []);
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  }
 
   return (
-
     <>
-    <Banner/>
-    <div className="container mx-auto px-4">
-      <h1 className="text-3xl font-bold my-4">Popular Flats</h1>
-      {/* <Search /> */}
-     
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-4">
-          {!flats.length ? <HomeCardShimmer /> : flats.slice(4,12).map((flat) => (
-            <FlatCard key={flat._id} flat={flat} />
-          ))}
-        </div>
+      <Banner />
+      <div className="container mx-auto px-4 py-12">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="flex items-center justify-between mb-8"
+        >
+          <h1 className="text-4xl font-bold">Popular Flats</h1>
+        </motion.div>
 
-    </div>
-    <Testimonial/>
-    {/* <ScrollToTop /> */}
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"
+        >
+          {!flats.length ? (
+            <HomeCardShimmer />
+          ) : (
+            flats.slice(4, 12).map((flat) => <FlatCard key={flat._id} flat={flat} />)
+          )}
+        </motion.div>
+      </div>
+      <Testimonial />
     </>
-  );
-};
+  )
+}
 
-export default HomePage;
+export default HomePage
