@@ -22,7 +22,7 @@ app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/flats', require('./routes/flatRoutes'));
 app.use('/api/bookings', require('./routes/bookingRoutes,'));
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 5000;
 
 app.get("/", (req, res) => {
   res.send("Server is running fine");
