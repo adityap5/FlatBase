@@ -1,123 +1,197 @@
-// src/pages/RegisterPage.js
-import React, { useState } from 'react';
-import { register } from '../api';
-import { useNavigate, Link } from 'react-router-dom';
+"use client"
+
+import { useState } from "react"
+import { motion } from "framer-motion"
+import { register } from "../api"
+import { useNavigate, Link } from "react-router-dom"
+import { Mail, Lock, User, UserPlus, Building, Users, Loader2, AlertCircle } from "lucide-react"
+import Button from "../components/Button"
 
 const RegisterPage = () => {
-  const [form, setForm] = useState({name:'', email: '', password: '',role:'customer' })
-  const navigate = useNavigate();
+  const [form, setForm] = useState({ name: "", email: "", password: "", role: "customer" })
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState(null)
+  const navigate = useNavigate()
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value});
-  };
+    setForm({ ...form, [e.target.name]: e.target.value })
+    setError(null)
+  }
+
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    const { data } = await register(form);
-    localStorage.setItem('token', data.token);
-    navigate('/');
-  };
+    e.preventDefault()
+    setIsLoading(true)
+    setError(null)
+
+    try {
+      const { data } = await register(form)
+      localStorage.setItem("token", data.token)
+      localStorage.setItem("role", form.role)
+      navigate("/")
+    } catch (error) {
+      console.error("Registration failed:", error)
+      setError("Registration failed. Please try again with a different email.")
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   return (
-    <>
-      <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight ">
-           Register
-          </h2>
-        </div>
+    <div className="flex min-h-[80vh] items-center justify-center px-4">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="w-full max-w-md"
+      >
+        <div className="bg-white mt-4 rounded-xl shadow-lg overflow-hidden">
+          <div className="p-8">
+            <div className="text-center mb-8">
+              <motion.div
+                initial={{ scale: 0.5, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ delay: 0.2, duration: 0.5 }}
+                className="flex justify-center mb-4"
+              >
+                <div className="bg-[#76ABAE]/10 p-4 rounded-full">
+                  <UserPlus size={32} className="text-[#76ABAE]" />
+                </div>
+              </motion.div>
 
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form onSubmit={handleSubmit} className="space-y-6" action="#" method="POST">
-          <div>
-              <label htmlFor="name" className="block text-sm font-medium leading-6 ">
-                Name
-              </label>
-              <div className="mt-2">
-                <input
-                  value={form.name}
-                  onChange={handleChange}
-                  id="name"
-                  name="name"
-                  type="text"
-                  autoComplete="name"
-                  required
-                  className="block w-full font-semibold rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                />
-              </div>
-            </div>
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium leading-6">
-                Email address
-              </label>
-              <div className="mt-2">
-                <input
-                  value={form.email}
-                  onChange={handleChange}
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  required
-                  className="block w-full font-semibold rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                />
-              </div>
+              <h2 className="text-2xl font-bold text-gray-800">Create Account</h2>
+              <p className="text-gray-600 mt-2">Join our community today</p>
             </div>
 
+            {error && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                className="mb-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded flex items-start"
+              >
+                <AlertCircle size={20} className="mr-2 mt-0.5" />
+                <p>{error}</p>
+              </motion.div>
+            )}
 
-            <div>
-              <div className="flex items-center justify-between">
-                <label htmlFor="password" className="block text-sm font-medium leading-6">
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <div className="space-y-2">
+                <label htmlFor="name" className="block text-sm font-medium text-gray-700 flex items-center">
+                  <User size={16} className="mr-2 text-[#76ABAE]" />
+                  Full Name
+                </label>
+                <div className="mt-1">
+                  <input
+                    id="name"
+                    name="name"
+                    type="text"
+                    autoComplete="name"
+                    required
+                    value={form.name}
+                    onChange={handleChange}
+                    className="block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-[#76ABAE] focus:border-transparent"
+                    placeholder="John Doe"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700 flex items-center">
+                  <Mail size={16} className="mr-2 text-[#76ABAE]" />
+                  Email Address
+                </label>
+                <div className="mt-1">
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    autoComplete="email"
+                    required
+                    value={form.email}
+                    onChange={handleChange}
+                    className="block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-[#76ABAE] focus:border-transparent"
+                    placeholder="you@example.com"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label htmlFor="password" className="block text-sm font-medium text-gray-700 flex items-center">
+                  <Lock size={16} className="mr-2 text-[#76ABAE]" />
                   Password
                 </label>
+                <div className="mt-1">
+                  <input
+                    id="password"
+                    name="password"
+                    type="password"
+                    autoComplete="new-password"
+                    required
+                    value={form.password}
+                    onChange={handleChange}
+                    className="block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-[#76ABAE] focus:border-transparent"
+                    placeholder="••••••••"
+                  />
+                </div>
               </div>
-              <div className="mt-2">
-                <input
-                  value={form.password}
-                  onChange={handleChange}
-                  id="password"
-                  name="password"
-                  type="password"
-                  autoComplete="current-password"
-                  required
-                  className="block w-full font-bold rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+
+              <div className="space-y-2">
+                <label htmlFor="role" className="block text-sm font-medium text-gray-700 flex items-center">
+                  {form.role === "customer" ? (
+                    <Users size={16} className="mr-2 text-[#76ABAE]" />
+                  ) : (
+                    <Building size={16} className="mr-2 text-[#76ABAE]" />
+                  )}
+                  Account Type
+                </label>
+                <div className="mt-1">
+                  <select
+                    id="role"
+                    name="role"
+                    value={form.role}
+                    onChange={handleChange}
+                    className="block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-[#76ABAE] focus:border-transparent"
+                  >
+                    <option value="customer">Customer (Book Properties)</option>
+                    <option value="seller">Seller (List Properties)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="pt-2">
+                <Button
+                  type="submit"
+                  name={
+                    isLoading ? (
+                      <div className="flex items-center justify-center">
+                        <Loader2 size={20} className="animate-spin mr-2" />
+                        <span>Creating account...</span>
+                      </div>
+                    ) : (
+                      <div className="flex items-center justify-center">
+                        <UserPlus size={18} className="mr-2" />
+                        <span>Create Account</span>
+                      </div>
+                    )
+                  }
+                  fullWidth
+                  css="py-3"
                 />
               </div>
-              <div className="mt-2">
-              <label htmlFor="password" className="block text-sm font-medium leading-6 ">
-                  Role
-                </label>
-                <select
-                  name="role"
-                  value={form.role}
-                  onChange={handleChange}
-                  className="shadow  font-bold border rounded w-full p-2 text-gray-800"
-                >
-                  <option value="customer">Customer</option>
-                  <option value="seller">Seller</option>
-                </select>
-              </div>
-            </div>
+            </form>
 
-            <div>
-              <button
-                type="submit"
-                className="flex w-full justify-center rounded-md bg-[#76ABAE] px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-zinc-400 hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              >
-                Sign up
-              </button>
+            <div className="mt-8 text-center">
+              <p className="text-gray-600">
+                Already have an account?{" "}
+                <Link to="/login" className="font-medium text-[#76ABAE] hover:text-[#5B8D91]">
+                  Sign in
+                </Link>
+              </p>
             </div>
-          </form>
-
-          <p className="mt-10 text-center text-sm text-gray-500">
-            Already a member?{' '}
-            <Link to="/login" className="font-semibold leading-6 text-[#76ABAE] hover:text-[#85c1c4]">
-              Login
-            </Link>
-          </p>
+          </div>
         </div>
-      </div>
-    </>
-  );
-};
+      </motion.div>
+    </div>
+  )
+}
 
-export default RegisterPage;
+export default RegisterPage

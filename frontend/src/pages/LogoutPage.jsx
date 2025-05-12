@@ -1,48 +1,88 @@
-// src/pages/LogoutPage.js
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import LogoutIcon from '@mui/icons-material/Logout';
-import HomeIcon from '@mui/icons-material/Home';
+"use client"
+
+import { motion } from "framer-motion"
+import { useNavigate } from "react-router-dom"
+import { LogOut, Home, ArrowRight } from "lucide-react"
+import Button from "../components/Button"
 
 const LogoutPage = () => {
-  const navigate = useNavigate();
-  const handleLogin = ()=>{
-    navigate('/login')
+  const navigate = useNavigate()
+
+  const handleLogin = () => {
+    navigate("/login")
   }
+
   const handleHome = () => {
-    navigate('/');
-  };
+    navigate("/")
+  }
 
   return (
-    <div className="flex  items-center justify-center">
-      <div className="p-8 max-w-sm w-full text-center mt-10">
-        <LogoutIcon style={{ fontSize: 60, color: 'red' }} />
-        <Typography variant="h4" className="mt-4 mb-4">
-          You have been logged out😥
-        </Typography>
+    <div className="flex items-center justify-center min-h-[70vh]">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5 }}
+        className="bg-white p-8 rounded-xl shadow-lg max-w-md w-full text-center"
+      >
+        <motion.div
+          initial={{ y: -20 }}
+          animate={{ y: 0 }}
+          transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+          className="mb-6 flex justify-center"
+        >
+          <div className="bg-red-100 p-5 rounded-full">
+            <LogOut size={50} className="text-red-500" />
+          </div>
+        </motion.div>
 
-        <p  className="mt-4 text-lg">
-          We hope to see you again soon !!
-        </p>
-        <div className="mt-6 space-y-4">
-          <button
-            className=" bg-zinc-700 rounded-xl py-2 px-8 mr-1 text-center"
+        <motion.h2
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3, duration: 0.5 }}
+          className="text-3xl font-bold mb-4 text-gray-800"
+        >
+          You have been logged out
+        </motion.h2>
+
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4, duration: 0.5 }}
+          className="text-gray-600 text-lg mb-8"
+        >
+          We hope to see you again soon!
+        </motion.p>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.5 }}
+          className="flex flex-col sm:flex-row gap-4 justify-center"
+        >
+          <Button
+            name={
+              <div className="flex items-center">
+                <Home size={18} className="mr-2" />
+                <span>Go to Home</span>
+              </div>
+            }
             onClick={handleHome}
-          >
-          <HomeIcon /> Go to Home
-          </button>
-          <button
-           className=" bg-zinc-700 rounded-xl py-2 px-8 text-[#76ABAE]"
-            onClick={handleLogin}
-          >
-           <LogoutIcon /> Login Again
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-};
+          />
 
-export default LogoutPage;
+          <Button
+            name={
+              <div className="flex items-center">
+                <ArrowRight size={18} className="mr-2" />
+                <span>Login Again</span>
+              </div>
+            }
+            onClick={handleLogin}
+            css="bg-blue-600 hover:bg-blue-700"
+          />
+        </motion.div>
+      </motion.div>
+    </div>
+  )
+}
+
+export default LogoutPage
