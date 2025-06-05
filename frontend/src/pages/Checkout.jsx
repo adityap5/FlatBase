@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { useNavigate, useParams } from "react-router-dom"
 import axios from "axios"
-import { getBooking } from "../api"
+import { getBooking, getFlat } from "../api"
 import { CreditCard, Shield, Calendar, Home, MapPin, Loader2 } from "lucide-react"
 import Button from "../components/Button"
 
@@ -12,15 +12,23 @@ function Checkout() {
   const navigate = useNavigate()
   const { id } = useParams()
   const [flat, setFlat] = useState(null)
+  const [flatDetails, setFlatDetails] = useState(null)
   const [loading, setLoading] = useState(true)
   const [isProcessing, setIsProcessing] = useState(false)
   const [error, setError] = useState(null)
 
-  const loadRazorpay = async () => {
-    const script = document.createElement("script")
-    script.src = "https://checkout.razorpay.com/v1/checkout.js"
-    script.async = true
-    document.body.appendChild(script)
+  const loadRazorpay = () => {
+    return new Promise((resolve) => {
+      const script = document.createElement("script")
+      script.src = "https://checkout.razorpay.com/v1/checkout.js"
+      script.onload = () => {
+        resolve(true)
+      }
+      script.onerror = () => {
+        resolve(false)
+      }
+      document.body.appendChild(script)
+    })
   }
 
   useEffect(() => {
@@ -28,13 +36,17 @@ function Checkout() {
       try {
         const { data } = await getBooking(id)
         setFlat(data)
+
+        const flatRes = await getFlat(data.flat) // Assuming data.flat is just flat ID
+        setFlatDetails(flatRes.data)
       } catch (err) {
-        console.error("Error fetching booking:", err)
+        console.error("Error fetching booking or flat:", err)
         setError("Failed to load booking details")
       } finally {
         setLoading(false)
       }
     }
+
     loadRazorpay()
     fetchFlat()
   }, [id])
@@ -42,16 +54,23 @@ function Checkout() {
   const handlePayment = async () => {
     if (!flat) return
     setIsProcessing(true)
-
+  
+    const res = await loadRazorpay()
+    if (!res) {
+      alert("Razorpay SDK failed to load. Are you online?");
+      setIsProcessing(false)
+      return
+    }
+  
     const token = localStorage.getItem("token")
-
+  
     try {
       const { data: order } = await axios.post(
         "https://flatbase.onrender.com/api/bookings/create-order",
         { amount: flat.totalPrice + 999 + Math.round(flat.totalPrice / flat.timePeriod) },
-        { headers: { Authorization: `Bearer ${token}` } },
+        { headers: { Authorization: `Bearer ${token}` } }
       )
-
+  
       const options = {
         key: "rzp_test_POjN4Ulq8Q6my8",
         amount: order.amount,
@@ -67,9 +86,9 @@ function Checkout() {
                 ...response,
                 bookingId: flat._id,
               },
-              { headers: { Authorization: `Bearer ${token}` } },
+              { headers: { Authorization: `Bearer ${token}` } }
             )
-
+  
             if (verifyRes.data.success) {
               navigate("/success")
             } else {
@@ -84,7 +103,7 @@ function Checkout() {
         },
         theme: { color: "#76ABAE" },
       }
-
+  
       const paymentObject = new window.Razorpay(options)
       paymentObject.open()
     } catch (error) {
@@ -93,7 +112,8 @@ function Checkout() {
       setIsProcessing(false)
     }
   }
-
+  
+console.log(flatDetails)
   if (loading) {
     return (
       <div className="flex justify-center items-center py-20">
@@ -118,10 +138,10 @@ function Checkout() {
     )
   }
 
-  if (!flat) {
+  if (!flat || !flatDetails) {
     return (
       <div className="container mx-auto px-4 py-12 text-center">
-        <p className="text-gray-600 mb-4">Booking not found</p>
+        <p className="text-gray-600 mb-4">Booking or flat details not found</p>
         <Button name="Go Back" onClick={() => navigate(-1)} />
       </div>
     )
@@ -146,13 +166,28 @@ function Checkout() {
                   <div className="flex items-center">
                     <Home size={20} className="text-[#76ABAE] mr-3" />
                     <div>
-                      <p className="font-medium">{flat.flat.name || "Booked Property"}</p>
-                      <div className="flex items-center text-gray-500 text-sm mt-1">
+                      <div className="flex items-center text-zinc-700 mt-1">
+                      <p className="mr-4 font-bold">{flatDetails.name}</p>
                         <MapPin size={14} className="mr-1" />
-                        <span>{flat.flat.location}, India</span>
+                        <span>{flatDetails.location}, India</span>
+                      </div>
+                      <div className="flex items-center gap-8 text-gray-500 mt-1">
+                        <span>Host: {flatDetails.seller?.name}</span>
+                        <span>email: {flatDetails.seller?.email}</span>
+                      </div>
+                      <div>
+                        <p className="text-zinc-400 tracking-tighter">{flatDetails.description}</p>
                       </div>
                     </div>
                   </div>
+
+                  {flatDetails.images && (
+                    <img
+                      src={flatDetails.images}
+                      alt="Flat"
+                      className="rounded-lg mt-4 w-full max-h-64 object-cover"
+                    />
+                  )}
 
                   <div className="flex items-center">
                     <Calendar size={20} className="text-[#76ABAE] mr-3" />
@@ -160,6 +195,9 @@ function Checkout() {
                       <p className="font-medium">
                         {flat.timePeriod} Month{flat.timePeriod > 1 && "s"} Booking
                       </p>
+                    </div>
+                    <div>
+                      <p className="ml-3">Capacity: {flatDetails.capacity}</p>
                     </div>
                   </div>
                 </div>
@@ -209,43 +247,24 @@ function Checkout() {
                       <span className="text-gray-600">Security Deposit</span>
                       <span className="font-medium">₹{securityDeposit}</span>
                     </div>
-                    <div className="flex justify-between items-center">
+                    <div className="flex justify-between items-center mb-2">
                       <span className="text-gray-600">Advance Payment</span>
-                      <span className="font-medium">₹{advancePayment.toLocaleString()}</span>
+                      <span className="font-medium">₹{advancePayment}</span>
                     </div>
                   </div>
-
-                  <div className="pt-4">
-                    <div className="flex items-center justify-between py-2">
-                      <div>
-                        <span className="text-lg font-bold">Total Amount</span>
-                        <p className="text-xs text-gray-500">(Total Price + Advance + Security Deposit)</p>
-                      </div>
-                      <span className="text-xl font-bold text-[#76ABAE]">₹{totalAmount.toLocaleString()}</span>
-                    </div>
+                  <div className="pt-4 flex justify-between items-center text-lg font-bold">
+                    <span>Total Amount</span>
+                    <span>₹{totalAmount.toLocaleString()}</span>
                   </div>
                 </div>
 
-                <div className="mt-6">
-                  <Button
-                    name={
-                      isProcessing ? (
-                        <div className="flex items-center justify-center">
-                          <Loader2 size={20} className="animate-spin mr-2" />
-                          <span>Processing...</span>
-                        </div>
-                      ) : (
-                        <div className="flex items-center justify-center">
-                          <CreditCard size={18} className="mr-2" />
-                          <span>Proceed to Pay</span>
-                        </div>
-                      )
-                    }
-                    onClick={handlePayment}
-                    fullWidth
-                    css="py-3 text-lg font-medium"
-                  />
-                </div>
+                <Button
+                  name={isProcessing ? "Processing..." : "Pay Now"}
+                  onClick={handlePayment}
+                  disabled={isProcessing}
+                  className="mt-6 w-full bg-[#76ABAE] hover:bg-[#62989a] text-white font-semibold py-2 px-4 rounded-lg"
+                />
+                <button onClick={handlePayment}>Pay Now</button>
               </div>
             </motion.div>
           </div>
