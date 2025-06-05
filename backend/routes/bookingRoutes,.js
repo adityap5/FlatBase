@@ -55,10 +55,18 @@ router.post('/verify-payment', auth, async (req, res) => {
     }
 });
 
+// Create booking - FIXED
 router.post('/', auth, async (req, res) => {
   const { flat, timePeriod, totalPrice } = req.body;
 
   try {
+    // Validate required fields
+    if (!flat || !timePeriod || !totalPrice) {
+      return res.status(400).json({ 
+        message: 'Missing required fields: flat, timePeriod, and totalPrice are required' 
+      });
+    }
+
     const booking = new Booking({
       flat,
       user: req.user.id,
@@ -67,12 +75,22 @@ router.post('/', auth, async (req, res) => {
     });
 
     await booking.save();
-    res.json(booking);
+    
+    // Return 201 status for successful creation
+    res.status(201).json({
+      success: true,
+      message: 'Booking created successfully',
+      booking
+    });
   } catch (error) {
-    res.status(500).send('Server error');
+    console.error('Booking creation error:', error);
+    res.status(500).json({ 
+      success: false,
+      message: 'Failed to create booking',
+      error: error.message 
+    });
   }
 });
-
 
 router.get('/mybookings', auth, async (req, res) => {
   try {
@@ -82,6 +100,7 @@ router.get('/mybookings', auth, async (req, res) => {
     res.status(500).send('Server error');
   }
 });
+
 router.get('/:id', async (req, res) => {
   try {
     const booking = await Booking.findById(req.params.id)
