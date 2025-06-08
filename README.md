@@ -90,6 +90,8 @@ CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
 CLOUDINARY_API_KEY=your_cloudinary_api_key
 CLOUDINARY_API_SECRET=your_cloudinary_api_secret
 JWT_SECRET=your_jwt_secret_key
+RAZORPAY_KEY_ID= your_razorpay_keyId
+RAZORPAY_KEY_SECRET=your_razorpay_secret_key
 PORT=5000
 ```
 
