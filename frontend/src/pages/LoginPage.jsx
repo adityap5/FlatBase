@@ -75,7 +75,7 @@ const LoginPage = () => {
 
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-2">
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 flex items-center">
+                <label htmlFor="email" className="text-sm font-medium text-gray-700 flex items-center">
                   <Mail size={16} className="mr-2 text-[#76ABAE]" />
                   Email Address
                 </label>
@@ -96,7 +96,7 @@ const LoginPage = () => {
 
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <label htmlFor="password" className="block text-sm font-medium text-gray-700 flex items-center">
+                  <label htmlFor="password" className="text-sm font-medium text-gray-700 flex items-center">
                     <Lock size={16} className="mr-2 text-[#76ABAE]" />
                     Password
                   </label>
@@ -148,7 +148,7 @@ const LoginPage = () => {
 
             <div className="mt-8 text-center">
               <p className="text-gray-600">
-                Don't have an account?{" "}
+                Don&apos;t have an account?{" "}
                 <Link to="/register" className="font-medium text-[#76ABAE] hover:text-[#5B8D91]">
                   Sign up
                 </Link>

@@ -17,7 +17,7 @@ const FlatDetailPage = () => {
   const [isBooking, setIsBooking] = useState(false)
 
   const handleBooking = async () => {
-    console.log("🔥 BOOK NOW BUTTON CLICKED!")
+    
     console.log("Token:", localStorage.getItem("token"))
     console.log("Role:", localStorage.getItem("role"))
     console.log("Flat ID:", id)

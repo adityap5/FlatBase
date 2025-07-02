@@ -66,7 +66,7 @@ function Checkout() {
   
     try {
       const { data: order } = await axios.post(
-        "https://flatbase.onrender.com/api/bookings/create-order",
+        "http://flatbase.ap-south-1.elasticbeanstalk.com/api/bookings/create-order",
         { amount: flat.totalPrice + 999 + Math.round(flat.totalPrice / flat.timePeriod) },
         { headers: { Authorization: `Bearer ${token}` } }
       )
@@ -81,7 +81,7 @@ function Checkout() {
         handler: async (response) => {
           try {
             const verifyRes = await axios.post(
-              "https://flatbase.onrender.com/api/bookings/verify-payment",
+              "http://flatbase.ap-south-1.elasticbeanstalk.com/api/bookings/verify-payment",
               {
                 ...response,
                 bookingId: flat._id,
@@ -259,7 +259,7 @@ console.log(flatDetails)
                 </div>
 
                 <Button
-                  name={isProcessing ? "Processing..." : "Pay Now"}
+                  name={isProcessing ? "Processing..." : ""}
                   onClick={handlePayment}
                   disabled={isProcessing}
                   className="mt-6 w-full bg-[#76ABAE] hover:bg-[#62989a] text-white font-semibold py-2 px-4 rounded-lg"

@@ -207,7 +207,7 @@ function MyListings() {
             <Home size={48} className="text-gray-400" />
           </div>
           <h3 className="text-xl font-medium text-gray-700 mb-2">No Listings Found</h3>
-          <p className="text-gray-500 mb-6">You haven't added any properties yet.</p>
+          <p className="text-gray-500 mb-6">You haven&apos;t added any properties yet.</p>
           <Link to="/add-flat">
             <Button
               name={
