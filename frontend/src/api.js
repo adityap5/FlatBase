@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API = axios.create({ baseURL: 'http://flatbase.ap-south-1.elasticbeanstalk.com/api' });
+const API = axios.create({ baseURL: 'https://flatbase.onrender.com/api' });
 
 API.interceptors.request.use((req) => {
   if (localStorage.getItem('token')) {

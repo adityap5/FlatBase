@@ -66,7 +66,7 @@ function Checkout() {
   
     try {
       const { data: order } = await axios.post(
-        "http://flatbase.ap-south-1.elasticbeanstalk.com/api/bookings/create-order",
+        "https://flatbase.onrender.com/api/bookings/create-order",
         { amount: flat.totalPrice + 999 + Math.round(flat.totalPrice / flat.timePeriod) },
         { headers: { Authorization: `Bearer ${token}` } }
       )
@@ -81,7 +81,7 @@ function Checkout() {
         handler: async (response) => {
           try {
             const verifyRes = await axios.post(
-              "http://flatbase.ap-south-1.elasticbeanstalk.com/api/bookings/verify-payment",
+              "https://flatbase.onrender.com/api/bookings/verify-payment",
               {
                 ...response,
                 bookingId: flat._id,
