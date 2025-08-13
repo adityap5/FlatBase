@@ -52,6 +52,58 @@ const HomePage = () => {
             flats.slice(4, 12).map((flat) => <FlatCard key={flat._id} flat={flat} />)
           )}
         </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="flex items-center justify-between mb-8 mt-8"
+        >
+          {/* <h1 className="text-4xl font-bold">Popular Flats in Chandigarh</h1> */}
+          <p className="text-4xl font-bold text-gray-700">Discover the best flats in Chandigarh</p>
+          <p className="">See all</p>
+        </motion.div>
+
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"
+        >
+          {!flats.length ? (
+            <HomeCardShimmer />
+          ) : (
+            flats
+              .filter((flat) => flat.location?.toLowerCase() === "chandigarh")
+              .slice(0, 4)
+              .map((flat) => <FlatCard key={flat._id} flat={flat} />)
+          )}
+        </motion.div>
+        
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="flex items-center justify-between mb-8 mt-8 "
+        >
+                 <p className="text-4xl font-bold text-gray-700">Discover the best flats in New Delhi</p>
+
+        </motion.div>
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"
+        >
+          {!flats.length ? (
+            <HomeCardShimmer />
+          ) : (
+            flats
+              .filter((flat) => flat.location?.toLowerCase() === "newdelhi")
+              .slice(0, 4)
+              .map((flat) => <FlatCard key={flat._id} flat={flat} />)
+          )}
+        </motion.div>
       </div>
       <Testimonial />
     </>
