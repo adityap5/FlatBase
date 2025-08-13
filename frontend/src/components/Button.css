@@ -1,0 +1,43 @@
+.glowy-button {
+    background: transparent;
+    color: #76ABAE;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    position: relative;
+    transition: all 0.4s ease;
+}
+
+.glowy-button::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(120deg, #76ABAE, #ffffff, #76ABAE, #ffffff);
+    background-size: 300% 300%;
+    filter: blur(20px); /* Increased blur */
+    opacity: 1;         /* Full opacity for stronger glow */
+    transition: all 0.4s ease;
+    z-index: -1;
+    border-radius: 12px;
+    animation: glow 4s linear infinite;
+}
+
+.glowy-button:hover::before {
+    animation-direction: reverse;
+}
+
+.glowy-button .arrow {
+    margin-left: 8px;
+    transition: transform 0.4s ease;
+}
+
+.glowy-button:hover .arrow {
+    transform: translateX(5px);
+}
+
+@keyframes glow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}

@@ -14,7 +14,7 @@ const Testimonial = () => {
         type: "carousel",
         perView: 3,
         gap: 30,
-        autoplay: 3000,
+        autoplay: 2000,
         breakpoints: {
           1024: {
             perView: 2,
@@ -71,7 +71,7 @@ const Testimonial = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="py-16 bg-gray-50 rounded-2xl my-12"
+      className="py-16  rounded-2xl my-12"
     >
       <div className="container mx-auto px-4">
         <motion.div
@@ -119,7 +119,7 @@ const Testimonial = () => {
             </ul>
           </div>
 
-          <div className="glide__bullets flex justify-center mt-8" data-glide-el="controls[nav]">
+          {/* <div className="glide__bullets  flex justify-center" data-glide-el="controls[nav]">
             {testimonials.map((_, index) => (
               <button
                 key={index}
@@ -127,7 +127,7 @@ const Testimonial = () => {
                 data-glide-dir={`=${index}`}
               ></button>
             ))}
-          </div>
+          </div> */}
         </div>
       </div>
     </motion.div>
