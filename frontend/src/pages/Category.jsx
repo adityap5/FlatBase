@@ -2,60 +2,55 @@
 
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
-import { getFlats } from "../api"
+import { useQuery } from "@apollo/client"
+import { GET_FLATS } from "../graphql/queries"
 import FlatCard from "../components/FlatCard"
 import HomeCardShimmer from "../components/HomeCardShimmer"
 import { SlidersHorizontal, ArrowUpDown } from "lucide-react"
 
 const Category = () => {
-  const [flats, setFlats] = useState([])
+  const { data, loading, error } = useQuery(GET_FLATS)
   const [sortedFlats, setSortedFlats] = useState([])
   const [sortOption, setSortOption] = useState("select")
-  const [loading, setLoading] = useState(true)
 
+  // Whenever data changes, update sortedFlats
   useEffect(() => {
-    const fetchFlats = async () => {
-      try {
-        const { data } = await getFlats()
-        setFlats(data)
-        setSortedFlats(data)
-      } catch (error) {
-        console.error("Error fetching flats:", error)
-      } finally {
-        setLoading(false)
-      }
+    if (data?.flats) {
+      setSortedFlats(data.flats)
     }
-
-    fetchFlats()
-  }, [])
+  }, [data])
 
   // Handle sorting functionality
   useEffect(() => {
-    const sortFlats = () => {
-      const sorted = [...flats]
+    if (!data?.flats) return
 
-      if (sortOption === "price-low") {
-        sorted.sort((a, b) => a.price - b.price)
-      } else if (sortOption === "price-high") {
-        sorted.sort((a, b) => b.price - a.price)
-      } else if (sortOption === "location") {
-        sorted.sort((a, b) => a.location.localeCompare(b.location))
-      }
+    const sorted = [...data.flats]
 
-      setSortedFlats(sorted)
+    if (sortOption === "price-low") {
+      sorted.sort((a, b) => a.price - b.price)
+    } else if (sortOption === "price-high") {
+      sorted.sort((a, b) => b.price - a.price)
+    } else if (sortOption === "location") {
+      sorted.sort((a, b) => a.location.localeCompare(b.location))
     }
 
-    sortFlats()
-  }, [sortOption, flats])
+    setSortedFlats(sorted)
+  }, [sortOption, data])
 
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
+      transition: { staggerChildren: 0.1 },
     },
+  }
+
+  if (error) {
+    return (
+      <div className="text-center py-12 text-red-500">
+        Error fetching flats: {error.message}
+      </div>
+    )
   }
 
   return (

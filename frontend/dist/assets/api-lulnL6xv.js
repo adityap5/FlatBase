@@ -1,1 +1,0 @@
-import{a as t}from"./axios-B4uVmeYG.js";const a=t.create({baseURL:"https://flatbase.onrender.com/api"});a.interceptors.request.use(e=>(localStorage.getItem("token")&&(e.headers.Authorization=`Bearer ${localStorage.getItem("token")}`),e));

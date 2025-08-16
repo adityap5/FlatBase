@@ -1,10 +1,8 @@
 import { useState, useEffect } from "react"
 import { Home, MapPin, Calendar, Trash2, CreditCard, Loader2, AlertCircle } from "lucide-react"
 import { Link } from "react-router-dom"
-// Import your actual API functions
-import { getBookings, deleteBooking } from "../api"
+import { getBookings, deleteBooking } from "../graphql/queries"
 
-// Button Component
 const Button = ({ name, onClick, css = "", fullWidth = false, ...props }) => (
   <button
     onClick={onClick}
@@ -17,19 +15,14 @@ const Button = ({ name, onClick, css = "", fullWidth = false, ...props }) => (
   </button>
 )
 
-// Modal Component
 const Modal = ({ isOpen, setIsOpen, header, footer, children }) => {
   if (!isOpen) return null
-
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
-      {/* Backdrop */}
-      <div 
+      <div
         className="absolute inset-0 bg-black bg-opacity-50"
         onClick={() => setIsOpen(false)}
       />
-      
-      {/* Modal Content */}
       <div className="relative bg-white rounded-lg shadow-xl max-w-md w-full mx-4 p-6">
         {header && <div className="mb-4">{header}</div>}
         <div className="mb-6">{children}</div>
@@ -50,8 +43,14 @@ const BookingPage = () => {
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        const { data } = await getBookings()
-        setBookings(data)
+        const userId = localStorage.getItem("userId")
+        if (!userId) {
+          setError("No user ID found. Please log in.")
+          setLoading(false)
+          return
+        }
+        const { data } = await getBookings(userId) // send userId to backend
+        setBookings(data.myBookings || [])
       } catch (error) {
         console.error("Error fetching bookings:", error)
         setError("Failed to load bookings. Please try again.")
@@ -63,33 +62,18 @@ const BookingPage = () => {
   }, [])
 
   const handleDeleteClick = (bookingId) => {
-    console.log("Delete clicked for booking:", bookingId) // Debug log
     setSelectedBooking(bookingId)
     setIsModalOpen(true)
   }
 
   const confirmDelete = async () => {
-    console.log("Confirm delete called for:", selectedBooking) // Debug log
-    
-    if (!selectedBooking) {
-      console.error("No booking selected for deletion")
-      return
-    }
-
+    if (!selectedBooking) return
     try {
       setIsDeleting(true)
       await deleteBooking(selectedBooking)
-      
-      // Remove booking from state
-      setBookings(prevBookings => 
-        prevBookings.filter(booking => booking._id !== selectedBooking)
-      )
-      
-      // Close modal and reset state
+      setBookings(prev => prev.filter(b => b._id !== selectedBooking))
       setIsModalOpen(false)
       setSelectedBooking(null)
-      console.log("Booking deleted successfully")
-      
     } catch (error) {
       console.error("Error deleting booking:", error)
       setError("Failed to delete booking. Please try again.")
@@ -99,7 +83,6 @@ const BookingPage = () => {
   }
 
   const handleModalClose = () => {
-    console.log("Modal closing") // Debug log
     setIsModalOpen(false)
     setSelectedBooking(null)
   }
@@ -107,9 +90,7 @@ const BookingPage = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center py-20">
-        <div className="animate-spin">
-          <Loader2 size={32} className="text-[#76ABAE]" />
-        </div>
+        <Loader2 size={32} className="text-[#76ABAE] animate-spin" />
       </div>
     )
   }
@@ -155,10 +136,10 @@ const BookingPage = () => {
                   </p>
                 </div>
 
-                <div className="flex items-center text-gray-600">
+                {/* <div className="flex items-center text-gray-600">
                   <Home size={18} className="mr-2 text-[#76ABAE]" />
                   <p>Capacity: {booking.flat.capacity} guests</p>
-                </div>
+                </div> */}
 
                 <div className="flex items-center font-medium text-lg">
                   <span>Total Price:</span>
@@ -168,26 +149,15 @@ const BookingPage = () => {
 
               <div className="flex flex-col sm:flex-row gap-3">
                 <Button
-                  name={
-                    <div className="flex items-center">
-                      <Trash2 size={16} className="mr-2" />
-                      Cancel Booking
-                    </div>
-                  }
+                  name={<><Trash2 size={16} className="mr-2" />Cancel Booking</>}
                   onClick={() => handleDeleteClick(booking._id)}
                   css="bg-red-500 hover:bg-red-600 text-white"
                 />
                 <Link to={`/checkout/${booking._id}`} className="flex-1">
-                
-                <Button
-                  name={
-                    <div className="flex items-center">
-                      <CreditCard size={16} className="mr-2" />
-                      Checkout
-                    </div>
-                  }
-                  css="bg-green-500 hover:bg-green-600 text-white"
-                />
+                  <Button
+                    name={<><CreditCard size={16} className="mr-2" />Checkout</>}
+                    css="bg-green-500 hover:bg-green-600 text-white"
+                  />
                 </Link>
               </div>
             </div>
@@ -195,25 +165,13 @@ const BookingPage = () => {
         </div>
       ) : (
         <div className="text-center py-12 bg-gray-50 rounded-xl">
-          <div className="mb-4 flex justify-center">
-            <Calendar size={48} className="text-gray-400" />
-          </div>
+          <Calendar size={48} className="text-gray-400 mb-4" />
           <h3 className="text-xl font-medium text-gray-700 mb-2">No Bookings Found</h3>
           <p className="text-gray-500 mb-6">You haven&apos;t made any bookings yet.</p>
           <Button name="Browse Properties" />
         </div>
       )}
 
-      {/* Debug Info */}
-      {/* <div className="mt-8 p-4 bg-gray-100 rounded-lg">
-        <h3 className="font-bold mb-2">Debug Info:</h3>
-        <p>Modal Open: {isModalOpen ? "Yes" : "No"}</p>
-        <p>Selected Booking: {selectedBooking || "None"}</p>
-        <p>Is Deleting: {isDeleting ? "Yes" : "No"}</p>
-        <p>Bookings Count: {bookings.length}</p>
-      </div> */}
-
-      {/* Confirmation Modal */}
       <Modal
         isOpen={isModalOpen}
         setIsOpen={setIsModalOpen}

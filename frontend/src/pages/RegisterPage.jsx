@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { motion } from "framer-motion"
-import { register } from "../api"
+import { register } from "../graphql/queries" // GraphQL register mutation
 import { useNavigate, Link } from "react-router-dom"
 import { Mail, Lock, User, UserPlus, Building, Users, Loader2, AlertCircle } from "lucide-react"
 import Button from "../components/Button"
@@ -24,10 +24,21 @@ const RegisterPage = () => {
     setError(null)
 
     try {
-      const { data } = await register(form)
-      localStorage.setItem("token", data.token)
-      localStorage.setItem("role", form.role)
-      navigate("/")
+      // Call GraphQL register mutation
+      const { data } = await register({
+        name: form.name,
+        email: form.email,
+        password: form.password,
+        role: form.role,
+      })
+
+      if (data?.register) {
+        localStorage.setItem("token", data.register.token)
+        localStorage.setItem("role", data.register.user.role)
+        navigate("/")
+      } else {
+        setError("Registration failed. Please try again.")
+      }
     } catch (error) {
       console.error("Registration failed:", error)
       setError("Registration failed. Please try again with a different email.")
@@ -79,19 +90,17 @@ const RegisterPage = () => {
                   <User size={16} className="mr-2 text-[#76ABAE]" />
                   Full Name
                 </label>
-                <div className="mt-1">
-                  <input
-                    id="name"
-                    name="name"
-                    type="text"
-                    autoComplete="name"
-                    required
-                    value={form.name}
-                    onChange={handleChange}
-                    className="block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-[#76ABAE] focus:border-transparent"
-                    placeholder="John Doe"
-                  />
-                </div>
+                <input
+                  id="name"
+                  name="name"
+                  type="text"
+                  autoComplete="name"
+                  required
+                  value={form.name}
+                  onChange={handleChange}
+                  className="block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-[#76ABAE] focus:border-transparent"
+                  placeholder="John Doe"
+                />
               </div>
 
               <div className="space-y-2">
@@ -99,19 +108,17 @@ const RegisterPage = () => {
                   <Mail size={16} className="mr-2 text-[#76ABAE]" />
                   Email Address
                 </label>
-                <div className="mt-1">
-                  <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    autoComplete="email"
-                    required
-                    value={form.email}
-                    onChange={handleChange}
-                    className="block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-[#76ABAE] focus:border-transparent"
-                    placeholder="you@example.com"
-                  />
-                </div>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  required
+                  value={form.email}
+                  onChange={handleChange}
+                  className="block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-[#76ABAE] focus:border-transparent"
+                  placeholder="you@example.com"
+                />
               </div>
 
               <div className="space-y-2">
@@ -119,19 +126,17 @@ const RegisterPage = () => {
                   <Lock size={16} className="mr-2 text-[#76ABAE]" />
                   Password
                 </label>
-                <div className="mt-1">
-                  <input
-                    id="password"
-                    name="password"
-                    type="password"
-                    autoComplete="new-password"
-                    required
-                    value={form.password}
-                    onChange={handleChange}
-                    className="block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-[#76ABAE] focus:border-transparent"
-                    placeholder="••••••••"
-                  />
-                </div>
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  autoComplete="new-password"
+                  required
+                  value={form.password}
+                  onChange={handleChange}
+                  className="block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-[#76ABAE] focus:border-transparent"
+                  placeholder="••••••••"
+                />
               </div>
 
               <div className="space-y-2">
@@ -143,18 +148,16 @@ const RegisterPage = () => {
                   )}
                   Account Type
                 </label>
-                <div className="mt-1">
-                  <select
-                    id="role"
-                    name="role"
-                    value={form.role}
-                    onChange={handleChange}
-                    className="block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-[#76ABAE] focus:border-transparent"
-                  >
-                    <option value="customer">Customer (Book Properties)</option>
-                    <option value="seller">Seller (List Properties)</option>
-                  </select>
-                </div>
+                <select
+                  id="role"
+                  name="role"
+                  value={form.role}
+                  onChange={handleChange}
+                  className="block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-[#76ABAE] focus:border-transparent"
+                >
+                  <option value="customer">Customer (Book Properties)</option>
+                  <option value="seller">Seller (List Properties)</option>
+                </select>
               </div>
 
               <div className="pt-2">

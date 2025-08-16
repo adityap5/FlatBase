@@ -3,42 +3,76 @@
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { useNavigate, useParams } from "react-router-dom"
-import axios from "axios"
-import { getBooking, getFlat } from "../api"
+import { useMutation, useQuery } from "@apollo/client"
+import { gql } from "@apollo/client"
+import { getBooking, getFlat } from "../graphql/queries"
 import { CreditCard, Shield, Calendar, Home, MapPin, Loader2 } from "lucide-react"
 import Button from "../components/Button"
+
+// GraphQL Mutations for Razorpay
+const CREATE_ORDER = gql`
+  mutation CreateOrder($amount: Float!, $currency: String) {
+    createOrder(amount: $amount, currency: $currency) {
+      id
+      amount
+      currency
+      receipt
+    }
+  }
+`
+
+const VERIFY_PAYMENT = gql`
+  mutation VerifyPayment(
+    $razorpay_order_id: String!
+    $razorpay_payment_id: String!
+    $razorpay_signature: String!
+    $bookingId: ID!
+  ) {
+    verifyPayment(
+      razorpay_order_id: $razorpay_order_id
+      razorpay_payment_id: $razorpay_payment_id
+      razorpay_signature: $razorpay_signature
+      bookingId: $bookingId
+    )
+  }
+`
 
 function Checkout() {
   const navigate = useNavigate()
   const { id } = useParams()
-  const [flat, setFlat] = useState(null)
+  const [booking, setBooking] = useState(null)
   const [flatDetails, setFlatDetails] = useState(null)
   const [loading, setLoading] = useState(true)
   const [isProcessing, setIsProcessing] = useState(false)
   const [error, setError] = useState(null)
 
+  // GraphQL mutations
+  const [createOrder] = useMutation(CREATE_ORDER)
+  const [verifyPayment] = useMutation(VERIFY_PAYMENT)
+
   const loadRazorpay = () => {
     return new Promise((resolve) => {
       const script = document.createElement("script")
       script.src = "https://checkout.razorpay.com/v1/checkout.js"
-      script.onload = () => {
-        resolve(true)
-      }
-      script.onerror = () => {
-        resolve(false)
-      }
+      script.onload = () => resolve(true)
+      script.onerror = () => resolve(false)
       document.body.appendChild(script)
     })
   }
 
   useEffect(() => {
-    const fetchFlat = async () => {
+    const fetchData = async () => {
       try {
-        const { data } = await getBooking(id)
-        setFlat(data)
+        // Fetch booking by ID using GraphQL
+        const bookingRes = await getBooking(id)
+        const bookingData = bookingRes.data.booking
+        setBooking(bookingData)
 
-        const flatRes = await getFlat(data.flat) // Assuming data.flat is just flat ID
-        setFlatDetails(flatRes.data)
+        // Fetch flat details using booking.flat._id
+        if (bookingData?.flat?._id) {
+          const flatRes = await getFlat(bookingData.flat._id)
+          setFlatDetails(flatRes.data.flat)
+        }
       } catch (err) {
         console.error("Error fetching booking or flat:", err)
         setError("Failed to load booking details")
@@ -48,29 +82,36 @@ function Checkout() {
     }
 
     loadRazorpay()
-    fetchFlat()
+    fetchData()
   }, [id])
 
   const handlePayment = async () => {
-    if (!flat) return
+    if (!booking) return
     setIsProcessing(true)
-  
-    const res = await loadRazorpay()
-    if (!res) {
-      alert("Razorpay SDK failed to load. Are you online?");
+
+    const razorpayLoaded = await loadRazorpay()
+    if (!razorpayLoaded) {
+      alert("Razorpay SDK failed to load. Are you online?")
       setIsProcessing(false)
       return
     }
-  
-    const token = localStorage.getItem("token")
-  
+
     try {
-      const { data: order } = await axios.post(
-        "https://flatbase.onrender.com/api/bookings/create-order",
-        { amount: flat.totalPrice + 999 + Math.round(flat.totalPrice / flat.timePeriod) },
-        { headers: { Authorization: `Bearer ${token}` } }
-      )
-  
+      // Calculate total amount
+      const securityDeposit = 999
+      const advancePayment = Math.round(booking.totalPrice / booking.timePeriod)
+      const totalAmount = booking.totalPrice + securityDeposit + advancePayment
+
+      // Create order using GraphQL
+      const { data: orderData } = await createOrder({
+        variables: {
+          amount: totalAmount,
+          currency: "INR"
+        }
+      })
+
+      const order = orderData.createOrder
+
       const options = {
         key: "rzp_test_POjN4Ulq8Q6my8",
         amount: order.amount,
@@ -80,46 +121,58 @@ function Checkout() {
         order_id: order.id,
         handler: async (response) => {
           try {
-            const verifyRes = await axios.post(
-              "https://flatbase.onrender.com/api/bookings/verify-payment",
-              {
-                ...response,
-                bookingId: flat._id,
-              },
-              { headers: { Authorization: `Bearer ${token}` } }
-            )
-  
-            if (verifyRes.data.success) {
+            // Verify payment using GraphQL
+            const { data: verifyData } = await verifyPayment({
+              variables: {
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+                bookingId: booking._id
+              }
+            })
+
+            if (verifyData.verifyPayment) {
+              // Payment successful, navigate to success page
               navigate("/success")
             } else {
-              setError("Payment Verification Failed!")
+              setError("Payment verification failed!")
             }
-          } catch (error) {
-            console.error("Payment verification failed", error)
+          } catch (err) {
+            console.error("Payment verification failed", err)
             setError("Payment verification failed. Please try again.")
           } finally {
             setIsProcessing(false)
           }
         },
-        theme: { color: "#76ABAE" },
+        prefill: {
+          name: booking.user?.name || "",
+          email: booking.user?.email || "",
+        },
+        theme: { 
+          color: "#76ABAE" 
+        },
+        modal: {
+          ondismiss: () => {
+            setIsProcessing(false)
+          }
+        }
       }
-  
+
       const paymentObject = new window.Razorpay(options)
       paymentObject.open()
-    } catch (error) {
-      console.error("Payment failed", error)
+    } catch (err) {
+      console.error("Payment failed", err)
       setError("Payment initialization failed. Please try again.")
       setIsProcessing(false)
     }
   }
-  
-console.log(flatDetails)
+
   if (loading) {
     return (
       <div className="flex justify-center items-center py-20">
         <motion.div
           animate={{ rotate: 360 }}
-          transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
         >
           <Loader2 size={32} className="text-[#76ABAE]" />
         </motion.div>
@@ -138,7 +191,7 @@ console.log(flatDetails)
     )
   }
 
-  if (!flat || !flatDetails) {
+  if (!booking || !flatDetails) {
     return (
       <div className="container mx-auto px-4 py-12 text-center">
         <p className="text-gray-600 mb-4">Booking or flat details not found</p>
@@ -148,8 +201,8 @@ console.log(flatDetails)
   }
 
   const securityDeposit = 999
-  const advancePayment = Math.round(flat.totalPrice / flat.timePeriod)
-  const totalAmount = flat.totalPrice + securityDeposit + advancePayment
+  const advancePayment = Math.round(booking.totalPrice / booking.timePeriod)
+  const totalAmount = booking.totalPrice + securityDeposit + advancePayment
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -167,17 +220,15 @@ console.log(flatDetails)
                     <Home size={20} className="text-[#76ABAE] mr-3" />
                     <div>
                       <div className="flex items-center text-zinc-700 mt-1">
-                      <p className="mr-4 font-bold">{flatDetails.name}</p>
+                        <p className="mr-4 font-bold">{flatDetails.name}</p>
                         <MapPin size={14} className="mr-1" />
                         <span>{flatDetails.location}, India</span>
                       </div>
                       <div className="flex items-center gap-8 text-gray-500 mt-1">
                         <span>Host: {flatDetails.seller?.name}</span>
-                        <span>email: {flatDetails.seller?.email}</span>
+                        <span>Email: {flatDetails.seller?.email}</span>
                       </div>
-                      <div>
-                        <p className="text-zinc-400 tracking-tighter">{flatDetails.description}</p>
-                      </div>
+                      <p className="text-zinc-400 tracking-tighter mt-1">{flatDetails.description}</p>
                     </div>
                   </div>
 
@@ -189,16 +240,10 @@ console.log(flatDetails)
                     />
                   )}
 
-                  <div className="flex items-center">
-                    <Calendar size={20} className="text-[#76ABAE] mr-3" />
-                    <div>
-                      <p className="font-medium">
-                        {flat.timePeriod} Month{flat.timePeriod > 1 && "s"} Booking
-                      </p>
-                    </div>
-                    <div>
-                      <p className="ml-3">Capacity: {flatDetails.capacity}</p>
-                    </div>
+                  <div className="flex items-center gap-4 mt-2">
+                    <Calendar size={20} className="text-[#76ABAE]" />
+                    <span>{booking.timePeriod} Month{booking.timePeriod > 1 && "s"} Booking</span>
+                    <span className="ml-4">Capacity: {flatDetails.capacity}</span>
                   </div>
                 </div>
               </div>
@@ -239,9 +284,9 @@ console.log(flatDetails)
                   <div className="pb-4">
                     <div className="flex justify-between items-center mb-2">
                       <span className="text-gray-600">
-                        Price for {flat.timePeriod} month{flat.timePeriod > 1 ? "s" : ""}
+                        Price for {booking.timePeriod} month{booking.timePeriod > 1 ? "s" : ""}
                       </span>
-                      <span className="font-medium">₹{flat.totalPrice.toLocaleString()}</span>
+                      <span className="font-medium">₹{booking.totalPrice.toLocaleString()}</span>
                     </div>
                     <div className="flex justify-between items-center mb-2">
                       <span className="text-gray-600">Security Deposit</span>
@@ -259,10 +304,10 @@ console.log(flatDetails)
                 </div>
 
                 <Button
-                  name={isProcessing ? "Processing..." : ""}
+                  name={isProcessing ? "Processing..." : "Pay Now"}
                   onClick={handlePayment}
                   disabled={isProcessing}
-                  className="mt-6 w-full bg-[#76ABAE] hover:bg-[#62989a] text-white font-semibold py-2 px-4 rounded-lg"
+                  className="mt-6 w-full bg-[#76ABAE] hover:bg-[#62989a] text-white font-semibold py-2 px-4 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
                 />
                 <button onClick={handlePayment}>Pay Now</button>
               </div>

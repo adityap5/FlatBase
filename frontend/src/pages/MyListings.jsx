@@ -1,11 +1,9 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { motion } from "framer-motion"
-import { getMyListings, deleteListing } from "../api"
+import { getMyListings, deleteListing } from "../graphql/queries"
 import { useNavigate, Link } from "react-router-dom"
-import { Home, MapPin, Users, DollarSign, Pencil, Trash2, Eye, Loader2, PlusCircle, AlertCircle } from "lucide-react"
-import Button from "../components/Button"
+import { MapPin, Users, DollarSign, Pencil, Trash2, Plus, AlertCircle } from "lucide-react"
 import Modal from "../components/Modal"
 
 function MyListings() {
@@ -20,11 +18,23 @@ function MyListings() {
   useEffect(() => {
     const fetchListings = async () => {
       try {
-        const { data } = await getMyListings()
-        setListings(data)
+        setLoading(true)
+        const sellerId = localStorage.getItem("userId")
+
+        if (!sellerId) {
+          setError("Please login to view your listings.")
+          setLoading(false)
+          return
+        }
+
+        const listings = await getMyListings(sellerId)
+        console.log("Fetched listings:", listings) // Debug log
+        setListings(listings || [])
+        setError(null)
       } catch (error) {
         console.error("Failed to fetch listings:", error)
         setError("Failed to load your listings. Please try again.")
+        setListings([])
       } finally {
         setLoading(false)
       }
@@ -40,6 +50,7 @@ function MyListings() {
         setListings((prevListings) => prevListings.filter((listing) => listing._id !== selectedListingId))
         setIsOpen(false)
         setSelectedListingId(null)
+        setError(null)
       } catch (error) {
         console.error("Failed to delete listing:", error)
         setError("Failed to delete listing. Please try again.")
@@ -54,204 +65,158 @@ function MyListings() {
     setIsOpen(true)
   }
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  }
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 },
-  }
-
   if (loading) {
     return (
       <div className="flex justify-center items-center py-20">
-        <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
-        >
-          <Loader2 size={32} className="text-[#76ABAE]" />
-        </motion.div>
+        <div className="text-gray-500">Loading your listings...</div>
       </div>
     )
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8"
-      >
+    <div className="max-w-7xl mx-auto px-4 py-12">
+      <div className="flex justify-between items-center mb-12">
         <div>
-          <h1 className="text-3xl font-bold">Your Listings</h1>
-          <p className="text-gray-600 mt-2">Manage all your properties in one place</p>
+          <h1 className="text-2xl font-medium text-gray-900">My Listings</h1>
+          <p className="text-gray-500 mt-1">Manage your properties</p>
         </div>
 
         <Link to="/add-flat">
-          <Button
-            name={
-              <div className="flex items-center">
-                <PlusCircle size={18} className="mr-2" />
-                Add New Property
-              </div>
-            }
-            css="mt-4 md:mt-0"
-          />
+          <button className="flex items-center gap-2 px-4 py-2 bg-gray-900 text-white text-sm hover:bg-gray-800 transition-colors">
+            <Plus size={16} />
+            Add Property
+          </button>
         </Link>
-      </motion.div>
+      </div>
 
       {error && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded flex items-start"
-        >
-          <AlertCircle size={20} className="mr-2 mt-0.5" />
-          <p>{error}</p>
-        </motion.div>
+        <div className="mb-8 p-4 border border-red-200 bg-red-50 text-red-700 text-sm">
+          <div className="flex items-start gap-2">
+            <AlertCircle size={16} className="mt-0.5 flex-shrink-0" />
+            <div>
+              <p>{error}</p>
+              <button onClick={() => window.location.reload()} className="underline mt-1 hover:no-underline">
+                Try again
+              </button>
+            </div>
+          </div>
+        </div>
       )}
 
       {listings.length > 0 ? (
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="grid grid-cols-1 md:grid-cols-2 gap-6"
-        >
+        <div className="grid grid-cols-3 gap-4">
           {listings.map((listing) => (
-            <motion.div
-              key={listing._id}
-              variants={itemVariants}
-              whileHover={{ y: -5 }}
-              className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300"
-            >
-              <div className="flex justify-between items-start mb-4">
-                <h2 className="text-xl font-semibold">{listing.name || "Unnamed Property"}</h2>
-                <div className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium">Active</div>
-              </div>
-
-              <div className="space-y-3 mb-6">
-                <div className="flex items-center text-gray-600">
-                  <MapPin size={18} className="mr-2 text-[#76ABAE]" />
-                  <p>{listing.location}, India</p>
+            <div key={listing._id} className="border border-gray-200 bg-white">
+              <div className="p-4">
+                <div className="flex justify-between items-start mb-3">
+                  <Link to={`/flat/${listing._id}`}>
+                    <h2 className="text-sm font-medium text-gray-900 hover:text-gray-600 transition-colors line-clamp-1">
+                      {listing.name || "Unnamed Property"}
+                    </h2>
+                  </Link>
+                  <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1">Active</span>
                 </div>
 
-                <div className="flex items-center text-gray-600">
-                  <Users size={18} className="mr-2 text-[#76ABAE]" />
-                  <p>Capacity: {listing.capacity} guests</p>
-                </div>
+                {listing.images && (
+                  <div className="mb-3 h-32 bg-gray-100 overflow-hidden">
+                    <img
+                      src={listing.images || "/placeholder.svg"}
+                      alt={listing.name}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        e.target.style.display = "none"
+                      }}
+                    />
+                  </div>
+                )}
 
-                <div className="flex items-center text-gray-600">
-                  <DollarSign size={18} className="mr-2 text-[#76ABAE]" />
-                  <p className="font-medium">₹{listing.price.toLocaleString()}/month</p>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-3 gap-3">
-                <Link to={`/flat/${listing._id}`} className="col-span-1">
-                  <Button
-                    name={
-                      <div className="flex items-center justify-center">
-                        <Eye size={16} className="mr-2" />
-                        <span className="hidden sm:inline">View</span>
-                      </div>
-                    }
-                    fullWidth
-                    css="bg-gray-100 text-gray-800 hover:bg-gray-200"
-                  />
-                </Link>
-
-                <Link to={`/updatePage/${listing._id}`} className="col-span-1">
-                  <Button
-                    name={
-                      <div className="flex items-center justify-center">
-                        <Pencil size={16} className="mr-2" />
-                        <span className="hidden sm:inline">Edit</span>
-                      </div>
-                    }
-                    fullWidth
-                    css="bg-blue-100 text-blue-800 hover:bg-blue-200"
-                  />
-                </Link>
-
-                <Button
-                  name={
-                    <div className="flex items-center justify-center">
-                      <Trash2 size={16} className="mr-2" />
-                      <span className="hidden sm:inline">Delete</span>
+                <div className="mb-4 text-xs text-gray-600">
+                  <div className="flex items-center justify-between gap-1">
+                    <div className="flex items-center gap-1 flex-1 min-w-0">
+                      <MapPin size={12} />
+                      <span className="truncate">{listing.location}</span>
                     </div>
-                  }
-                  onClick={() => openModal(listing._id)}
-                  fullWidth
-                  css="bg-red-100 text-red-800 hover:bg-red-200"
-                />
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
-      ) : (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center py-12 bg-gray-50 rounded-xl"
-        >
-          <div className="mb-4 flex justify-center">
-            <Home size={48} className="text-gray-400" />
-          </div>
-          <h3 className="text-xl font-medium text-gray-700 mb-2">No Listings Found</h3>
-          <p className="text-gray-500 mb-6">You haven&apos;t added any properties yet.</p>
-          <Link to="/add-flat">
-            <Button
-              name={
-                <div className="flex items-center">
-                  <PlusCircle size={18} className="mr-2" />
-                  Add Your First Property
+                    <div className="flex items-center gap-1">
+                      <Users size={12} />
+                      <span>{listing.capacity}</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-1 mt-1">
+                    <DollarSign size={12} />
+                    <span className="font-medium">₹{listing.price?.toLocaleString()}/mo</span>
+                  </div>
                 </div>
-              }
-            />
-          </Link>
-        </motion.div>
+
+                <div className="flex gap-2">
+                  <Link to={`/updatePage/${listing._id}`} className="flex-1">
+                    <button className="w-full flex items-center justify-center gap-1 px-2 py-1.5 border border-gray-300 text-gray-700 text-xs hover:bg-gray-50 transition-colors">
+                      <Pencil size={12} />
+                      Edit
+                    </button>
+                  </Link>
+
+                  <button
+                    onClick={() => openModal(listing._id)}
+                    className="flex-1 flex items-center justify-center gap-1 px-2 py-1.5 border border-red-300 text-red-700 text-xs hover:bg-red-50 transition-colors"
+                  >
+                    <Trash2 size={12} />
+                    Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        !loading && (
+          /* Simplified empty state */
+          <div className="text-center py-16">
+            <div className="text-gray-400 mb-4">
+              <div className="w-12 h-12 border-2 border-gray-200 rounded mx-auto mb-4"></div>
+            </div>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">No listings yet</h3>
+            <p className="text-gray-500 mb-6">Add your first property to get started</p>
+            <Link to="/add-flat">
+              <button className="flex items-center gap-2 px-4 py-2 bg-gray-900 text-white text-sm hover:bg-gray-800 transition-colors mx-auto">
+                <Plus size={16} />
+                Add Property
+              </button>
+            </Link>
+          </div>
+        )
       )}
 
       <Modal
         isOpen={isOpen}
         setIsOpen={setIsOpen}
         header={
-          <h2 className="text-lg font-semibold flex items-center">
-            <AlertCircle size={20} className="mr-2 text-red-500" />
-            Confirm Deletion
+          <h2 className="text-lg font-medium flex items-center gap-2">
+            <AlertCircle size={18} className="text-red-500" />
+            Delete Property
           </h2>
         }
         footer={
-          <div className="flex justify-end gap-4">
-            <Button onClick={() => setIsOpen(false)} name="Cancel" css="bg-gray-200 text-gray-800 hover:bg-gray-300" />
-            <Button
+          <div className="flex justify-end gap-3">
+            <button
+              onClick={() => setIsOpen(false)}
+              className="px-4 py-2 border border-gray-300 text-gray-700 text-sm hover:bg-gray-50 transition-colors"
+            >
+              Cancel
+            </button>
+            <button
               onClick={handleDelete}
-              name={
-                isDeleting ? (
-                  <div className="flex items-center">
-                    <Loader2 size={16} className="animate-spin mr-2" />
-                    <span>Deleting...</span>
-                  </div>
-                ) : (
-                  "Delete Property"
-                )
-              }
-              css="bg-red-500 hover:bg-red-600"
-            />
+              disabled={isDeleting}
+              className="px-4 py-2 bg-red-600 text-white text-sm hover:bg-red-700 transition-colors disabled:opacity-50"
+            >
+              {isDeleting ? "Deleting..." : "Delete"}
+            </button>
           </div>
         }
       >
-        <p className="text-gray-700 mb-2">Are you sure you want to delete this property?</p>
-        <p className="text-gray-500 text-sm">This action cannot be undone and will remove all associated bookings.</p>
+        <div className="text-gray-700 text-sm">
+          <p className="mb-2">Are you sure you want to delete this property?</p>
+          <p className="text-gray-500">This action cannot be undone.</p>
+        </div>
       </Modal>
     </div>
   )
