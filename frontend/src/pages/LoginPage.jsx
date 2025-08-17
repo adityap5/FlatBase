@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { motion } from "framer-motion"
-import { login } from "../api"
+import { login } from "../graphql/queries" // GraphQL login mutation
 import { useNavigate, Link } from "react-router-dom"
 import { Mail, Lock, LogIn, AlertCircle, Loader2 } from "lucide-react"
 import Button from "../components/Button"
@@ -24,10 +24,20 @@ const LoginPage = () => {
     setError(null)
 
     try {
-      const { data } = await login(formData)
-      localStorage.setItem("token", data.token)
-      localStorage.setItem("role", data.user.role)
-      navigate("/")
+      // Call GraphQL login mutation
+      const { data } = await login({
+        email: formData.email,
+        password: formData.password,
+      })
+
+      if (data?.login) {
+        localStorage.setItem("token", data.login.token)
+        localStorage.setItem("role", data.login.user.role)
+        localStorage.setItem("userId", data.login.user._id)
+        navigate("/")
+      } else {
+        setError("Login failed. Please try again.")
+      }
     } catch (error) {
       console.error("Login failed:", error)
       setError("Invalid email or password. Please try again.")
@@ -79,19 +89,17 @@ const LoginPage = () => {
                   <Mail size={16} className="mr-2 text-[#76ABAE]" />
                   Email Address
                 </label>
-                <div className="mt-1">
-                  <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    autoComplete="email"
-                    required
-                    value={formData.email}
-                    onChange={handleChange}
-                    className="block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-[#76ABAE] focus:border-transparent"
-                    placeholder="you@example.com"
-                  />
-                </div>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  required
+                  value={formData.email}
+                  onChange={handleChange}
+                  className="block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-[#76ABAE] focus:border-transparent"
+                  placeholder="you@example.com"
+                />
               </div>
 
               <div className="space-y-2">
@@ -109,41 +117,37 @@ const LoginPage = () => {
                     Forgot password?
                   </motion.a>
                 </div>
-                <div className="mt-1">
-                  <input
-                    id="password"
-                    name="password"
-                    type="password"
-                    autoComplete="current-password"
-                    required
-                    value={formData.password}
-                    onChange={handleChange}
-                    className="block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-[#76ABAE] focus:border-transparent"
-                    placeholder="••••••••"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <Button
-                  type="submit"
-                  name={
-                    isLoading ? (
-                      <div className="flex items-center justify-center">
-                        <Loader2 size={20} className="animate-spin mr-2" />
-                        <span>Signing in...</span>
-                      </div>
-                    ) : (
-                      <div className="flex items-center justify-center">
-                        <LogIn size={18} className="mr-2" />
-                        <span>Sign in</span>
-                      </div>
-                    )
-                  }
-                  fullWidth
-                  css="py-3"
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  autoComplete="current-password"
+                  required
+                  value={formData.password}
+                  onChange={handleChange}
+                  className="block w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-[#76ABAE] focus:border-transparent"
+                  placeholder="••••••••"
                 />
               </div>
+
+              <Button
+                type="submit"
+                name={
+                  isLoading ? (
+                    <div className="flex items-center justify-center">
+                      <Loader2 size={20} className="animate-spin mr-2" />
+                      <span>Signing in...</span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center justify-center">
+                      <LogIn size={18} className="mr-2" />
+                      <span>Sign in</span>
+                    </div>
+                  )
+                }
+                fullWidth
+                css="py-3"
+              />
             </form>
 
             <div className="mt-8 text-center">

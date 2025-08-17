@@ -1,20 +1,26 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getFlats } from '../api';
+import client from '../apolloClient';
+import { GET_FLATS, SEARCH_FLATS } from '../graphql/queries';
 
+// Fetch all flats
 export const fetchFlats = createAsyncThunk('flats/fetchFlats', async () => {
-  const { data } = await getFlats();
-  return data;
+  const result = await client.query({
+    query: GET_FLATS,
+    fetchPolicy: 'network-only',
+  });
+  return result.data.flats; // Apollo puts data under data key
 });
 
+// Fetch flats by location
 export const fetchFlatsByLocation = createAsyncThunk(
   'flats/fetchFlatsByLocation',
   async (location) => {
-    const { data } = await getFlats();
-    // Filter flats based on exact location match
-    const filteredFlats = data.filter((flat) =>
-      flat.location.toLowerCase() === location.toLowerCase()
-    );
-    return filteredFlats;
+    const result = await client.query({
+      query: SEARCH_FLATS,
+      variables: { location },
+      fetchPolicy: 'network-only',
+    });
+    return result.data.searchFlats; // Apollo query result
   }
 );
 
@@ -28,6 +34,7 @@ const flatsSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+      // fetchFlats
       .addCase(fetchFlats.pending, (state) => {
         state.loading = true;
       })
@@ -39,6 +46,7 @@ const flatsSlice = createSlice({
         state.loading = false;
         state.error = action.error.message;
       })
+      // fetchFlatsByLocation
       .addCase(fetchFlatsByLocation.pending, (state) => {
         state.loading = true;
       })
