@@ -3,7 +3,7 @@ import { setContext } from '@apollo/client/link/context';
 
 // HTTP connection to GraphQL server
 const httpLink = createHttpLink({
-  uri: 'http://localhost:5000/graphql', // replace with your backend URL
+  uri: 'https://flatbase.onrender.com/graphql',
 });
 
 // Middleware to add token from localStorage

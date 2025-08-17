@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { useNavigate, NavLink } from "react-router-dom"
-import { Menu, X, Home, LogOut, User, BookOpen, Building, Plus, Grid } from "lucide-react"
+import { Menu, X, Home, LogOut, User, BookOpen, Building, Plus, MountainIcon } from "lucide-react"
 import { Logout } from "../components/Logout"
 
 const Navbar = () => {
@@ -26,9 +26,9 @@ const Navbar = () => {
 
   const navItems = [
     {
-      name: "Categories",
+      name: "Explore",
       path: "/category",
-      icon: <Grid size={18} />,
+      icon: <MountainIcon size={18} />,
       show: true,
     },
     {

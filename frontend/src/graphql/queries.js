@@ -1,4 +1,4 @@
-// src/api.js
+// src/graphqlqueries.js
 import { gql } from '@apollo/client';
 import client from '../apolloClient';
 

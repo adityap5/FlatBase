@@ -13,7 +13,7 @@ export function Logout() {
     localStorage.removeItem("role")
     localStorage.removeItem("userId")  
     
-    navigate("/login")
+    navigate("/logout")
   }
 
   return (

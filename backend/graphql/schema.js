@@ -100,7 +100,7 @@ type AuthPayload {
     login(email: String!, password: String!): AuthPayload
 
     # Bookings
-    createBooking(flat: ID!, user: ID!, timePeriod: String!, totalPrice: Float!): Booking
+     createBooking(flat: ID!, user: ID!, timePeriod: String!, totalPrice: Float!): Booking
     deleteBooking(id: ID!): String
 
     # Razorpay
@@ -126,6 +126,11 @@ const resolvers = {
         myBookings: async (_, { userId }) =>
             await Booking.find({ user: userId }).populate('flat').populate('user'),
         booking: async (_, { id }) => await Booking.findById(id).populate('flat').populate('user'),
+    },
+      Flat: {
+        price: (flat) => {
+            return flat.price !== null && flat.price !== undefined ? flat.price : 0;
+        }
     },
 
     Mutation: {
@@ -169,8 +174,25 @@ const resolvers = {
         },
 
         createBooking: async (_, args) => {
-            const booking = new Booking(args);
-            return await booking.save();
+            try {
+                
+                const flat = await Flat.findById(args.flat);
+                if (!flat) {
+                    throw new Error("Flat not found");
+                }
+                const booking = new Booking(args);
+                const savedBooking = await booking.save();
+                
+                // Properly populate the booking with error handling
+                const populatedBooking = await Booking.findById(savedBooking._id)
+                    .populate('flat')
+                    .populate('user');
+                
+                return populatedBooking;
+            } catch (error) {
+                console.error('Error creating booking:', error);
+                throw error;
+            }
         },
         deleteBooking: async (_, { id }) => {
             await Booking.findByIdAndDelete(id);

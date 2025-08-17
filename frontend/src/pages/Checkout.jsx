@@ -3,11 +3,10 @@
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { useNavigate, useParams } from "react-router-dom"
-import { useMutation, useQuery } from "@apollo/client"
+import { useMutation } from "@apollo/client"
 import { gql } from "@apollo/client"
 import { getBooking, getFlat } from "../graphql/queries"
-import { CreditCard, Shield, Calendar, Home, MapPin, Loader2 } from "lucide-react"
-import Button from "../components/Button"
+import { CreditCard, Shield, MapPin, Loader2 } from "lucide-react"
 
 // GraphQL Mutations for Razorpay
 const CREATE_ORDER = gql`
@@ -106,8 +105,8 @@ function Checkout() {
       const { data: orderData } = await createOrder({
         variables: {
           amount: totalAmount,
-          currency: "INR"
-        }
+          currency: "INR",
+        },
       })
 
       const order = orderData.createOrder
@@ -127,8 +126,8 @@ function Checkout() {
                 razorpay_order_id: response.razorpay_order_id,
                 razorpay_payment_id: response.razorpay_payment_id,
                 razorpay_signature: response.razorpay_signature,
-                bookingId: booking._id
-              }
+                bookingId: booking._id,
+              },
             })
 
             if (verifyData.verifyPayment) {
@@ -148,14 +147,14 @@ function Checkout() {
           name: booking.user?.name || "",
           email: booking.user?.email || "",
         },
-        theme: { 
-          color: "#76ABAE" 
+        theme: {
+          color: "#76ABAE",
         },
         modal: {
           ondismiss: () => {
             setIsProcessing(false)
-          }
-        }
+          },
+        },
       }
 
       const paymentObject = new window.Razorpay(options)
@@ -169,12 +168,12 @@ function Checkout() {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center py-20">
+      <div className="min-h-screen flex items-center justify-center">
         <motion.div
           animate={{ rotate: 360 }}
-          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+          transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
         >
-          <Loader2 size={32} className="text-[#76ABAE]" />
+          <Loader2 size={24} className="text-[#76ABAE]" />
         </motion.div>
       </div>
     )
@@ -182,10 +181,12 @@ function Checkout() {
 
   if (error) {
     return (
-      <div className="container mx-auto px-4 py-12 text-center">
-        <div className="bg-red-50 p-6 rounded-lg inline-block">
-          <p className="text-red-600 mb-4">{error}</p>
-          <Button name="Go Back" onClick={() => navigate(-1)} />
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-gray-600 mb-6">{error}</p>
+          <button onClick={() => navigate(-1)} className="text-[#76ABAE] hover:text-[#62989a] font-medium">
+            ← Go Back
+          </button>
         </div>
       </div>
     )
@@ -193,9 +194,13 @@ function Checkout() {
 
   if (!booking || !flatDetails) {
     return (
-      <div className="container mx-auto px-4 py-12 text-center">
-        <p className="text-gray-600 mb-4">Booking or flat details not found</p>
-        <Button name="Go Back" onClick={() => navigate(-1)} />
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-gray-600 mb-6">Booking details not found</p>
+          <button onClick={() => navigate(-1)} className="text-[#76ABAE] hover:text-[#62989a] font-medium">
+            ← Go Back
+          </button>
+        </div>
       </div>
     )
   }
@@ -205,116 +210,126 @@ function Checkout() {
   const totalAmount = booking.totalPrice + securityDeposit + advancePayment
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-        <h1 className="text-3xl font-bold mb-8">Checkout</h1>
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-7xl mx-auto px-6 py-12">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+          <div className="text-center mb-12">
+            <h1 className="text-2xl font-light text-gray-900 mb-2">Complete Your Booking</h1>
+            <div className="w-12 h-0.5 bg-[#76ABAE] mx-auto"></div>
+          </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2">
-            <div className="bg-white rounded-xl shadow-md overflow-hidden mb-6">
-              <div className="p-6">
-                <h2 className="text-xl font-semibold mb-4">Booking Details</h2>
-
-                <div className="space-y-4">
-                  <div className="flex items-center">
-                    <Home size={20} className="text-[#76ABAE] mr-3" />
-                    <div>
-                      <div className="flex items-center text-zinc-700 mt-1">
-                        <p className="mr-4 font-bold">{flatDetails.name}</p>
-                        <MapPin size={14} className="mr-1" />
-                        <span>{flatDetails.location}, India</span>
-                      </div>
-                      <div className="flex items-center gap-8 text-gray-500 mt-1">
-                        <span>Host: {flatDetails.seller?.name}</span>
-                        <span>Email: {flatDetails.seller?.email}</span>
-                      </div>
-                      <p className="text-zinc-400 tracking-tighter mt-1">{flatDetails.description}</p>
-                    </div>
-                  </div>
-
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
+            <div className="lg:col-span-3">
+              {/* Property Overview */}
+              <div className="mb-10">
+                <div className="flex items-start space-x-4">
                   {flatDetails.images && (
                     <img
-                      src={flatDetails.images}
-                      alt="Flat"
-                      className="rounded-lg mt-4 w-full max-h-64 object-cover"
+                      src={flatDetails.images || "/placeholder.svg"}
+                      alt="Property"
+                      className="w-20 h-20 rounded-lg object-cover flex-shrink-0"
                     />
                   )}
-
-                  <div className="flex items-center gap-4 mt-2">
-                    <Calendar size={20} className="text-[#76ABAE]" />
-                    <span>{booking.timePeriod} Month{booking.timePeriod > 1 && "s"} Booking</span>
-                    <span className="ml-4">Capacity: {flatDetails.capacity}</span>
+                  <div className="flex-1">
+                    <h2 className="text-lg font-medium text-gray-900 mb-1">{flatDetails.name}</h2>
+                    <p className="text-gray-500 text-sm mb-2 flex items-center">
+                      <MapPin size={14} className="mr-1" />
+                      {flatDetails.location}, India
+                    </p>
+                    <p className="text-gray-400 text-sm leading-relaxed">{flatDetails.description}</p>
                   </div>
                 </div>
               </div>
-            </div>
 
-            <div className="bg-white rounded-xl shadow-md overflow-hidden">
-              <div className="p-6">
-                <h2 className="text-xl font-semibold mb-4">Payment Method</h2>
-                <div className="flex items-center p-4 border rounded-lg mb-4">
-                  <CreditCard size={24} className="text-[#76ABAE] mr-3" />
+              {/* Booking Summary */}
+              <div className="space-y-6">
+                <div className="flex items-center justify-between py-3 border-b border-gray-100">
+                  <span className="text-gray-600">Duration</span>
+                  <span className="font-medium">
+                    {booking.timePeriod} month{booking.timePeriod > 1 ? "s" : ""}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between py-3 border-b border-gray-100">
+                  <span className="text-gray-600">Capacity</span>
+                  <span className="font-medium">{flatDetails.capacity} guests</span>
+                </div>
+                <div className="flex items-center justify-between py-3 border-b border-gray-100">
+                  <span className="text-gray-600">Host</span>
+                  <span className="font-medium capitalize">{flatDetails.seller?.name}</span>
+                </div>
+              </div>
+
+              <div className="mt-12">
+                <h3 className="text-lg font-medium text-gray-900 mb-6">Payment Method</h3>
+                <div className="flex items-center space-x-3 p-4 bg-white rounded-lg border border-gray-100">
+                  <CreditCard size={20} className="text-[#76ABAE]" />
                   <div>
-                    <p className="font-medium">Razorpay</p>
-                    <p className="text-gray-500 text-sm">Secure online payment</p>
+                    <p className="font-medium text-gray-900">Razorpay</p>
+                    <p className="text-gray-500 text-sm">Secure payment processing</p>
                   </div>
-                </div>
-
-                <div className="bg-blue-50 p-4 rounded-lg flex items-start">
-                  <Shield size={20} className="text-blue-500 mr-3 mt-0.5" />
-                  <p className="text-sm text-blue-700">
-                    Your payment information is processed securely. We do not store credit card details nor have access
-                    to your credit card information.
-                  </p>
                 </div>
               </div>
             </div>
-          </div>
 
-          <div className="lg:col-span-1">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2, duration: 0.5 }}
-              className="bg-white rounded-xl shadow-md sticky top-6"
-            >
-              <div className="p-6">
-                <h2 className="text-xl font-semibold mb-4">Price Details</h2>
-                <div className="space-y-4 divide-y">
-                  <div className="pb-4">
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="text-gray-600">
-                        Price for {booking.timePeriod} month{booking.timePeriod > 1 ? "s" : ""}
-                      </span>
-                      <span className="font-medium">₹{booking.totalPrice.toLocaleString()}</span>
-                    </div>
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="text-gray-600">Security Deposit</span>
-                      <span className="font-medium">₹{securityDeposit}</span>
-                    </div>
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="text-gray-600">Advance Payment</span>
-                      <span className="font-medium">₹{advancePayment}</span>
-                    </div>
+            <div className="lg:col-span-2">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3, duration: 0.6 }}
+                className="bg-white rounded-xl p-8 sticky top-8"
+              >
+                <h3 className="text-lg font-medium text-gray-900 mb-8">Summary</h3>
+
+                <div className="space-y-4 mb-8">
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-600">
+                      Rent ({booking.timePeriod} month{booking.timePeriod > 1 ? "s" : ""})
+                    </span>
+                    <span className="font-medium">₹{booking.totalPrice.toLocaleString()}</span>
                   </div>
-                  <div className="pt-4 flex justify-between items-center text-lg font-bold">
-                    <span>Total Amount</span>
-                    <span>₹{totalAmount.toLocaleString()}</span>
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-600">Security deposit</span>
+                    <span className="font-medium">₹{securityDeposit.toLocaleString()}</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-600">Advance payment</span>
+                    <span className="font-medium">₹{advancePayment.toLocaleString()}</span>
+                  </div>
+
+                  <div className="border-t border-gray-100 pt-4 mt-6">
+                    <div className="flex justify-between items-center">
+                      <span className="text-lg font-medium text-gray-900">Total</span>
+                      <span className="text-lg font-semibold text-gray-900">₹{totalAmount.toLocaleString()}</span>
+                    </div>
                   </div>
                 </div>
 
-                <Button
-                  name={isProcessing ? "Processing..." : "Pay Now"}
+                <button
                   onClick={handlePayment}
                   disabled={isProcessing}
-                  className="mt-6 w-full bg-[#76ABAE] hover:bg-[#62989a] text-white font-semibold py-2 px-4 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
-                />
-                <button onClick={handlePayment}>Pay Now</button>
-              </div>
-            </motion.div>
+                  className="w-full bg-[#76ABAE] hover:bg-[#62989a] text-white font-medium py-4 px-6 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isProcessing ? (
+                    <div className="flex items-center justify-center space-x-2">
+                      <Loader2 size={16} className="animate-spin" />
+                      <span>Processing...</span>
+                    </div>
+                  ) : (
+                    "Complete Payment"
+                  )}
+                </button>
+
+                <div className="mt-6 flex items-start space-x-2">
+                  <Shield size={16} className="text-gray-400 mt-0.5 flex-shrink-0" />
+                  <p className="text-xs text-gray-500 leading-relaxed">
+                    Your payment is secured with 256-bit SSL encryption
+                  </p>
+                </div>
+              </motion.div>
+            </div>
           </div>
-        </div>
-      </motion.div>
+        </motion.div>
+      </div>
     </div>
   )
 }
