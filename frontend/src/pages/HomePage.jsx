@@ -3,14 +3,27 @@
 import { useEffect } from "react"
 import { motion } from "framer-motion"
 import FlatCard from "../components/FlatCard"
+import FlatCardName from "../components/FlatCardName"
 import HomeCardShimmer from "../components/HomeCardShimmer"
 import { useDispatch, useSelector } from "react-redux"
 import { fetchFlats } from "../redux/flatsSlice"
 import Banner from "./Banner"
 import Testimonial from "./Testimonial"
+import { useNavigate } from "react-router-dom"
+import { useState } from "react"
+import { fetchFlatsByLocation } from "../redux/flatsSlice"
 
 const HomePage = () => {
-  const dispatch = useDispatch()
+
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+
+  // Fixed handleSeeAll function - use the parameter directly instead of state
+  const handleSeeAll = (loc) => {
+    dispatch(fetchFlatsByLocation(loc))
+      navigate(`/search?location=${loc}`)
+  }
+  
   const { flats, loading } = useSelector((state) => state.flats)
 
   useEffect(() => {
@@ -59,9 +72,8 @@ const HomePage = () => {
           transition={{ duration: 0.5 }}
           className="flex items-center justify-between mb-8 mt-8"
         >
-          {/* <h1 className="text-4xl font-bold">Popular Flats in Chandigarh</h1> */}
           <p className="text-4xl font-bold text-gray-700">Discover the best flats in Chandigarh</p>
-          <p className="">See all</p>
+          <p className="cursor-pointer hover:underline" onClick={() => handleSeeAll("Chandigarh")}>See all</p>
         </motion.div>
 
         <motion.div
@@ -76,7 +88,7 @@ const HomePage = () => {
             flats
               .filter((flat) => flat.location?.toLowerCase() === "chandigarh")
               .slice(0, 4)
-              .map((flat) => <FlatCard key={flat._id} flat={flat} />)
+              .map((flat) => <FlatCardName key={flat._id} flat={flat} />)
           )}
         </motion.div>
         
@@ -84,11 +96,12 @@ const HomePage = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="flex items-center justify-between mb-8 mt-8 "
+          className="flex items-center justify-between mb-8 mt-8"
         >
-                 <p className="text-4xl font-bold text-gray-700">Discover the best flats in New Delhi</p>
-
+          <p className="text-4xl font-bold text-gray-700">Discover the best flats in New Delhi</p>
+          <p className="cursor-pointer hover:underline" onClick={() => handleSeeAll("Delhi")}>See all</p>
         </motion.div>
+        
         <motion.div
           variants={containerVariants}
           initial="hidden"
@@ -101,7 +114,7 @@ const HomePage = () => {
             flats
               .filter((flat) => flat.location?.toLowerCase() === "newdelhi")
               .slice(0, 4)
-              .map((flat) => <FlatCard key={flat._id} flat={flat} />)
+              .map((flat) => <FlatCardName key={flat._id} flat={flat} />)
           )}
         </motion.div>
       </div>

@@ -5,7 +5,9 @@ import { Link } from "react-router-dom"
 import { MapPin, Home } from "lucide-react"
 import Button from "./Button"
 
+
 const FlatCard = ({ flat }) => {
+
   return (
     <motion.div
       variants={{
@@ -37,7 +39,7 @@ const FlatCard = ({ flat }) => {
 
         <h1 className="font-bold text-xl mb-2 line-clamp-1">
           {/* <Home size={18} className="inline mr-1 text-[#76ABAE]" /> */}
-          Rooms in {flat.location}
+          {flat.name}
         </h1>
 
         <p className="text-gray-600 text-sm line-clamp-2 mb-4">{flat.description}</p>

@@ -84,7 +84,7 @@ const Search = ({ css }) => {
           onChange={handleInputChange}
           onFocus={handleFocus}
           onBlur={handleBlur}
-          placeholder="Search by location (e.g., Mumbai, Delhi)"
+          placeholder="Search by location (e.g., Noida, Delhi)"
           className={`
             relative z-10 w-full py-3 pl-12 pr-24 
             bg-white/90 backdrop-blur-sm rounded-full 

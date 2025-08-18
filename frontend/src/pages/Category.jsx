@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react"
 import { motion } from "framer-motion"
 import { useQuery } from "@apollo/client"
 import { GET_FLATS } from "../graphql/queries"
-import FlatCard from "../components/FlatCard"
+import FlatCard from "../components/FlatCardName"
 import HomeCardShimmer from "../components/HomeCardShimmer"
 import { Search, SlidersHorizontal, X, Loader2 } from "lucide-react"
 
