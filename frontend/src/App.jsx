@@ -1,8 +1,9 @@
 "use client"
 
 import { useState, useEffect, Suspense, lazy } from "react"
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom"
 import { AnimatePresence } from "framer-motion"
+import ReactGA from "react-ga4" // ✅ import Google Analytics
 import NavScrollTop from "./components/NavScrollTop"
 import Navbar from "./components/Navbar"
 import PageTransition from "./components/PageTransition"
@@ -10,6 +11,7 @@ import LoadingScreen from "./components/LoadingScreen"
 import Error404 from "./components/Error404"
 import { Footer } from "./components/Footer"
 
+// lazy imports...
 const HomePage = lazy(() => import("./pages/HomePage"))
 const FlatDetailPage = lazy(() => import("./pages/FlatDetailPage"))
 const LoginPage = lazy(() => import("./pages/LoginPage"))
@@ -24,13 +26,23 @@ const UpdatePage = lazy(() => import("./pages/UpdatePage"))
 const Category = lazy(() => import("./pages/Category"))
 const Success = lazy(() => import("./components/Success"))
 
+const AnalyticsTracker = () => {
+  const location = useLocation()
+
+  useEffect(() => {
+    ReactGA.send({ hitType: "pageview", page: location.pathname + location.search })
+  }, [location])
+
+  return null
+}
+
 const App = () => {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    setTimeout(() => {
-      setLoading(false)
-    }, 1000)
+    setTimeout(() => setLoading(false), 1000)
+
+    ReactGA.initialize("G-34YS1ZRZTT")
   }, [])
 
   return (
@@ -46,123 +58,28 @@ const App = () => {
           <LoadingScreen />
         ) : (
           <Router>
+         
+            <AnalyticsTracker />
+
             <NavScrollTop>
               <Suspense fallback={<LoadingScreen minimal />}>
                 <Navbar />
                 <AnimatePresence mode="wait">
                   <Routes>
-                    <Route
-                      path="/"
-                      element={
-                        <PageTransition>
-                          <HomePage />
-                        </PageTransition>
-                      }
-                    />
-                    <Route
-                      path="/flat/:id"
-                      element={
-                        <PageTransition>
-                          <FlatDetailPage />
-                        </PageTransition>
-                      }
-                    />
-                    <Route
-                      path="/login"
-                      element={
-                        <PageTransition>
-                          <LoginPage />
-                        </PageTransition>
-                      }
-                    />
-                    <Route
-                      path="/register"
-                      element={
-                        <PageTransition>
-                          <RegisterPage />
-                        </PageTransition>
-                      }
-                    />
-                    <Route
-                      path="/add-flat"
-                      element={
-                        <PageTransition>
-                          <AddFlatPage />
-                        </PageTransition>
-                      }
-                    />
-                    <Route
-                      path="/search"
-                      element={
-                        <PageTransition>
-                          <SearchResultsPage />
-                        </PageTransition>
-                      }
-                    />
-                    <Route
-                      path="/logout"
-                      element={
-                        <PageTransition>
-                          <LogoutPage />
-                        </PageTransition>
-                      }
-                    />
-                    <Route
-                      path="/bookings"
-                      element={
-                        <PageTransition>
-                          <BookingPage />
-                        </PageTransition>
-                      }
-                    />
-                    <Route
-                      path="/mylistings"
-                      element={
-                        <PageTransition>
-                          <MyListings />
-                        </PageTransition>
-                      }
-                    />
-                    <Route
-                      path="/checkout/:id"
-                      element={
-                        <PageTransition>
-                          <Checkout />
-                        </PageTransition>
-                      }
-                    />
-                    <Route
-                      path="/updatePage/:id"
-                      element={
-                        <PageTransition>
-                          <UpdatePage />
-                        </PageTransition>
-                      }
-                    />
-                    <Route
-                      path="/category"
-                      element={
-                        <PageTransition>
-                          <Category />
-                        </PageTransition>
-                      }
-                    />
-                    <Route
-                      path="/*"
-                      element={
-                        <PageTransition>
-                          <Error404 />
-                        </PageTransition>
-                      }
-                    />
-                    <Route
-                      path="/success"
-                      element={
-                        <PageTransition>
-                          <Success />
-                        </PageTransition>
-                      }
-                    />
+                    <Route path="/" element={<PageTransition><HomePage /></PageTransition>} />
+                    <Route path="/flat/:id" element={<PageTransition><FlatDetailPage /></PageTransition>} />
+                    <Route path="/login" element={<PageTransition><LoginPage /></PageTransition>} />
+                    <Route path="/register" element={<PageTransition><RegisterPage /></PageTransition>} />
+                    <Route path="/add-flat" element={<PageTransition><AddFlatPage /></PageTransition>} />
+                    <Route path="/search" element={<PageTransition><SearchResultsPage /></PageTransition>} />
+                    <Route path="/logout" element={<PageTransition><LogoutPage /></PageTransition>} />
+                    <Route path="/bookings" element={<PageTransition><BookingPage /></PageTransition>} />
+                    <Route path="/mylistings" element={<PageTransition><MyListings /></PageTransition>} />
+                    <Route path="/checkout/:id" element={<PageTransition><Checkout /></PageTransition>} />
+                    <Route path="/updatePage/:id" element={<PageTransition><UpdatePage /></PageTransition>} />
+                    <Route path="/category" element={<PageTransition><Category /></PageTransition>} />
+                    <Route path="/success" element={<PageTransition><Success /></PageTransition>} />
+                    <Route path="/*" element={<PageTransition><Error404 /></PageTransition>} />
                   </Routes>
                 </AnimatePresence>
                 <Footer />
