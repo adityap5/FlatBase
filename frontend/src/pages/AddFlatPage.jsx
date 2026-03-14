@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { motion } from "framer-motion"
 import { useNavigate } from "react-router-dom"
-import { Home, MapPin, Users, DollarSign, FileText, Upload, Loader2 } from "lucide-react"
+import { Home, MapPin, Users, DollarSign, FileText, Upload, Loader2, Wifi, Car, Utensils, Wind, Waves, ShieldCheck, Dumbbell, Tv, CheckSquare } from "lucide-react"
 import Confetti from "react-confetti"
 import Button from "../components/Button"
 import { addFlat } from "../graphql/queries" // import your GraphQL function
@@ -30,6 +30,7 @@ const AddFlatPage = () => {
   const [location, setLocation] = useState("Chandigarh")
   const [capacity, setCapacity] = useState("")
   const [description, setDescription] = useState("")
+  const [amenities, setAmenities] = useState([])
   const [image, setImage] = useState(null)
   const [imagePreview, setImagePreview] = useState(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -58,6 +59,23 @@ const AddFlatPage = () => {
     reader.readAsDataURL(file)
     setImagePreview(URL.createObjectURL(file))
   }
+
+  const handleAmenityToggle = (amenity) => {
+    setAmenities(prev => 
+      prev.includes(amenity) ? prev.filter(a => a !== amenity) : [...prev, amenity]
+    )
+  }
+
+  const AVAILABLE_AMENITIES = [
+    { id: "WiFi", icon: Wifi },
+    { id: "Parking", icon: Car },
+    { id: "Kitchen", icon: Utensils },
+    { id: "AC", icon: Wind },
+    { id: "Pool", icon: Waves },
+    { id: "Security", icon: ShieldCheck },
+    { id: "Gym", icon: Dumbbell },
+    { id: "TV", icon: Tv },
+  ]
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -90,6 +108,7 @@ const AddFlatPage = () => {
         location,
         capacity: parseInt(capacity),
         description,
+        amenities,
         images: image, // base64 string
         seller: userId
       }
@@ -112,6 +131,7 @@ const AddFlatPage = () => {
       setLocation("Chandigarh")
       setCapacity("")
       setDescription("")
+      setAmenities([])
       setImage(null)
       setImagePreview(null)
 
@@ -153,7 +173,7 @@ const AddFlatPage = () => {
   ]
 
   return (
-    <div className="container mx-auto px-4 py-8 relative">
+    <div className="max-w-7xl mx-auto px-4 py-6 relative">
       {showConfetti && <Confetti width={window.innerWidth} height={window.innerHeight} />}
       {showModal && <Modal message={modalMessage} type={modalType} onClose={closeModal} />}
 
@@ -218,6 +238,32 @@ const AddFlatPage = () => {
                     className="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:border-[#76ABAE] focus:ring-1 focus:ring-[#76ABAE]" 
                     placeholder="Number of guests"
                   />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium flex items-center mb-3">
+                  <CheckSquare size={16} className="mr-2 text-[#76ABAE]" /> Amenities
+                </label>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {AVAILABLE_AMENITIES.map((amenity) => {
+                    const Icon = amenity.icon
+                    const isSelected = amenities.includes(amenity.id)
+                    return (
+                      <div 
+                        key={amenity.id}
+                        onClick={() => handleAmenityToggle(amenity.id)}
+                        className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all ${
+                          isSelected 
+                            ? "bg-[#76ABAE]/10 border-[#76ABAE] text-[#76ABAE] shadow-sm" 
+                            : "bg-gray-50/50 border-gray-200 text-gray-600 hover:bg-gray-50"
+                        }`}
+                      >
+                        <Icon size={18} className={isSelected ? "text-[#76ABAE]" : "text-gray-400"} />
+                        <span className="font-medium text-sm">{amenity.id}</span>
+                      </div>
+                    )
+                  })}
                 </div>
               </div>
 

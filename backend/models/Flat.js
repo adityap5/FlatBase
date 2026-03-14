@@ -7,8 +7,11 @@ const flatSchema = new mongoose.Schema({
   location: { type: String, required: true },
   description: { type: String, required: true },
   images: { type: String, required: true },
-  seller: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
-});
+  seller: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  amenities: { type: [String], default: [] },
+  bookingCount: { type: Number, default: 0 },
+  blockedMonths: { type: [String], default: [] }, // format: "YYYY-MM"
+}, { timestamps: true });
 
 const Flat = mongoose.model('Flat', flatSchema);
 

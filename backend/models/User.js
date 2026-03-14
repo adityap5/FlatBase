@@ -20,7 +20,15 @@ const UserSchema = new mongoose.Schema({
     enum: ['seller', 'customer'],
     default: 'customer',
   },
-});
+  phone: {
+    type: String,
+    default: '',
+  },
+  bio: {
+    type: String,
+    default: '',
+  },
+}, { timestamps: true });
 
 UserSchema.pre('save', async function (next) {
   if (!this.isModified('password')) {

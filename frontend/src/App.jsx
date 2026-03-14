@@ -25,6 +25,10 @@ const Checkout = lazy(() => import("./pages/Checkout"))
 const UpdatePage = lazy(() => import("./pages/UpdatePage"))
 const Category = lazy(() => import("./pages/Category"))
 const Success = lazy(() => import("./components/Success"))
+const SellerDashboard = lazy(() => import("./pages/SellerDashboard"))
+const SellerProfilePage = lazy(() => import("./pages/SellerProfilePage"))
+const SellerAnalytics = lazy(() => import("./pages/SellerAnalytics"))
+const SellerLayout = lazy(() => import("./components/SellerLayout"))
 
 const AnalyticsTracker = () => {
   const location = useLocation()
@@ -68,17 +72,19 @@ const App = () => {
                   <Routes>
                     <Route path="/" element={<PageTransition><HomePage /></PageTransition>} />
                     <Route path="/flat/:id" element={<PageTransition><FlatDetailPage /></PageTransition>} />
+                    <Route path="/search" element={<PageTransition><SearchResultsPage /></PageTransition>} />
+                    <Route path="/category" element={<PageTransition><Category /></PageTransition>} />
+                    <Route path="/bookings" element={<PageTransition><BookingPage /></PageTransition>} />
+                    <Route path="/checkout/:id" element={<PageTransition><Checkout /></PageTransition>} />
                     <Route path="/login" element={<PageTransition><LoginPage /></PageTransition>} />
                     <Route path="/register" element={<PageTransition><RegisterPage /></PageTransition>} />
-                    <Route path="/add-flat" element={<PageTransition><AddFlatPage /></PageTransition>} />
-                    <Route path="/search" element={<PageTransition><SearchResultsPage /></PageTransition>} />
-                    <Route path="/logout" element={<PageTransition><LogoutPage /></PageTransition>} />
-                    <Route path="/bookings" element={<PageTransition><BookingPage /></PageTransition>} />
-                    <Route path="/mylistings" element={<PageTransition><MyListings /></PageTransition>} />
-                    <Route path="/checkout/:id" element={<PageTransition><Checkout /></PageTransition>} />
-                    <Route path="/updatePage/:id" element={<PageTransition><UpdatePage /></PageTransition>} />
-                    <Route path="/category" element={<PageTransition><Category /></PageTransition>} />
-                    <Route path="/success" element={<PageTransition><Success /></PageTransition>} />
+                    <Route element={<PageTransition><SellerLayout /></PageTransition>}>
+                      <Route path="/seller/dashboard" element={<SellerDashboard />} />
+                      <Route path="/seller/profile" element={<SellerProfilePage />} />
+                      <Route path="/seller/analytics" element={<SellerAnalytics />} />
+                      <Route path="/mylistings" element={<MyListings />} />
+                      <Route path="/add-flat" element={<AddFlatPage />} />
+                    </Route>
                     <Route path="/*" element={<PageTransition><Error404 /></PageTransition>} />
                   </Routes>
                 </AnimatePresence>

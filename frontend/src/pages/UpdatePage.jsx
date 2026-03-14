@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { useNavigate, useParams } from "react-router-dom"
 import { getFlat, updateListing } from "../graphql/queries"
-import { Home, MapPin, Users, DollarSign, FileText, Loader2, AlertCircle, ArrowLeft } from "lucide-react"
+import { Home, MapPin, Users, DollarSign, FileText, Loader2, AlertCircle, ArrowLeft, Wifi, Car, Utensils, Wind, Waves, ShieldCheck, Dumbbell, Tv, CheckSquare } from "lucide-react"
 import Button from "../components/Button"
 
 function UpdatePage() {
@@ -14,6 +14,7 @@ function UpdatePage() {
   const [location, setLocation] = useState("")
   const [capacity, setCapacity] = useState("")
   const [description, setDescription] = useState("")
+  const [amenities, setAmenities] = useState([])
   const [loading, setLoading] = useState(true)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState(null)
@@ -40,6 +41,7 @@ function UpdatePage() {
         setLocation(flatData.location || "Chandigarh")
         setCapacity(flatData.capacity?.toString() || "")
         setDescription(flatData.description || "")
+        setAmenities(flatData.amenities || [])
         setError(null)
         
       } catch (err) {
@@ -70,6 +72,7 @@ function UpdatePage() {
         location,
         description: description.trim(),
         capacity: parseInt(capacity),
+        amenities,
       }
 
       console.log("Updating flat with data:", formData) // Debug log
@@ -111,6 +114,23 @@ function UpdatePage() {
     "Varanasi",
     "Shimla",
     "Noida",
+  ]
+
+  const handleAmenityToggle = (amenity) => {
+    setAmenities(prev => 
+      prev.includes(amenity) ? prev.filter(a => a !== amenity) : [...prev, amenity]
+    )
+  }
+
+  const AVAILABLE_AMENITIES = [
+    { id: "WiFi", icon: Wifi },
+    { id: "Parking", icon: Car },
+    { id: "Kitchen", icon: Utensils },
+    { id: "AC", icon: Wind },
+    { id: "Pool", icon: Waves },
+    { id: "Security", icon: ShieldCheck },
+    { id: "Gym", icon: Dumbbell },
+    { id: "TV", icon: Tv },
   ]
 
   if (loading) {
@@ -250,6 +270,32 @@ function UpdatePage() {
                     min="1"
                     required
                   />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-700 flex items-center mb-3">
+                  <CheckSquare size={16} className="mr-2 text-[#76ABAE]" /> Amenities
+                </label>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {AVAILABLE_AMENITIES.map((amenity) => {
+                    const Icon = amenity.icon
+                    const isSelected = amenities.includes(amenity.id)
+                    return (
+                      <div 
+                        key={amenity.id}
+                        onClick={() => handleAmenityToggle(amenity.id)}
+                        className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all ${
+                          isSelected 
+                            ? "bg-[#76ABAE]/10 border-[#76ABAE] text-[#76ABAE] shadow-sm" 
+                            : "bg-gray-50/50 border-gray-200 text-gray-600 hover:bg-gray-50"
+                        }`}
+                      >
+                        <Icon size={18} className={isSelected ? "text-[#76ABAE]" : "text-gray-400"} />
+                        <span className="font-medium text-sm">{amenity.id}</span>
+                      </div>
+                    )
+                  })}
                 </div>
               </div>
 

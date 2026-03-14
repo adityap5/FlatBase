@@ -2,13 +2,15 @@
 
 import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
-import { useSelector } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
 import { useLocation } from "react-router-dom"
 import { SlidersHorizontal, ArrowUpDown, Search, MapPin } from "lucide-react"
 import FlatCard from "../components/FlatCard"
 import HomeCardShimmer from "../components/HomeCardShimmer"
+import { fetchFlats, fetchFlatsByLocation } from "../redux/flatsSlice"
 
 const SearchResultsPage = () => {
+  const dispatch = useDispatch()
   const { flats, loading } = useSelector((state) => state.flats)
   const location = useLocation()
   const searchParams = new URLSearchParams(location.search)
@@ -18,8 +20,18 @@ const SearchResultsPage = () => {
   const [sortOption, setSortOption] = useState("select")
 
   useEffect(() => {
+    if (searchLocation) {
+      dispatch(fetchFlatsByLocation(searchLocation))
+    } else {
+      dispatch(fetchFlats())
+    }
+  }, [dispatch, searchLocation])
+
+  useEffect(() => {
     if (flats && flats.length > 0) {
       setSortedFlats([...flats])
+    } else {
+      setSortedFlats([])
     }
   }, [flats])
 

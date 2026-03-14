@@ -19,6 +19,23 @@ const BookingSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-});
+  paymentStatus: {
+    type: String,
+    enum: ['pending', 'paid'],
+    default: 'pending',
+  },
+  paymentId: {
+    type: String,
+    default: '',
+  },
+  startDate: {
+    type: String, // "YYYY-MM"
+    default: '',
+  },
+  endDate: {
+    type: String, // "YYYY-MM"
+    default: '',
+  },
+}, { timestamps: true });
 
 module.exports = mongoose.model('Booking', BookingSchema);

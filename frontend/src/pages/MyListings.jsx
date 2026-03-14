@@ -111,14 +111,21 @@ function MyListings() {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center py-20">
-        <div className="text-gray-500 text-sm">Loading your listings...</div>
+      <div className="max-w-7xl mx-auto px-4 py-6">
+        <div className="animate-pulse space-y-8">
+          <div className="h-8 bg-gray-200 rounded w-1/4"></div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="h-64 bg-gray-200 rounded-lg"></div>
+            <div className="h-64 bg-gray-200 rounded-lg"></div>
+            <div className="h-64 bg-gray-200 rounded-lg"></div>
+          </div>
+        </div>
       </div>
     )
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-12">
+    <div className="max-w-7xl mx-auto px-4 py-6">
       <div className="flex justify-between items-center mb-12">
         <div>
           <h1 className="text-2xl font-medium text-gray-900">My Properties</h1>

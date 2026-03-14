@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { useNavigate, NavLink } from "react-router-dom"
-import { Menu, X, Home, LogOut, User, BookOpen, Building, Plus, MountainIcon } from "lucide-react"
+import { Menu, X, Home, LogOut, User, BookOpen, Building, Plus, MountainIcon, LayoutDashboard, BarChart3, Settings } from "lucide-react"
 import { Logout } from "../components/Logout"
 
 const Navbar = () => {
@@ -29,7 +29,7 @@ const Navbar = () => {
       name: "Explore",
       path: "/category",
       icon: <MountainIcon size={18} />,
-      show: true,
+      show: !isSeller,
     },
     {
       name: "Register",
@@ -44,9 +44,9 @@ const Navbar = () => {
       show: !token,
     },
     {
-      name: "My Listings",
-      path: "/mylistings",
-      icon: <Building size={18} />,
+      name: "Dashboard",
+      path: "/seller/dashboard",
+      icon: <LayoutDashboard size={18} />,
       show: isSeller,
     },
     {
@@ -54,12 +54,6 @@ const Navbar = () => {
       path: "/bookings",
       icon: <BookOpen size={18} />,
       show: isBuyer,
-    },
-    {
-      name: "Add Property",
-      path: "/add-flat",
-      icon: <Plus size={18} />,
-      show: isSeller,
     },
   ]
 

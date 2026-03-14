@@ -15,10 +15,14 @@ export const GET_FLATS = gql`
       location
       capacity
       images
+      amenities
+      bookingCount
       seller {
         _id
         name
         email
+        phone
+        bio
       }
     }
   }
@@ -35,10 +39,15 @@ export const GET_FLAT = gql`
       location
       capacity
       images
+      amenities
+      blockedMonths
+      bookingCount
       seller {
         _id
         name
         email
+        phone
+        bio
       }
     }
   }
@@ -55,6 +64,8 @@ export const SEARCH_FLATS = gql`
       location
       capacity
       images
+      amenities
+      bookingCount
       seller {
         _id
         name
@@ -74,12 +85,110 @@ export const GET_BOOKINGS = gql`
         name
         price
         location
+        images
       }
       user {
         _id
       }
       timePeriod
       totalPrice
+      paymentStatus
+      startDate
+      endDate
+      createdAt
+    }
+  }
+`;
+
+export const GET_SELLER_BOOKINGS = gql`
+  query SellerBookings($sellerId: ID!) {
+    sellerBookings(sellerId: $sellerId) {
+      _id
+      flat {
+        _id
+        name
+        price
+        location
+      }
+      user {
+        _id
+        name
+        email
+      }
+      timePeriod
+      totalPrice
+      paymentStatus
+      paymentId
+      startDate
+      endDate
+      createdAt
+    }
+  }
+`;
+
+export const GET_SELLER_ANALYTICS = gql`
+  query SellerAnalytics($sellerId: ID!) {
+    sellerAnalytics(sellerId: $sellerId) {
+      totalRevenue
+      activeListings
+      monthlyBookings
+      avgRating
+      monthlyData {
+        month
+        revenue
+        bookings
+      }
+    }
+  }
+`;
+
+export const GET_POPULAR_FLATS = gql`
+  query PopularFlats {
+    popularFlats {
+      _id
+      name
+      price
+      location
+      images
+      bookingCount
+    }
+  }
+`;
+
+export const GET_POPULAR_CITIES = gql`
+  query PopularCities {
+    popularCities {
+      city
+      count
+      image
+    }
+  }
+`;
+
+export const GET_FLAT_REVIEWS = gql`
+  query FlatReviews($flatId: ID!) {
+    flatReviews(flatId: $flatId) {
+      _id
+      rating
+      text
+      createdAt
+      user {
+        _id
+        name
+      }
+    }
+  }
+`;
+
+export const GET_USER = gql`
+  query GetUser($id: ID!) {
+    user(id: $id) {
+      _id
+      name
+      email
+      phone
+      bio
+      role
     }
   }
 `;
@@ -126,6 +235,7 @@ export const ADD_FLAT = gql`
     $capacity: Int
     $images: String
     $seller: ID!
+    $amenities: [String]
   ) {
     addFlat(
       name: $name
@@ -135,11 +245,13 @@ export const ADD_FLAT = gql`
       capacity: $capacity
       images: $images
       seller: $seller
+      amenities: $amenities
     ) {
       _id
       name
       price
       location
+      amenities
     }
   }
 `;
@@ -153,6 +265,7 @@ export const UPDATE_FLAT = gql`
     $description: String
     $location: String
     $capacity: Int
+    $amenities: [String]
   ) {
     updateFlat(
       id: $id
@@ -161,11 +274,13 @@ export const UPDATE_FLAT = gql`
       description: $description
       location: $location
       capacity: $capacity
+      amenities: $amenities
     ) {
       _id
       name
       price
       location
+      amenities
     }
   }
 `;
@@ -179,8 +294,8 @@ export const DELETE_FLAT = gql`
 
 // Create a booking
 export const CREATE_BOOKING = gql`
-  mutation CreateBooking($flat: ID!, $user: ID!, $timePeriod: String!, $totalPrice: Float!) {
-    createBooking(flat: $flat, user: $user, timePeriod: $timePeriod, totalPrice: $totalPrice) {
+  mutation CreateBooking($flat: ID!, $user: ID!, $timePeriod: String!, $totalPrice: Float!, $startDate: String, $endDate: String) {
+    createBooking(flat: $flat, user: $user, timePeriod: $timePeriod, totalPrice: $totalPrice, startDate: $startDate, endDate: $endDate) {
       _id
       flat {
         _id
@@ -193,6 +308,9 @@ export const CREATE_BOOKING = gql`
       }
       timePeriod
       totalPrice
+      paymentStatus
+      startDate
+      endDate
     }
   }
 `;
@@ -211,16 +329,53 @@ const GET_BOOKING = gql`
         _id
         name
         price
+        capacity
+        location
+        description
+        images
+        seller {
+          name
+        }
       }
       user {
         _id
         name
+        email
       }
       timePeriod
       totalPrice
+      paymentStatus
     }
   }
 `;
+
+export const UPDATE_SELLER_PROFILE = gql`
+  mutation UpdateSellerProfile($id: ID!, $name: String, $email: String, $phone: String, $bio: String) {
+    updateSellerProfile(id: $id, name: $name, email: $email, phone: $phone, bio: $bio) {
+      _id
+      name
+      email
+      phone
+      bio
+    }
+  }
+`;
+
+export const ADD_REVIEW = gql`
+  mutation AddReview($flat: ID!, $user: ID!, $rating: Int!, $text: String) {
+    addReview(flat: $flat, user: $user, rating: $rating, text: $text) {
+      _id
+      rating
+      text
+      createdAt
+      user {
+        _id
+        name
+      }
+    }
+  }
+`;
+
 // ------------------- API Functions -------------------
 
 export const register = (formData) =>
@@ -267,5 +422,14 @@ export const getBooking = (id) =>
 
 // ------------------- Additional Queries -------------------
 
-// Get single booking
+export const getSellerBookings = (sellerId) => client.query({ query: GET_SELLER_BOOKINGS, variables: { sellerId }, fetchPolicy: 'network-only' });
+export const getSellerAnalytics = (sellerId) => client.query({ query: GET_SELLER_ANALYTICS, variables: { sellerId }, fetchPolicy: 'network-only' });
 
+export const getPopularFlats = () => client.query({ query: GET_POPULAR_FLATS, fetchPolicy: 'network-only' });
+export const getPopularCities = () => client.query({ query: GET_POPULAR_CITIES, fetchPolicy: 'network-only' });
+
+export const getFlatReviews = (flatId) => client.query({ query: GET_FLAT_REVIEWS, variables: { flatId }, fetchPolicy: 'network-only' });
+export const getUser = (id) => client.query({ query: GET_USER, variables: { id }, fetchPolicy: 'network-only' });
+
+export const updateSellerProfile = (profileData) => client.mutate({ mutation: UPDATE_SELLER_PROFILE, variables: profileData });
+export const addReview = (reviewData) => client.mutate({ mutation: ADD_REVIEW, variables: reviewData });
