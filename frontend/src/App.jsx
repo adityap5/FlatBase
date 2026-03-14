@@ -74,6 +74,8 @@ const App = () => {
                     <Route path="/flat/:id" element={<PageTransition><FlatDetailPage /></PageTransition>} />
                     <Route path="/search" element={<PageTransition><SearchResultsPage /></PageTransition>} />
                     <Route path="/category" element={<PageTransition><Category /></PageTransition>} />
+                    <Route path="/success" element={<PageTransition><Success /></PageTransition>} />
+                    <Route path="/logout" element={<PageTransition><LogoutPage /></PageTransition>} />
                     <Route path="/bookings" element={<PageTransition><BookingPage /></PageTransition>} />
                     <Route path="/checkout/:id" element={<PageTransition><Checkout /></PageTransition>} />
                     <Route path="/login" element={<PageTransition><LoginPage /></PageTransition>} />
