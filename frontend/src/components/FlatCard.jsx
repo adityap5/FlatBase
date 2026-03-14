@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion"
 import { Link } from "react-router-dom"
-import { MapPin, Home } from "lucide-react"
+import { MapPin, Home, TrendingUp } from "lucide-react"
 import Button from "./Button"
 
 const FlatCard = ({ flat }) => {
@@ -23,9 +23,15 @@ const FlatCard = ({ flat }) => {
           src={flat.images}
           alt={flat.name || "Flat"}
         />
-        <div className="absolute top-3 right-3 bg-white/90 px-2 py-1 rounded-full text-sm font-medium">
-          ₹{flat.price}/month
+        <div className="absolute top-3 right-3 bg-white/90 px-3 py-1 rounded-full text-sm font-bold text-gray-800 shadow-sm backdrop-blur-sm">
+          ₹{flat.price?.toLocaleString()}
+          <span className="text-xs font-normal text-gray-500 ml-1">/ mo</span>
         </div>
+        {flat.bookingCount >= 3 && (
+          <div className="absolute top-3 left-3 bg-[#76ABAE] text-white px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1 shadow-md">
+            <TrendingUp size={14} /> Popular ({flat.bookingCount}+ booked)
+          </div>
+        )}
       </div>
 
       <div className="p-5">

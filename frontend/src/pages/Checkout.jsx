@@ -67,10 +67,9 @@ function Checkout() {
         const bookingData = bookingRes.data.booking
         setBooking(bookingData)
 
-        // Fetch flat details using booking.flat._id
-        if (bookingData?.flat?._id) {
-          const flatRes = await getFlat(bookingData.flat._id)
-          setFlatDetails(flatRes.data.flat)
+        // Use flat details directly from the booking response
+        if (bookingData?.flat) {
+          setFlatDetails(bookingData.flat)
         }
       } catch (err) {
         console.error("Error fetching booking or flat:", err)
@@ -98,7 +97,7 @@ function Checkout() {
     try {
       // Calculate total amount
       const securityDeposit = 999
-      const advancePayment = Math.round(booking.totalPrice / booking.timePeriod)
+      const advancePayment = Math.round(booking.totalPrice / parseInt(booking.timePeriod || "1"))
       const totalAmount = booking.totalPrice + securityDeposit + advancePayment
 
       // Create order using GraphQL
@@ -206,7 +205,7 @@ function Checkout() {
   }
 
   const securityDeposit = 999
-  const advancePayment = Math.round(booking.totalPrice / booking.timePeriod)
+  const advancePayment = Math.round(booking.totalPrice / parseInt(booking.timePeriod || "1"))
   const totalAmount = booking.totalPrice + securityDeposit + advancePayment
 
   return (
@@ -246,7 +245,7 @@ function Checkout() {
                 <div className="flex items-center justify-between py-3 border-b border-gray-100">
                   <span className="text-gray-600">Duration</span>
                   <span className="font-medium">
-                    {booking.timePeriod} month{booking.timePeriod > 1 ? "s" : ""}
+                    {booking.timePeriod} month{parseInt(booking.timePeriod) > 1 ? "s" : ""}
                   </span>
                 </div>
                 <div className="flex items-center justify-between py-3 border-b border-gray-100">
@@ -283,7 +282,7 @@ function Checkout() {
                 <div className="space-y-4 mb-8">
                   <div className="flex justify-between items-center">
                     <span className="text-gray-600">
-                      Rent ({booking.timePeriod} month{booking.timePeriod > 1 ? "s" : ""})
+                      Rent ({booking.timePeriod} month{parseInt(booking.timePeriod) > 1 ? "s" : ""})
                     </span>
                     <span className="font-medium">₹{booking.totalPrice.toLocaleString()}</span>
                   </div>
