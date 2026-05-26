@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense, lazy } from "react"
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom"
 import { AnimatePresence } from "framer-motion"
-import ReactGA from "react-ga4" // ✅ import Google Analytics
+import ReactGA from "react-ga4"
 import NavScrollTop from "./components/NavScrollTop"
 import Navbar from "./components/Navbar"
 import PageTransition from "./components/PageTransition"
@@ -62,7 +62,7 @@ const App = () => {
           <LoadingScreen />
         ) : (
           <Router>
-         
+
             <AnalyticsTracker />
 
             <NavScrollTop>
