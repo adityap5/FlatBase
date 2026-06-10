@@ -67,11 +67,11 @@ const HomePage = () => {
       <Banner />
 
       {/* Content wrapper with custom margins */}
-      <div className="w-full flex flex-col space-y-32">
+      <div className="w-full flex flex-col space-y-20 md:space-y-28">
         
         {/* Popular Cities Section (Trending Destinations) */}
         {popularCities && popularCities.length > 0 && (
-          <section className="max-w-container-max mx-auto px-6 md:px-margin-desktop w-full">
+          <section className="max-w-[1440px] mx-auto px-4 md:px-10 w-full">
             <motion.div 
               initial={{ opacity: 0, y: 20 }} 
               whileInView={{ opacity: 1, y: 0 }} 
@@ -118,8 +118,8 @@ const HomePage = () => {
 
         {/* Popular Flats Section (Most Booked Properties) */}
         {popularFlats && popularFlats.length > 0 && (
-          <section className="bg-surface-container-lowest py-24 w-full">
-            <div className="max-w-container-max mx-auto px-6 md:px-margin-desktop w-full">
+          <section className="bg-surface-container-lowest py-16 w-full">
+            <div className="max-w-[1440px] mx-auto px-4 md:px-10 w-full">
               <motion.div 
                 initial={{ opacity: 0, y: 20 }} 
                 whileInView={{ opacity: 1, y: 0 }} 
@@ -139,7 +139,7 @@ const HomePage = () => {
                 initial="hidden" 
                 whileInView="visible"
                 viewport={{ once: true }}
-                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter"
+                className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-gutter"
               >
                 {popularFlats.slice(0, 4).map((flat) => (
                   <FlatCard key={`pop-${flat._id}`} flat={flat} />
@@ -150,7 +150,7 @@ const HomePage = () => {
         )}
 
         {/* All Flats / Bento Layout Section */}
-        <section className="max-w-container-max mx-auto px-6 md:px-margin-desktop w-full">
+        <section className="max-w-[1440px] mx-auto px-4 md:px-10 w-full">
           <div className="flex justify-between items-end mb-12">
             <div>
               <span className="font-body text-xs text-primary font-bold tracking-[0.2em] block mb-2 uppercase">
@@ -169,7 +169,7 @@ const HomePage = () => {
           </div>
 
           {loading ? (
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-gutter">
               <HomeCardShimmer />
             </div>
           ) : (
@@ -235,7 +235,7 @@ const HomePage = () => {
 
               {/* Remaining Cards List */}
               {remainingFlats.length > 0 && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter mt-8">
+                <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-gutter mt-8">
                   {remainingFlats.map((flat) => (
                     <FlatCard key={flat._id} flat={flat} />
                   ))}

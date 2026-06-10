@@ -149,7 +149,7 @@ const Category = () => {
   }
 
   return (
-    <div className="container mx-auto py-12 px-4 min-h-[80vh]">
+    <div className="max-w-[1440px] mx-auto py-12 px-4 md:px-10 min-h-[80vh]">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-10">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4">
           <div>
@@ -241,7 +241,7 @@ const Category = () => {
       </motion.div>
 
       {loading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
           {[...Array(8)].map((_, index) => (
             <HomeCardShimmer key={index} />
           ))}
@@ -252,7 +252,7 @@ const Category = () => {
             variants={containerVariants}
             initial="hidden"
             animate="visible"
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"
+            className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8"
           >
             {displayedFlats.length === 0 ? (
               <div className="col-span-full text-center py-20 motionsite-card rounded-3xl border border-glass-border p-8 max-w-2xl mx-auto">

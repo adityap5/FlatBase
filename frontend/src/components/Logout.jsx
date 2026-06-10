@@ -18,12 +18,12 @@ export function Logout() {
 
   return (
     <motion.button
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
       onClick={handleLogout}
-      className="flex items-center text-gray-600 hover:text-red-500 transition-colors duration-200"
+      className="flex items-center text-on-surface-variant hover:text-error transition-colors duration-300 font-body text-xs font-bold uppercase tracking-wider gap-1.5"
     >
-      <LogOut size={18} className="mr-1" />
+      <LogOut size={14} className="text-glow-purple" />
       <span>Logout</span>
     </motion.button>
   )

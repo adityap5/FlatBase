@@ -5,14 +5,19 @@ import Search from "../components/Search"
 
 const Banner = () => {
   return (
-    <section className="relative h-screen min-h-[650px] w-full flex items-center justify-center overflow-hidden -mt-24 z-0">
+    <section className="relative h-screen min-h-[650px] w-full flex items-center justify-center overflow-hidden -mt-28 z-0">
       {/* Background Image and Overlays */}
       <div className="absolute inset-0 z-0">
-        <img 
+        <video 
           className="w-full h-full object-cover" 
-          src="https://res.cloudinary.com/drynv2ild/image/upload/v1723394436/cpsymesbt70uqsxxs9zy.jpg"
-          alt="Luxury architectural stay"
-        />
+          src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260403_050628_c4e32401-fab4-4a27-b7a8-6e9291cd5959.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+        >
+          <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260403_050628_c4e32401-fab4-4a27-b7a8-6e9291cd5959.mp4" type="video/mp4" />
+        </video>
         <div className="absolute inset-0 bg-gradient-to-b from-background/30 via-background/60 to-background"></div>
       </div>
 

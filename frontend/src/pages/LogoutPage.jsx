@@ -21,10 +21,10 @@ const LogoutPage = () => {
   return (
     <div className="flex items-center justify-center min-h-[70vh] px-4">
       <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
+        initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}
-        className="bg-white p-8 rounded-xl shadow-lg max-w-md w-full text-center border border-gray-100"
+        className="motionsite-card p-8 md:p-10 rounded-3xl border border-glass-border max-w-md w-full text-center shadow-2xl"
       >
         <motion.div
           initial={{ y: -20 }}
@@ -32,8 +32,8 @@ const LogoutPage = () => {
           transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
           className="mb-6 flex justify-center"
         >
-          <div className="bg-gradient-to-br from-red-100 to-red-50 p-5 rounded-full shadow-sm">
-            <LogOut size={50} className="text-red-500" />
+          <div className="bg-error/10 p-5 rounded-full border border-error/20 shadow-lg shadow-error/5">
+            <LogOut size={42} className="text-error text-glow" />
           </div>
         </motion.div>
 
@@ -41,7 +41,7 @@ const LogoutPage = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3, duration: 0.5 }}
-          className="text-3xl font-bold mb-4 text-gray-800"
+          className="font-display text-2xl md:text-3xl font-bold mb-4 text-on-background"
         >
           Successfully Logged Out
         </motion.h2>
@@ -50,7 +50,7 @@ const LogoutPage = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4, duration: 0.5 }}
-          className="text-gray-600 text-lg mb-6"
+          className="text-on-surface-variant font-body text-sm mb-6 opacity-80 leading-relaxed"
         >
           Thank you for using our platform. We hope to see you again soon!
         </motion.p>
@@ -59,54 +59,40 @@ const LogoutPage = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5, duration: 0.5 }}
-          className="text-sm text-gray-500 mb-8"
+          className="text-xs font-body font-semibold text-on-surface-variant/60 uppercase tracking-wider mb-8"
         >
           You&apos;ll be redirected to the home page in 5 seconds...
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6, duration: 0.5 }}
           className="flex flex-col sm:flex-row gap-4 justify-center"
         >
-          <Link to="/" className="block">
-            <Button
-              name={
-                <div className="flex items-center justify-center">
-                  <Home size={18} className="mr-2" />
-                  <span>Go to Home</span>
-              </div>
-            }
-          
-            css="bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 transition-all duration-200"
-            />
-            </Link>
-          <Link to="/login" className="block">
-            <Button
-              name={
-                <div className="flex items-center justify-center">
-                  <ArrowRight size={18} className="mr-2" />
-                  <span>Login Again</span>
-                </div>
-              }
-              
-              css="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 transition-all duration-200"
-            />
+          <Link to="/" className="w-full">
+            <button className="w-full flex items-center justify-center gap-2 border border-glass-border py-3.5 rounded-2xl font-body font-bold text-xs uppercase tracking-widest text-on-surface hover:bg-primary hover:text-on-primary hover:border-primary transition-all duration-300 active:scale-[0.98]">
+              <Home size={14} />
+              <span>Go to Home</span>
+            </button>
+          </Link>
+          <Link to="/login" className="w-full">
+            <button className="w-full flex items-center justify-center gap-2 bg-primary text-on-primary py-3.5 rounded-2xl font-body font-bold text-xs uppercase tracking-widest shadow-lg shadow-primary/15 hover:shadow-[0_0_20px_rgba(0,245,255,0.4)] hover:brightness-110 active:scale-[0.98] transition-all duration-300">
+              <ArrowRight size={14} />
+              <span>Login Again</span>
+            </button>
           </Link>
         </motion.div>
 
-        {/* Progress bar for 5-second auto-redirect */}
-        <motion.div
-          className="mt-6 h-1 bg-gray-200 rounded-full overflow-hidden"
-        >
+        {/* Progress bar for auto-redirect */}
+        <div className="mt-8 h-1 bg-surface border border-glass-border rounded-full overflow-hidden">
           <motion.div
             initial={{ width: "100%" }}
             animate={{ width: "0%" }}
             transition={{ duration: 5, ease: "linear" }}
-            className="h-full bg-blue-500 rounded-full"
+            className="h-full bg-primary rounded-full shadow-[0_0_10px_rgba(0,245,255,0.5)]"
           />
-        </motion.div>
+        </div>
       </motion.div>
     </div>
   )

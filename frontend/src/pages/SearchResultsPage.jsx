@@ -63,7 +63,7 @@ const SearchResultsPage = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-12 min-h-[75vh]">
+    <div className="max-w-[1440px] mx-auto px-4 md:px-10 py-12 min-h-[75vh]">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -107,9 +107,7 @@ const SearchResultsPage = () => {
       </motion.div>
 
       {loading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          <HomeCardShimmer />
-          <HomeCardShimmer />
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
           <HomeCardShimmer />
         </div>
       ) : (
@@ -117,7 +115,7 @@ const SearchResultsPage = () => {
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+          className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8"
         >
           {sortedFlats.length > 0 ? (
             sortedFlats.map((flat) => <FlatCard key={flat._id} flat={flat} />)
