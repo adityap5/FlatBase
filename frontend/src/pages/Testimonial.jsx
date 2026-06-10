@@ -14,7 +14,7 @@ const Testimonial = () => {
         type: "carousel",
         perView: 3,
         gap: 30,
-        autoplay: 2000,
+        autoplay: 2500,
         breakpoints: {
           1024: {
             perView: 2,
@@ -35,24 +35,6 @@ const Testimonial = () => {
 
   const testimonials = [
     {
-      name: "Janet",
-      image:
-        "https://images.unsplash.com/photo-1654944989990-9da8fa364ca1?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      text: "The stay was absolutely fantastic! The amenities were top-notch and the staff was incredibly friendly. I'll definitely be coming back!",
-    },
-    {
-      name: "Jane Smith",
-      image:
-        "https://images.unsplash.com/photo-1690544252334-ff1765e6d212?q=80&w=1926&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      text: "I was blown away by the beautiful views and the comfort of my room. It felt like a home away from home. Highly recommended!",
-    },
-    {
-      name: "Mike Johnson",
-      image:
-        "https://images.unsplash.com/photo-1719464791083-65240362d001?q=80&w=1939&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      text: "The location was perfect, and the service was impeccable. I couldn't have asked for a better experience. Will definitely return!",
-    },
-    {
       name: "Sara Johnson",
       image:
         "https://images.unsplash.com/photo-1654512504066-e5af36ceaa27?q=80&w=1888&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
@@ -62,53 +44,67 @@ const Testimonial = () => {
       name: "Chloe James",
       image:
         "https://images.unsplash.com/photo-1650612546797-4b8cf3625a11?q=80&w=1949&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      text: "The location was perfect, and the service was impeccable. I couldn't have asked for a better experience. Will definitely return!",
+      text: "Modern amenities and stunning views. The frosted glass aesthetic of the platform translates perfectly to their property selection.",
+    },
+    {
+      name: "Janet Smith",
+      image:
+        "https://images.unsplash.com/photo-1654944989990-9da8fa364ca1?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      text: "The stay was absolutely fantastic! The amenities were top-notch and the staff was incredibly friendly. I'll definitely be back!",
     },
   ]
 
   return (
-    <motion.div
+    <motion.section
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="py-16  rounded-2xl my-12"
+      className="py-24 relative overflow-hidden w-full"
     >
-      <div className="container mx-auto px-4">
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-primary/5 blur-[120px] rounded-full pointer-events-none"></div>
+      
+      <div className="max-w-container-max mx-auto px-6 md:px-margin-desktop text-center relative z-10">
         <motion.div
           initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-12"
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mb-16"
         >
-          <h2 className="text-4xl font-bold mb-4">What Our Guests Say</h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
-            Discover why our guests love staying with us and what makes our accommodations special
+          <span className="font-body text-xs text-primary font-bold tracking-[0.2em] block mb-3 uppercase">GUEST STORIES</span>
+          <h2 className="font-display text-4xl md:text-5xl text-on-background mb-4">What Our Guests Say</h2>
+          <p className="font-body text-on-surface-variant max-w-2xl mx-auto opacity-70">
+            Discover why luxury travelers choose FlatBase for their curated stays.
           </p>
         </motion.div>
 
         <div className="glide" ref={glideRef}>
-          <div data-glide-el="track" className="glide__track">
+          <div data-glide-el="track" className="glide__track overflow-visible">
             <ul className="glide__slides">
               {testimonials.map((testimonial, index) => (
-                <li key={index} className="glide__slide">
-                  <motion.div whileHover={{ y: -5 }} className="bg-white p-6 rounded-xl shadow-md h-full flex flex-col">
-                    <div className="mb-4 text-[#76ABAE]">
-                      <Quote size={32} />
+                <li key={index} className="glide__slide h-auto">
+                  <motion.div 
+                    whileHover={{ y: -5 }} 
+                    className="motionsite-card p-8 rounded-3xl h-full flex flex-col text-left transition-all duration-300 relative group"
+                  >
+                    <div className="mb-6 text-primary opacity-30 group-hover:opacity-60 transition-opacity duration-300">
+                      <Quote size={40} />
                     </div>
 
-                    <p className="text-gray-700 italic mb-6 flex-grow">"{testimonial.text}"</p>
+                    <p className="text-on-surface font-body text-base italic mb-8 flex-grow leading-relaxed opacity-95">
+                      "{testimonial.text}"
+                    </p>
 
-                    <div className="flex items-center">
+                    <div className="flex items-center gap-4 mt-auto pt-6 border-t border-glass-border/40">
                       <img
-                        src={testimonial.image || "/placeholder.svg"}
+                        src={testimonial.image}
                         alt={testimonial.name}
-                        className="w-12 h-12 rounded-full object-cover mr-4"
+                        className="w-14 h-14 rounded-full object-cover border-2 border-glass-border shadow-md"
                       />
                       <div>
-                        <p className="font-semibold">{testimonial.name}</p>
-                        <div className="flex text-yellow-400 mt-1">
+                        <p className="font-display font-semibold text-on-background">{testimonial.name}</p>
+                        <div className="flex gap-0.5 text-secondary mt-1">
                           {[...Array(5)].map((_, i) => (
-                            <Star key={i} size={14} fill="currentColor" />
+                            <Star key={i} size={12} fill="currentColor" className="stroke-none" />
                           ))}
                         </div>
                       </div>
@@ -118,19 +114,9 @@ const Testimonial = () => {
               ))}
             </ul>
           </div>
-
-          {/* <div className="glide__bullets  flex justify-center" data-glide-el="controls[nav]">
-            {testimonials.map((_, index) => (
-              <button
-                key={index}
-                className="glide__bullet w-3 h-3 bg-gray-300 rounded-full mx-1 focus:outline-none"
-                data-glide-dir={`=${index}`}
-              ></button>
-            ))}
-          </div> */}
         </div>
       </div>
-    </motion.div>
+    </motion.section>
   )
 }
 

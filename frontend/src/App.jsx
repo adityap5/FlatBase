@@ -51,13 +51,17 @@ const App = () => {
 
   return (
     <>
-      <div className="fixed top-0 -z-10 h-full w-full">
-        <div className="relative h-full w-full bg-white">
-          <div className="absolute bottom-0 left-0 right-0 top-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)]"></div>
-        </div>
+      <div className="fixed top-0 -z-10 h-full w-full bg-background overflow-hidden">
+        {/* Glowing Blobs */}
+        <div className="glowing-blob w-[500px] h-[500px] bg-primary/10 top-[-10%] right-[5%]" />
+        <div className="glowing-blob w-[600px] h-[600px] bg-secondary/5 top-[30%] left-[-10%]" style={{ animationDelay: '-5s' }} />
+        <div className="glowing-blob w-[400px] h-[400px] bg-accent/10 bottom-[10%] right-[10%]" style={{ animationDelay: '-10s' }} />
+        
+        {/* Subtle grid lines overlay */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.01)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.01)_1px,transparent_1px)] bg-[size:32px_32px]" />
       </div>
 
-      <div className="container px-8 mx-auto">
+      <div className="min-h-screen w-full flex flex-col font-body bg-background text-on-background">
         {loading ? (
           <LoadingScreen />
         ) : (

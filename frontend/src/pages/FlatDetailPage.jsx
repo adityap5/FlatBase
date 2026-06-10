@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion } from "framer-motion"
 import { useNavigate, useParams } from "react-router-dom"
 import { useQuery, useMutation } from "@apollo/client"
 import { GET_FLAT, CREATE_BOOKING } from "../graphql/queries"
@@ -7,7 +7,6 @@ import { getFlatReviews } from "../graphql/queries"
 import {
   Users,
   MapPin,
-  User,
   Calendar,
   Loader2,
   Wifi,
@@ -20,7 +19,8 @@ import {
   Dumbbell,
   Home,
   Star,
-  MessageSquare
+  MessageSquare,
+  ShieldAlert
 } from "lucide-react"
 import MonthCalendar from "../components/MonthCalendar"
 
@@ -84,14 +84,9 @@ const FlatDetailPage = () => {
     if (id) fetchReviews()
   }, [id])
 
-  // Get current YYYY-MM for min attribute
-  const today = new Date()
-  const currentMonthStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}`
-
   const checkAvailability = () => {
     if (!startMonth || !endMonth || monthsCount <= 0) return false
     
-    // Check if any month in range is in blockedMonths
     const blocked = flat?.blockedMonths || []
     const start = new Date(startMonth)
     const end = new Date(endMonth)
@@ -118,7 +113,7 @@ const FlatDetailPage = () => {
     }
 
     if (role !== "customer") {
-       setErrorMsg("Only customers can book flats.")
+       setErrorMsg("Only customers can book properties.")
        return
     }
 
@@ -155,12 +150,12 @@ const FlatDetailPage = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center py-20">
+      <div className="flex justify-center items-center py-40">
         <motion.div
            animate={{ scale: [1, 1.2, 1] }}
            transition={{ duration: 1.5, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
         >
-          <Loader2 size={32} className="text-[#76ABAE]" />
+          <Loader2 size={32} className="text-primary animate-spin" />
         </motion.div>
       </div>
     )
@@ -169,7 +164,7 @@ const FlatDetailPage = () => {
   if (error) {
     return (
       <div className="py-20 text-center">
-        <p className="text-red-500">{error.message}</p>
+        <p className="text-error font-body font-bold">{error.message}</p>
       </div>
     )
   }
@@ -186,190 +181,231 @@ const FlatDetailPage = () => {
   }
 
   return (
-    <div className="w-full min-h-screen pb-20">
+    <div className="w-full min-h-screen pb-20 max-w-container-max mx-auto px-6 md:px-margin-desktop">
       {flat && (
-        <div className="bg-gradient-to-br mt-4 from-white via-blue-50/30 to-purple-50/30 backdrop-blur-sm rounded-3xl shadow-2xl overflow-hidden border border-white/20">
-          <div className="flex flex-col lg:flex-row min-h-screen">
-            <div className="w-full lg:w-1/2 lg:sticky lg:top-0 lg:h-screen lg:overflow-hidden">
-              <motion.div
-                initial={{ opacity: 0, x: -50 }}
-                animate={{ opacity: 1, x: 0 }}
-                 transition={{ duration: 0.8, ease: "easeOut" }}
-                className="h-full p-6 lg:p-10 flex items-center"
-              >
-                <div className="relative rounded-2xl overflow-hidden shadow-sm w-full">
-                  <motion.img
-                     whileHover={{ scale: 1.02 }}
-                     transition={{ duration: 0.3 }}
-                    className="w-full h-[300px] lg:h-[80vh] object-cover"
-                    src={flat.images || "/placeholder.svg"}
-                    alt={flat.name}
+        <div className="space-y-12">
+          {/* Hero Gallery Section */}
+          <section className="mt-8">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-4 h-[300px] md:h-[500px]">
+              {/* Featured Image */}
+              <div className="md:col-span-8 overflow-hidden rounded-3xl group relative border border-glass-border">
+                <img 
+                  alt={flat.name} 
+                  className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" 
+                  src={flat.images || "/placeholder.svg"}
+                />
+                <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-500"></div>
+              </div>
+              {/* Thumbnail Stack */}
+              <div className="hidden md:col-span-4 md:flex flex-col gap-4">
+                <div className="h-1/2 overflow-hidden rounded-3xl border border-glass-border group">
+                  <img 
+                    alt="Interior 1" 
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+                    src="https://images.unsplash.com/photo-1554995207-c18c203602cb?auto=format&fit=crop&q=80"
                   />
-                  <div className="absolute top-4 right-4 bg-gradient-to-r from-[#76ABAE] to-teal-600 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg">
-                    ₹{(flat.price || 0).toLocaleString()}/month
-                  </div>
-                  {flat.bookingCount >= 3 && (
-                    <div className="absolute top-4 left-4 bg-red-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg flex items-center gap-1">
-                      <Star size={12} fill="currentColor" /> Popular ({flat.bookingCount} booked)
-                    </div>
-                  )}
-
-                   <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-6 text-white pt-20">
-                    <h3 className="text-2xl font-bold mb-2">{flat.name || `Beautiful Flat in ${flat.location}`}</h3>
-                    <div className="flex items-center text-white/90">
-                      <MapPin size={16} className="mr-2" />
-                      <span className="text-sm">{flat.location}, India</span>
-                    </div>
+                </div>
+                <div className="h-1/2 overflow-hidden rounded-3xl border border-glass-border relative group">
+                  <img 
+                    alt="Interior 2" 
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+                    src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&q=80"
+                  />
+                  <div className="absolute inset-0 bg-background/50 flex items-center justify-center cursor-pointer">
+                    <span className="font-body text-xs font-bold text-white bg-glass-white px-4 py-2 rounded-full border border-glass-border backdrop-blur-md">
+                      View Photos
+                    </span>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             </div>
+          </section>
 
-            <motion.div
-               initial={{ opacity: 0, y: 30 }}
-               animate={{ opacity: 1, y: 0 }}
-               transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-              className="w-full lg:w-1/2 lg:overflow-y-auto lg:max-h-screen scrollbar-hide"
-            >
-              <div className="p-6 lg:p-10 space-y-8">
-                <div>
-                   <h1 className="text-3xl lg:text-4xl font-bold mb-2 text-gray-800">
-                    {flat.name || `Beautiful Flat in ${flat.location}`}
-                   </h1>
-                   <div className="flex items-center text-gray-500 gap-4 mb-6">
-                      <div className="flex items-center">
-                        <MapPin size={18} className="text-[#76ABAE] mr-1" /> {flat.location}
-                      </div>
-                      <div className="flex items-center">
-                        <Users size={18} className="text-[#76ABAE] mr-1" /> up to {flat.capacity} guests
-                      </div>
-                   </div>
+          {/* Details & Booking Layout */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 relative">
+            {/* Left Column: Info details */}
+            <div className="col-span-12 lg:col-span-8 space-y-12">
+              {/* Header Info */}
+              <div className="space-y-4">
+                <div className="flex flex-wrap gap-2.5">
+                  <span className="bg-secondary/20 text-on-secondary px-3.5 py-1 rounded-full font-body text-[10px] font-bold tracking-widest uppercase border border-secondary/30">
+                    Featured
+                  </span>
+                  <span className="bg-primary/10 text-primary px-3.5 py-1 rounded-full font-body text-[10px] font-bold tracking-widest uppercase border border-primary/25">
+                    Modern Suite
+                  </span>
                 </div>
-
-                <div className="bg-white/80 backdrop-blur-md p-6 rounded-2xl shadow-sm border border-white">
-                  <h4 className="text-xl font-semibold mb-3 text-gray-800 border-b pb-2">About this space</h4>
-                   <p className="text-gray-600 leading-relaxed whitespace-pre-wrap">{flat.description}</p>
+                <h1 className="font-display text-3xl md:text-5xl text-on-background leading-tight">
+                  {flat.name || `Rooms in ${flat.location}`}
+                </h1>
+                <div className="flex flex-wrap items-center gap-4 text-on-surface-variant font-body text-sm font-semibold opacity-85">
+                  <div className="flex items-center gap-1.5">
+                    <MapPin size={16} className="text-primary" /> {flat.location}, India
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <Users size={16} className="text-primary" /> up to {flat.capacity} guests
+                  </div>
                 </div>
+              </div>
 
-                <div className="bg-white/80 backdrop-blur-md p-6 rounded-2xl shadow-sm border border-white">
-                   <h4 className="text-xl font-semibold mb-4 text-gray-800 border-b pb-2">Amenities</h4>
-                   {flat.amenities && flat.amenities.length > 0 ? (
-                     <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                       {flat.amenities.map(item => {
-                         const Icon = ICON_MAP[item] || Home
-                         return (
-                           <div key={item} className="flex items-center text-gray-700 bg-gray-50 p-2 rounded-lg border border-gray-100">
-                             <Icon size={18} className="text-[#76ABAE] mr-3" />
-                             <span className="font-medium text-sm">{item}</span>
-                           </div>
-                         )
-                       })}
-                     </div>
-                   ) : (
-                     <p className="text-gray-500 italic">No amenities listed by host.</p>
-                   )}
-                </div>
+              {/* Description Sheet */}
+              <div className="motionsite-card p-8 rounded-3xl space-y-4 border border-glass-border">
+                <h3 className="font-display text-xl font-bold text-on-background">About this sanctuary</h3>
+                <p className="font-body text-on-surface-variant leading-relaxed opacity-90 whitespace-pre-wrap">
+                  {flat.description}
+                </p>
+              </div>
 
-                {localStorage.getItem('role') === 'seller' ? (
-                  <div className="bg-red-50 p-6 rounded-2xl shadow-sm border border-red-100 text-center">
-                    <h2 className="text-xl font-semibold mb-2 text-red-800">Booking Restricted</h2>
-                    <p className="text-red-600">Sellers cannot book properties. Only users can book flights and stays.</p>
+              {/* Amenities Grid */}
+              <div className="space-y-6">
+                <h3 className="font-display text-xl font-bold text-on-background">What this sanctuary offers</h3>
+                {flat.amenities && flat.amenities.length > 0 ? (
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                    {flat.amenities.map(item => {
+                      const Icon = ICON_MAP[item] || Home
+                      return (
+                        <div key={item} className="flex items-center text-on-surface motionsite-card p-4 rounded-2xl border border-glass-border">
+                          <Icon size={18} className="text-primary mr-3" />
+                          <span className="font-body text-sm font-semibold">{item}</span>
+                        </div>
+                      )
+                    })}
                   </div>
                 ) : (
-                  <div className="bg-gradient-to-br from-indigo-50 to-purple-50 p-6 rounded-2xl shadow-sm border border-purple-100">
-                    <h2 className="text-xl font-semibold mb-4 text-gray-800 flex items-center gap-2">
-                      <Calendar className="text-purple-600" /> Select Booking Dates
-                    </h2>
-                    
-                    <div className="mb-4">
-                       <MonthCalendar 
-                          blockedMonths={flat.blockedMonths || []}
-                          onDateSelect={({ start, end }) => {
-                             setStartMonth(start);
-                             setEndMonth(end);
-                          }}
-                       />
-                    </div>
+                  <p className="text-on-surface-variant italic opacity-60">No amenities listed by host.</p>
+                )}
+              </div>
 
-                    <div className="flex justify-between items-center bg-white p-4 rounded-xl shadow-sm mt-6">
-                      <div>
-                         <p className="text-gray-500 text-sm">Duration</p>
-                         <p className="text-xl font-bold text-gray-800">{monthsCount} months</p>
+              {/* About Your Host */}
+              <div className="motionsite-card p-8 rounded-3xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 border border-glass-border">
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 bg-gradient-to-r from-primary to-secondary rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                    {(flat.seller?.name || "H")[0].toUpperCase()}
+                  </div>
+                  <div>
+                    <h4 className="font-display text-lg font-bold text-on-background">Hosted by {flat.seller?.name || "Property Host"}</h4>
+                    <p className="text-on-surface-variant font-body text-xs opacity-75">{flat.seller?.email}</p>
+                  </div>
+                </div>
+                {flat.seller?.bio && (
+                  <p className="text-on-surface-variant font-body text-sm italic border-l-2 border-primary pl-4 opacity-90 max-w-md">
+                    "{flat.seller.bio}"
+                  </p>
+                )}
+              </div>
+
+              {/* Reviews Section */}
+              <div className="motionsite-card p-8 rounded-3xl space-y-6 border border-glass-border">
+                <h3 className="font-display text-xl font-bold text-on-background flex items-center gap-2">
+                  <MessageSquare className="text-primary" /> Guest Reviews
+                </h3>
+                
+                {loadingReviews ? (
+                  <div className="flex justify-center p-4"><Loader2 className="animate-spin text-primary" /></div>
+                ) : reviews.length > 0 ? (
+                  <div className="space-y-4">
+                    {reviews.map(review => (
+                      <div key={review._id} className="bg-surface-container/60 p-5 rounded-2xl border border-glass-border/30">
+                        <div className="flex justify-between items-start mb-3">
+                           <div>
+                             <p className="font-display font-semibold text-on-background text-sm">{review.user?.name || "Guest"}</p>
+                             <p className="text-[10px] text-on-surface-variant font-body opacity-60 mt-0.5">{new Date(Number(review.createdAt)).toLocaleDateString()}</p>
+                           </div>
+                           <div className="flex gap-0.5">
+                             {[1,2,3,4,5].map(star => (
+                               <Star key={star} size={12} className={star <= review.rating ? "text-primary fill-primary" : "text-on-surface-variant/30"} />
+                             ))}
+                           </div>
+                        </div>
+                        <p className="text-on-surface-variant font-body text-sm leading-relaxed opacity-95">{review.text}</p>
                       </div>
-                      <div className="text-right">
-                         <p className="text-gray-500 text-sm">Total Price</p>
-                         <p className="text-2xl font-bold text-[#76ABAE]">₹{((flat.price || 0) * (monthsCount > 0 ? monthsCount : 0)).toLocaleString()}</p>
-                      </div>
-                    </div>
-
-                    {errorMsg && (
-                      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-4 p-3 bg-red-50 text-red-600 rounded-xl text-sm font-medium">
-                        {errorMsg}
-                      </motion.div>
-                    )}
-
-                    <button
-                      onClick={handleBooking}
-                      disabled={isBooking || monthsCount <= 0}
-                      className="mt-6 w-full bg-[#76ABAE] hover:bg-[#5a878a] text-white py-4 rounded-xl font-bold text-lg shadow-lg disabled:opacity-50 transition-all flex justify-center items-center"
-                    >
-                      {isBooking ? <Loader2 className="animate-spin mr-2" /> : null}
-                      {isBooking ? "Reserving..." : "Book Now"}
-                    </button>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-8 text-on-surface-variant opacity-75 font-body">
+                    <Star size={32} className="mx-auto text-on-surface-variant/40 mb-2" />
+                    <p className="text-sm">No reviews yet. Be the first to review after booking!</p>
                   </div>
                 )}
+              </div>
+            </div>
 
-                <div className="bg-white/80 backdrop-blur-md p-6 rounded-2xl shadow-sm border border-white">
-                   <h4 className="text-xl font-semibold mb-4 text-gray-800 border-b pb-2">About Your Host</h4>
-                   <div className="flex items-center">
-                     <div className="w-14 h-14 bg-gradient-to-r from-teal-400 to-[#76ABAE] rounded-full flex items-center justify-center text-white font-bold text-xl mr-4 shadow-inner">
-                       {(flat.seller?.name || "H")[0].toUpperCase()}
-                     </div>
-                     <div>
-                       <p className="font-bold text-lg text-gray-800">{flat.seller?.name || "Property Host"}</p>
-                       <p className="text-gray-500">{flat.seller?.email}</p>
-                       {flat.seller?.bio && <p className="text-gray-600 mt-2 italic text-sm border-l-2 border-[#76ABAE] pl-3">{flat.seller.bio}</p>}
-                     </div>
-                   </div>
+            {/* Right Column: Reservation widget */}
+            <aside className="col-span-12 lg:col-span-4 h-fit lg:sticky lg:top-28 z-10">
+              {localStorage.getItem('role') === 'seller' ? (
+                <div className="motionsite-card p-8 rounded-3xl border border-error/20 text-center space-y-4 bg-error/5 shadow-xl">
+                  <div className="w-12 h-12 rounded-full bg-error/10 text-error flex items-center justify-center mx-auto">
+                    <ShieldAlert size={24} />
+                  </div>
+                  <h4 className="font-display text-lg font-bold text-on-background">Booking Restricted</h4>
+                  <p className="text-on-surface-variant font-body text-sm opacity-80 leading-relaxed">
+                    Sellers cannot reserve properties. Please register or log in as a customer to book stays.
+                  </p>
                 </div>
-                
-                {/* Reviews Section */}
-                <div className="bg-white/80 backdrop-blur-md p-6 rounded-2xl shadow-sm border border-white">
-                  <h4 className="text-xl font-semibold mb-6 flex items-center text-gray-800 border-b pb-2">
-                    <MessageSquare className="mr-2 text-[#76ABAE]" /> Guest Reviews
-                  </h4>
-                  
-                  {loadingReviews ? (
-                    <div className="flex justify-center p-4"><Loader2 className="animate-spin text-gray-400" /></div>
-                  ) : reviews.length > 0 ? (
-                    <div className="space-y-4">
-                      {reviews.map(review => (
-                        <div key={review._id} className="bg-gray-50 p-4 rounded-xl border border-gray-100">
-                          <div className="flex justify-between items-start mb-2">
-                             <div>
-                               <p className="font-semibold text-gray-800">{review.user?.name || "Guest"}</p>
-                               <p className="text-xs text-gray-400">{new Date(Number(review.createdAt)).toLocaleDateString()}</p>
-                             </div>
-                             <div className="flex">
-                               {[1,2,3,4,5].map(star => (
-                                 <Star key={star} size={14} className={star <= review.rating ? "text-yellow-400 fill-yellow-400" : "text-gray-300"} />
-                               ))}
-                             </div>
-                          </div>
-                          <p className="text-gray-600 text-sm">{review.text}</p>
-                        </div>
-                      ))}
+              ) : (
+                <div className="motionsite-card p-8 rounded-3xl shadow-2xl border border-glass-border space-y-6">
+                  <div className="flex justify-between items-end pb-4 border-b border-glass-border">
+                    <div>
+                      <span className="font-display text-2xl font-bold text-primary text-glow">₹{(flat.price || 0).toLocaleString()}</span>
+                      <span className="text-on-surface-variant font-body text-xs opacity-75"> / month</span>
                     </div>
-                  ) : (
-                    <div className="text-center py-8 text-gray-500">
-                      <Star size={40} className="mx-auto text-gray-300 mb-2 opacity-50" />
-                      <p>No reviews yet. Be the first to review after booking!</p>
+                    {flat.bookingCount >= 3 && (
+                      <span className="bg-primary/10 text-primary border border-primary/20 px-2.5 py-1 rounded-full font-body text-[9px] font-bold uppercase tracking-widest">
+                        Popular
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="space-y-4">
+                    <label className="block font-body text-xs font-bold text-on-surface-variant tracking-widest uppercase">Select Stays</label>
+                    <MonthCalendar 
+                      blockedMonths={flat.blockedMonths || []}
+                      onDateSelect={({ start, end }) => {
+                         setStartMonth(start);
+                         setEndMonth(end);
+                      }}
+                    />
+                  </div>
+
+                  {/* Calculations */}
+                  {monthsCount > 0 && (
+                    <div className="pt-4 border-t border-glass-border space-y-3 font-body text-sm tracking-wide">
+                      <div className="flex justify-between text-on-surface-variant">
+                        <span>Rent ({monthsCount} months)</span>
+                        <span>₹{(flat.price * monthsCount).toLocaleString()}</span>
+                      </div>
+                      <div className="flex justify-between text-on-surface-variant">
+                        <span>Lumière Service Fee</span>
+                        <span>₹1,500</span>
+                      </div>
+                      <div className="flex justify-between text-on-background font-bold pt-3 border-t border-glass-border/40 text-base">
+                        <span>Estimated Total</span>
+                        <span className="text-primary">₹{((flat.price * monthsCount) + 1500).toLocaleString()}</span>
+                      </div>
                     </div>
                   )}
-                </div>
 
-              </div>
-            </motion.div>
+                  {errorMsg && (
+                    <div className="p-4 bg-error/15 border border-error/25 text-error rounded-2xl text-xs font-body leading-relaxed font-semibold">
+                      {errorMsg}
+                    </div>
+                  )}
+
+                  <button
+                    onClick={handleBooking}
+                    disabled={isBooking || monthsCount <= 0}
+                    className="w-full bg-primary text-on-primary py-4 rounded-2xl font-body font-bold text-xs uppercase tracking-widest shadow-lg shadow-primary/15 hover:shadow-[0_0_20px_rgba(0,245,255,0.4)] hover:brightness-110 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 flex justify-center items-center"
+                  >
+                    {isBooking ? <Loader2 size={16} className="animate-spin mr-2" /> : null}
+                    {isBooking ? "Reserving Stay..." : "Book Sanctuary"}
+                  </button>
+
+                  <p className="text-center text-on-surface-variant font-body text-xs opacity-75">
+                    You won't be charged in this step
+                  </p>
+                </div>
+              )}
+            </aside>
           </div>
         </div>
       )}

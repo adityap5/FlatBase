@@ -1,13 +1,14 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { useNavigate, NavLink } from "react-router-dom"
-import { Menu, X, Home, LogOut, User, BookOpen, Building, Plus, MountainIcon, LayoutDashboard, BarChart3, Settings } from "lucide-react"
+import { Menu, X, Compass, Bell, User, LayoutDashboard, BookOpen } from "lucide-react"
 import { Logout } from "../components/Logout"
 
 const Navbar = () => {
   const [drawerOpen, setDrawerOpen] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false)
   const token = localStorage.getItem("token")
   const isSeller = localStorage.getItem("role") === "seller"
   const isBuyer = localStorage.getItem("role") === "customer"
@@ -24,93 +25,125 @@ const Navbar = () => {
     setDrawerOpen(open)
   }
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 20) {
+        setIsScrolled(true)
+      } else {
+        setIsScrolled(false)
+      }
+    }
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
+
   const navItems = [
     {
-      name: "Explore",
+      name: "Destinations",
       path: "/category",
-      icon: <MountainIcon size={18} />,
+      icon: <Compass size={16} />,
       show: !isSeller,
     },
     {
       name: "Register",
       path: "/register",
-      icon: <User size={18} />,
-      show: !token,
-    },
-    {
-      name: "Login",
-      path: "/login",
-      icon: <LogOut size={18} />,
+      icon: <User size={16} />,
       show: !token,
     },
     {
       name: "Dashboard",
       path: "/seller/dashboard",
-      icon: <LayoutDashboard size={18} />,
+      icon: <LayoutDashboard size={16} />,
       show: isSeller,
     },
     {
       name: "My Bookings",
       path: "/bookings",
-      icon: <BookOpen size={18} />,
+      icon: <BookOpen size={16} />,
       show: isBuyer,
     },
   ]
 
   return (
-    <motion.div
-      initial={{ y: -20, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.5 }}
-      className="bg-white text-gray-800 rounded-xl mt-2 shadow-md"
-    >
-      <div className="flex justify-between items-center px-4 py-3">
-        <motion.div
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="flex items-center cursor-pointer"
-          onClick={handleHome}
-        >
-          <div className="bg-[#76ABAE] text-white p-2 rounded-lg mr-3">
-            <Home size={20} />
-          </div>
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-[#76ABAE] to-[#5B8D91] bg-clip-text text-transparent">
-            FlatBase
-          </h1>
-        </motion.div>
-
-        <div className="md:hidden">
-          <motion.button
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            onClick={toggleDrawer(true)}
-            className="p-2 rounded-lg hover:bg-gray-100"
+    <>
+      <motion.nav
+        initial={{ y: -100, x: "-50%", opacity: 0 }}
+        animate={{ y: 0, x: "-50%", opacity: 1 }}
+        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        className={`fixed top-6 left-1/2 z-50 w-[calc(100%-2rem)] max-w-5xl transition-all duration-300 border rounded-full ${
+          isScrolled 
+            ? "py-3 bg-surface/90 backdrop-blur-[25px] border-white/10 shadow-[0_15px_40px_-15px_rgba(0,0,0,0.8)]" 
+            : "py-5 bg-glass-white backdrop-blur-[15px] border-glass-border shadow-sm"
+        }`}
+      >
+        <div className="flex justify-between items-center w-full px-6 md:px-8 h-10">
+          {/* Logo */}
+          <motion.div
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="flex items-center cursor-pointer gap-2"
+            onClick={handleHome}
           >
-            <Menu size={24} />
-          </motion.button>
-        </div>
+            <span className="font-display text-xl font-bold tracking-widest text-on-background hover:text-primary transition-colors duration-300 text-glow">
+              FLATBASE
+            </span>
+          </motion.div>
 
-        <div className="hidden md:flex items-center space-x-6">
-          {navItems
-            .filter((item) => item.show)
-            .map((item) => (
-              <NavLink
-                key={item.path}
-                to={item.path}
-                className={({ isActive }) =>
-                  isActive
-                    ? "text-[#76ABAE] font-medium flex items-center"
-                    : "text-gray-600 hover:text-[#76ABAE] transition-colors duration-200 flex items-center"
-                }
+          {/* Desktop Navigation Links */}
+          <div className="hidden md:flex gap-8 items-center">
+            {navItems
+              .filter((item) => item.show)
+              .map((item) => (
+                <NavLink
+                  key={item.path}
+                  to={item.path}
+                  className={({ isActive }) =>
+                    isActive
+                      ? "text-primary font-bold border-b-2 border-primary pb-1 font-body text-xs tracking-wider uppercase transition-all"
+                      : "text-on-surface-variant hover:text-on-background transition-colors duration-300 font-body text-xs tracking-wider uppercase"
+                  }
+                >
+                  <div className="flex items-center gap-1.5">
+                    {item.name}
+                  </div>
+                </NavLink>
+              ))}
+          </div>
+
+          {/* Actions */}
+          <div className="flex items-center gap-4">
+            {token ? (
+              <div className="hidden md:block">
+                <Logout />
+              </div>
+            ) : (
+              <button 
+                onClick={() => navigate("/login")}
+                className="hidden md:block bg-primary text-on-primary px-5 py-2 rounded-full font-body font-bold text-xs tracking-wider uppercase hover:shadow-[0_0_15px_rgba(0,245,255,0.4)] hover:brightness-110 active:scale-95 transition-all duration-300"
               >
-                <span className="mr-1">{item.icon}</span>
-                {item.name}
-              </NavLink>
-            ))}
-          {token && <Logout />}
-        </div>
-      </div>
+                Sign In
+              </button>
+            )}
 
+            {/* Mobile menu toggle */}
+            <div className="md:hidden">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={toggleDrawer(true)}
+                className="p-1.5 rounded-full text-primary hover:bg-glass-white border border-transparent hover:border-glass-border transition-all"
+              >
+                <Menu size={20} />
+              </motion.button>
+            </div>
+          </div>
+        </div>
+      </motion.nav>
+
+      {/* Spacer to push content below sticky floating navbar */}
+      <div className="h-28" />
+
+      {/* Mobile Drawer */}
       <AnimatePresence>
         {drawerOpen && (
           <motion.div
@@ -118,63 +151,75 @@ const Navbar = () => {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "tween", duration: 0.3 }}
-            className="fixed inset-y-0 right-0 z-50 w-64 bg-white shadow-xl"
+            className="fixed inset-y-0 right-0 z-50 w-64 bg-surface-container-low/95 backdrop-blur-[20px] border-l border-glass-border shadow-2xl flex flex-col"
           >
-            <div className="flex flex-col h-full">
-              <div className="flex justify-between items-center p-4 border-b">
-                <h2 className="text-xl font-semibold text-[#76ABAE]">Menu</h2>
-                <motion.button
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                  onClick={toggleDrawer(false)}
-                  className="p-2 rounded-lg hover:bg-gray-100"
-                >
-                  <X size={24} />
-                </motion.button>
-              </div>
+            <div className="flex justify-between items-center p-6 border-b border-glass-border">
+              <h2 className="text-lg font-bold font-display text-primary tracking-wider uppercase">Menu</h2>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={toggleDrawer(false)}
+                className="p-2 rounded-full text-primary hover:bg-glass-white border border-glass-border"
+              >
+                <X size={18} />
+              </motion.button>
+            </div>
 
-              <div className="flex-1 overflow-y-auto py-4">
-                <nav className="flex flex-col space-y-1 px-4">
-                  {navItems
-                    .filter((item) => item.show)
-                    .map((item) => (
-                      <NavLink
-                        key={item.path}
-                        to={item.path}
-                        onClick={toggleDrawer(false)}
-                        className={({ isActive }) =>
-                          `${
-                            isActive ? "bg-[#76ABAE]/10 text-[#76ABAE]" : "text-gray-700 hover:bg-gray-100"
-                          } flex items-center px-4 py-3 rounded-lg transition-colors duration-200`
-                        }
-                      >
-                        <span className="mr-3">{item.icon}</span>
-                        {item.name}
-                      </NavLink>
-                    ))}
-                  {token && (
-                    <div onClick={toggleDrawer(false)}>
-                      <Logout />
-                    </div>
-                  )}
-                </nav>
-              </div>
+            <div className="flex-1 overflow-y-auto py-6">
+              <nav className="flex flex-col space-y-2 px-6">
+                {navItems
+                  .filter((item) => item.show)
+                  .map((item) => (
+                    <NavLink
+                      key={item.path}
+                      to={item.path}
+                      onClick={toggleDrawer(false)}
+                      className={({ isActive }) =>
+                        `${
+                          isActive 
+                            ? "bg-primary/10 text-primary font-bold border border-primary/20" 
+                            : "text-on-surface-variant hover:bg-glass-white hover:text-white border border-transparent"
+                        } flex items-center px-4 py-3 rounded-xl transition-all duration-200 font-body text-xs tracking-wider uppercase`
+                      }
+                    >
+                      <span className="mr-3">{item.icon}</span>
+                      {item.name}
+                    </NavLink>
+                  ))}
+                
+                {token ? (
+                  <div onClick={toggleDrawer(false)} className="pt-4 border-t border-glass-border mt-4">
+                    <Logout />
+                  </div>
+                ) : (
+                  <button 
+                    onClick={() => {
+                      navigate("/login")
+                      setDrawerOpen(false)
+                    }}
+                    className="w-full mt-4 bg-primary text-on-primary py-3 rounded-full font-body font-bold text-xs tracking-wider uppercase hover:shadow-[0_0_15px_rgba(0,245,255,0.4)] transition-all duration-300"
+                  >
+                    Sign In
+                  </button>
+                )}
+              </nav>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
 
+      {/* Backdrop */}
       {drawerOpen && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
-          className="fixed inset-0 bg-black/50 z-40"
+          className="fixed inset-0 bg-background/60 backdrop-blur-sm z-40"
           onClick={toggleDrawer(false)}
         />
       )}
-    </motion.div>
+    </>
   )
 }
 

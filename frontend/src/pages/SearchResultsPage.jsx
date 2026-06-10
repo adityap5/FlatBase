@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import { useSelector, useDispatch } from "react-redux"
-import { useLocation } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import { SlidersHorizontal, ArrowUpDown, Search, MapPin } from "lucide-react"
 import FlatCard from "../components/FlatCard"
 import HomeCardShimmer from "../components/HomeCardShimmer"
@@ -11,6 +11,7 @@ import { fetchFlats, fetchFlatsByLocation } from "../redux/flatsSlice"
 
 const SearchResultsPage = () => {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const { flats, loading } = useSelector((state) => state.flats)
   const location = useLocation()
   const searchParams = new URLSearchParams(location.search)
@@ -62,42 +63,44 @@ const SearchResultsPage = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-12 min-h-[75vh]">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8"
+        className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4"
       >
         <div className="mb-4 md:mb-0">
           <div className="flex items-center">
-            <Search size={24} className="text-[#76ABAE] mr-3" />
-            <h1 className="text-3xl font-bold">Search Results</h1>
+            <div className="bg-primary/10 p-3 rounded-2xl border border-primary/20 mr-4 shadow-[0_0_15px_rgba(0,245,255,0.05)]">
+              <Search size={22} className="text-primary text-glow animate-pulse" />
+            </div>
+            <h1 className="font-display text-3xl font-bold tracking-tight text-on-background">Search Results</h1>
           </div>
-          <div className="flex items-center mt-2 text-gray-600">
-            <MapPin size={16} className="mr-1" />
+          <div className="flex items-center mt-3 text-on-surface-variant font-body text-sm opacity-80">
+            <MapPin size={15} className="mr-2 text-primary" />
             <p>
-              Showing properties in <span className="font-medium">{searchLocation || "All Locations"}</span>
+              Showing properties in <span className="font-bold text-on-background">{searchLocation || "All Locations"}</span>
             </p>
           </div>
         </div>
 
-        <div className="relative">
-          <div className="flex items-center bg-white rounded-lg shadow-sm border overflow-hidden">
-            <div className="px-3 py-2 border-r">
-              <SlidersHorizontal size={18} className="text-gray-500" />
+        <div className="relative group">
+          <div className="flex items-center bg-surface/50 backdrop-blur-md border border-glass-border rounded-2xl overflow-hidden hover:border-primary/40 transition-colors duration-300">
+            <div className="px-4 py-3 border-r border-glass-border flex items-center justify-center">
+              <SlidersHorizontal size={16} className="text-primary" />
             </div>
             <select
               value={sortOption}
               onChange={(e) => setSortOption(e.target.value)}
-              className="appearance-none bg-transparent py-2 pl-2 pr-8 focus:outline-none text-gray-700"
+              className="appearance-none bg-surface text-on-background py-3 pl-3 pr-10 focus:outline-none font-body text-xs font-bold uppercase tracking-wider cursor-pointer"
             >
-              <option value="select">Sort By</option>
-              <option value="price-low">Price: Low to High</option>
-              <option value="price-high">Price: High to Low</option>
+              <option value="select" className="bg-[#08080f] text-on-background">Sort By</option>
+              <option value="price-low" className="bg-[#08080f] text-on-background">Price: Low to High</option>
+              <option value="price-high" className="bg-[#08080f] text-on-background">Price: High to Low</option>
             </select>
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-              <ArrowUpDown size={16} />
+            <div className="pointer-events-none absolute right-4 flex items-center text-primary">
+              <ArrowUpDown size={14} />
             </div>
           </div>
         </div>
@@ -105,6 +108,8 @@ const SearchResultsPage = () => {
 
       {loading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <HomeCardShimmer />
+          <HomeCardShimmer />
           <HomeCardShimmer />
         </div>
       ) : (
@@ -121,16 +126,21 @@ const SearchResultsPage = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5 }}
-              className="col-span-full text-center py-16"
+              className="col-span-full text-center py-20 motionsite-card rounded-3xl border border-glass-border p-8 max-w-2xl mx-auto"
             >
-              <div className="inline-block p-4 rounded-full bg-gray-100 mb-4">
-                <Search size={48} className="text-gray-400" />
+              <div className="inline-block p-5 rounded-full bg-primary/10 border border-primary/20 mb-6 shadow-[0_0_20px_rgba(0,245,255,0.05)]">
+                <Search size={42} className="text-primary text-glow" />
               </div>
-              <h3 className="text-xl font-medium text-gray-700 mb-2">No results found</h3>
-              <p className="text-gray-500">
-                We couldn't find any properties matching "{searchLocation}". Try a different location or browse all
-                properties.
+              <h3 className="font-display text-2xl font-bold text-on-background mb-3">No sanctuaries found</h3>
+              <p className="text-on-surface-variant font-body text-sm opacity-70 max-w-md mx-auto leading-relaxed mb-6">
+                We couldn&apos;t find any properties matching &quot;{searchLocation}&quot;. Try a different location or browse all properties.
               </p>
+              <button
+                onClick={() => navigate("/category")}
+                className="bg-primary text-on-primary px-6 py-3 rounded-xl font-body font-bold text-xs uppercase tracking-widest hover:shadow-[0_0_15px_rgba(0,245,255,0.3)] transition-all active:scale-[0.98]"
+              >
+                Browse All Properties
+              </button>
             </motion.div>
           )}
         </motion.div>

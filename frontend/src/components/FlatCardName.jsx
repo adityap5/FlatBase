@@ -2,12 +2,9 @@
 
 import { motion } from "framer-motion"
 import { Link } from "react-router-dom"
-import { MapPin, Home } from "lucide-react"
-import Button from "./Button"
-
+import { MapPin, Star } from "lucide-react"
 
 const FlatCard = ({ flat }) => {
-
   return (
     <motion.div
       variants={{
@@ -15,37 +12,51 @@ const FlatCard = ({ flat }) => {
         visible: { opacity: 1, y: 0 },
       }}
       whileHover={{ y: -5 }}
-      className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300"
+      className="motionsite-card rounded-3xl overflow-hidden flex flex-col h-full group shadow-xl border border-glass-border"
     >
-      <div className="relative overflow-hidden">
+      <div className="relative h-64 overflow-hidden z-0">
         <motion.img
-          whileHover={{ scale: 1.05 }}
-          transition={{ duration: 0.3 }}
-          className="h-56 w-full object-cover"
-          src={flat.images}
-          alt={flat.name || "Flat"}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+          src={flat.images || "/placeholder.svg"}
+          alt={flat.name || `Rooms in ${flat.location}`}
         />
-        <div className="absolute top-3 right-3 bg-white/90 px-2 py-1 rounded-full text-sm font-medium">
-          ₹{flat.price}/month
+        
+        {/* Price tag */}
+        <div className="absolute top-4 right-4 bg-primary text-on-primary px-4 py-1.5 rounded-full font-body font-bold text-xs tracking-wider uppercase shadow-lg hover:shadow-[0_0_15px_rgba(0,245,255,0.4)] transition-all">
+          ₹{flat.price?.toLocaleString()}
+          <span className="text-[9px] font-semibold opacity-90 ml-0.5">/ mo</span>
         </div>
+
+        {/* Popular indicator */}
+        {flat.bookingCount >= 3 && (
+          <div className="absolute top-4 left-4 bg-secondary text-on-secondary px-3 py-1.5 rounded-full text-[9px] font-bold tracking-wider uppercase flex items-center gap-1 shadow-md border border-secondary/20">
+            <Star size={10} className="fill-white" /> Popular
+          </div>
+        )}
       </div>
 
-      <div className="p-5">
-        <div className="flex items-center mb-2">
-          <MapPin size={16} className="text-[#76ABAE] mr-1" />
-          
-          <h2 className="font-medium text-gray-500">{flat.location}</h2>
+      <div className="p-6 flex flex-col flex-grow">
+        {/* Location */}
+        <div className="flex items-center gap-1.5 text-on-surface-variant mb-2">
+          <MapPin size={12} className="text-primary" />
+          <span className="font-body text-[10px] uppercase tracking-widest font-bold opacity-80">{flat.location}</span>
         </div>
 
-        <h1 className="font-bold text-xl mb-2 line-clamp-1">
-          {/* <Home size={18} className="inline mr-1 text-[#76ABAE]" /> */}
+        {/* Title */}
+        <h4 className="font-display text-lg font-semibold text-on-background mb-3 line-clamp-1 group-hover:text-primary transition-colors duration-300">
           {flat.name}
-        </h1>
+        </h4>
 
-        <p className="text-gray-600 text-sm line-clamp-2 mb-4">{flat.description}</p>
+        {/* Description */}
+        <p className="text-on-surface-variant font-body text-sm line-clamp-2 mb-6 opacity-70 leading-relaxed">
+          {flat.description}
+        </p>
 
-        <Link to={`/flat/${flat._id}`}>
-          <Button name="View Details" fullWidth />
+        {/* Button */}
+        <Link to={`/flat/${flat._id}`} className="mt-auto block w-full">
+          <button className="w-full border border-glass-border py-3 rounded-2xl font-body font-bold text-xs uppercase tracking-wider text-on-surface hover:bg-primary hover:text-on-primary hover:border-primary transition-all duration-300 active:scale-[0.98]">
+            View Details
+          </button>
         </Link>
       </div>
     </motion.div>

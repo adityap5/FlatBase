@@ -1,19 +1,19 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { Facebook, Instagram, Twitter, Github, Linkedin, Heart } from "lucide-react"
+import { Facebook, Instagram, Twitter, Github, Linkedin } from "lucide-react"
 
 const LINKS = [
   {
-    title: "Support",
+    title: "SUPPORT",
     items: ["Help Centre", "Anti-discrimination", "Flat cover", "Disability support", "Cancellation options"],
   },
   {
-    title: "Hosting",
+    title: "HOSTING",
     items: ["FlatBase your Home", "Hosting resources", "Community forum", "Press", "News"],
   },
   {
-    title: "FlatBase",
+    title: "COMPANY",
     items: ["About us", "Careers", "Blog", "Newsletter", "Investors", "New features"],
   },
 ]
@@ -23,38 +23,41 @@ const currentYear = new Date().getFullYear()
 export function Footer() {
   return (
     <motion.footer
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: 0.2 }}
-      className="relative w-full mt-20 pt-10 bg-gray-50 text-gray-800 rounded-t-3xl"
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
+      className="bg-surface-container-lowest border-t border-glass-border pt-20 pb-12 mt-32 w-full"
     >
-      <div className="container mx-auto px-4 md:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div>
-            <motion.div whileHover={{ scale: 1.05 }} className="flex items-center mb-4">
-              <div className="bg-[#76ABAE] text-white p-2 rounded-lg mr-3">
-                <Heart size={20} />
-              </div>
-              <h2 className="text-2xl font-bold bg-gradient-to-r from-[#76ABAE] to-[#5B8D91] bg-clip-text text-transparent">
-                FlatBase
-              </h2>
-            </motion.div>
-            <p className="text-gray-600 mb-6">
-              Find your perfect stay with FlatBase. We connect travelers with unique accommodations around the world.
-            </p>
-            <div className="flex space-x-4">
+      <div className="max-w-container-max mx-auto px-6 md:px-margin-desktop">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 mb-16">
+          {/* Brand Column */}
+          <div className="md:col-span-4 flex flex-col justify-between">
+            <div>
+              <motion.div whileHover={{ scale: 1.02 }} className="flex items-center mb-6">
+                <span className="font-display text-2xl font-bold text-primary tracking-widest text-glow">
+                  FLATBASE
+                </span>
+              </motion.div>
+              <p className="text-on-surface-variant font-body text-sm opacity-80 leading-relaxed max-w-sm mb-8">
+                Curated escapes for the modern collector. Experience the world's most unique editorial-grade luxury stays.
+              </p>
+            </div>
+            
+            {/* Social Links */}
+            <div className="flex space-x-3">
               {[
-                { icon: <Facebook size={18} />, label: "Facebook" },
-                { icon: <Instagram size={18} />, label: "Instagram" },
-                { icon: <Twitter size={18} />, label: "Twitter" },
-                { icon: <Github size={18} />, label: "GitHub" },
-                { icon: <Linkedin size={18} />, label: "LinkedIn" },
+                { icon: <Facebook size={16} />, label: "Facebook" },
+                { icon: <Instagram size={16} />, label: "Instagram" },
+                { icon: <Twitter size={16} />, label: "Twitter" },
+                { icon: <Github size={16} />, label: "GitHub" },
+                { icon: <Linkedin size={16} />, label: "LinkedIn" },
               ].map((social, index) => (
                 <motion.a
                   key={index}
                   href="#"
-                  whileHover={{ y: -3, color: "#76ABAE" }}
-                  className="text-gray-500 hover:text-[#76ABAE]"
+                  whileHover={{ y: -3 }}
+                  className="w-9 h-9 rounded-full motionsite-card flex items-center justify-center text-on-surface-variant hover:text-on-primary hover:bg-primary transition-all duration-300"
                   aria-label={social.label}
                 >
                   {social.icon}
@@ -63,40 +66,44 @@ export function Footer() {
             </div>
           </div>
 
-          {LINKS.map(({ title, items }) => (
-            <div key={title}>
-              <h3 className="font-semibold text-lg mb-4">{title}</h3>
-              <ul className="space-y-2">
-                {items.map((link) => (
-                  <li key={link}>
-                    <motion.a
-                      href="#"
-                      whileHover={{ x: 3, color: "#76ABAE" }}
-                      className="text-gray-600 hover:text-[#76ABAE] transition-colors duration-200"
-                    >
-                      {link}
-                    </motion.a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+          {/* Links Grid */}
+          <div className="md:col-span-8 grid grid-cols-1 sm:grid-cols-3 gap-8">
+            {LINKS.map(({ title, items }) => (
+              <div key={title}>
+                <h6 className="font-body text-xs font-bold text-primary tracking-[0.15em] mb-6 uppercase">{title}</h6>
+                <ul className="space-y-4">
+                  {items.map((link) => (
+                    <li key={link}>
+                      <motion.a
+                        href="#"
+                        whileHover={{ x: 3 }}
+                        className="text-on-surface-variant hover:text-white transition-all duration-200 font-body text-sm opacity-70 block"
+                      >
+                        {link}
+                      </motion.a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
         </div>
 
-        <div className="mt-12 pt-6 border-t border-gray-200">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-gray-600 text-sm mb-4 md:mb-0">&copy; {currentYear} FlatBase. All Rights Reserved.</p>
-            <div className="flex space-x-6 text-sm">
-              <motion.a href="#" whileHover={{ color: "#76ABAE" }} className="text-gray-600">
-                Privacy Policy
-              </motion.a>
-              <motion.a href="#" whileHover={{ color: "#76ABAE" }} className="text-gray-600">
-                Terms of Service
-              </motion.a>
-              <motion.a href="#" whileHover={{ color: "#76ABAE" }} className="text-gray-600">
-                Cookie Policy
-              </motion.a>
-            </div>
+        {/* Bottom Bar */}
+        <div className="pt-10 border-t border-glass-border/30 flex flex-col md:flex-row justify-between items-center gap-6">
+          <p className="text-on-surface-variant font-body text-xs opacity-60 tracking-wider">
+            &copy; {currentYear} FLATBASE LUXURY RENTALS. ALL RIGHTS RESERVED.
+          </p>
+          <div className="flex flex-wrap gap-6 text-xs font-body opacity-70">
+            <motion.a href="#" whileHover={{ textShadow: "0 0 10px rgba(0,245,255,0.3)" }} className="text-on-surface-variant hover:text-primary transition-colors">
+              PRIVACY POLICY
+            </motion.a>
+            <motion.a href="#" whileHover={{ textShadow: "0 0 10px rgba(0,245,255,0.3)" }} className="text-on-surface-variant hover:text-primary transition-colors">
+              TERMS OF SERVICE
+            </motion.a>
+            <motion.a href="#" whileHover={{ textShadow: "0 0 10px rgba(0,245,255,0.3)" }} className="text-on-surface-variant hover:text-primary transition-colors">
+              COOKIE POLICY
+            </motion.a>
           </div>
         </div>
       </div>

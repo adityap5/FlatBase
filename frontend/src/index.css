@@ -1,31 +1,116 @@
-
-@import url('https://fonts.googleapis.com/css2?family=Zain:wght@200;300;400;700;800;900&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-Body {
-    
-    color: black;
-    font-family: Zain;
+@layer base {
+  body {
+    background-color: #030305;
+    color: #f8fafc;
+    font-family: 'Hanken Grotesk', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
 }
 
+/* Scrollbars */
 ::-webkit-scrollbar {
-    width: 6px;
+  width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-    background: #222831;
+  background: #030305;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #555;
+  background: #11111a;
+  border-radius: 9999px;
+  border: 1px solid #030305;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: #363636;
+  background: #191926;
 }
+
 ::selection {
-    color: #EEEEEE;
-    background: #76ABAE;
+  color: #001f24;
+  background: #00f5ff;
+}
+
+/* Premium Motionsites Cards & Panels */
+.motionsite-card {
+  background: rgba(8, 8, 15, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.motionsite-card:hover {
+  border-color: rgba(0, 245, 255, 0.3);
+  background: rgba(8, 8, 15, 0.85);
+  box-shadow: 0 10px 30px -10px rgba(0, 245, 255, 0.08);
+}
+
+/* Glow Borders */
+.glow-border {
+  position: relative;
+}
+
+.glow-border::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  background: linear-gradient(90deg, #00f5ff, #7000ff, #00f2fe);
+  border-radius: inherit;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.glow-border:hover::after {
+  opacity: 0.15;
+}
+
+/* Glowy Text */
+.text-glow {
+  text-shadow: 0 0 15px rgba(0, 245, 255, 0.4);
+}
+
+.text-glow-purple {
+  text-shadow: 0 0 15px rgba(112, 0, 255, 0.4);
+}
+
+/* Radial Glow Blobs */
+@keyframes blob-float {
+  0% {
+    transform: translate(0px, 0px) scale(1);
   }
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.95);
+  }
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+}
+
+.glowing-blob {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(120px);
+  opacity: 0.15;
+  mix-blend-mode: screen;
+  pointer-events: none;
+  animation: blob-float 15s infinite alternate ease-in-out;
+}
+
+/* Custom transitions and interactive details */
+.interactive-hover {
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.interactive-hover:hover {
+  transform: translateY(-2px);
+}

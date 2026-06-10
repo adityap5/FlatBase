@@ -1,29 +1,35 @@
 import { useState, useEffect } from "react"
-import { MapPin, Calendar, Trash2, CreditCard, Loader2, AlertCircle, Filter, Search, Star, MessageSquare } from "lucide-react"
+import { MapPin, Calendar, Trash2, CreditCard, Loader2, AlertCircle, Filter, Search, Star, MessageSquare, ArrowRight } from "lucide-react"
 import { Link } from "react-router-dom"
 import { getBookings, deleteBooking, addReview } from "../graphql/queries"
 
-const Button = ({ name, onClick, css = "", fullWidth = false, ...props }) => (
-  <button
-    onClick={onClick}
-    className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-      fullWidth ? "w-full" : ""
-    } ${css || "bg-[#76ABAE] hover:bg-[#76ABAE]/90 text-white"}`}
-    {...props}
-  >
-    {name}
-  </button>
-)
+const Button = ({ name, onClick, css = "", variant = "primary", fullWidth = false, ...props }) => {
+  const baseClasses = "px-4 py-3 rounded-2xl font-body font-bold text-xs uppercase tracking-wider transition-all duration-300 active:scale-[0.98] flex items-center justify-center gap-1.5"
+  const variantClasses = variant === "primary"
+    ? "bg-primary text-on-primary hover:shadow-[0_0_15px_rgba(0,245,255,0.3)] hover:brightness-110"
+    : "bg-surface-container border border-glass-border text-on-surface hover:text-white hover:bg-glass-white hover:border-primary"
+  const widthClass = fullWidth ? "w-full" : ""
+
+  return (
+    <button
+      onClick={onClick}
+      className={`${baseClasses} ${variantClasses} ${widthClass} ${css}`}
+      {...props}
+    >
+      {name}
+    </button>
+  )
+}
 
 const Modal = ({ isOpen, setIsOpen, header, footer, children }) => {
   if (!isOpen) return null
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setIsOpen(false)} />
-      <div className="relative bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 p-8">
+    <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
+      <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" onClick={() => setIsOpen(false)} />
+      <div className="relative motionsite-card rounded-3xl border border-glass-border shadow-2xl max-w-md w-full p-8 z-10">
         {header && <div className="mb-6">{header}</div>}
-        <div className="mb-8">{children}</div>
-        {footer && <div>{footer}</div>}
+        <div className="mb-6">{children}</div>
+        {footer && <div className="mt-8">{footer}</div>}
       </div>
     </div>
   )
@@ -62,7 +68,6 @@ const BookingPage = () => {
           return
         }
         const { data } = await getBookings(userId)
-        // Filter out bookings where flat was deleted to prevent crashes
         const validBookings = (data.myBookings || []).filter(b => b.flat !== null)
         setBookings(validBookings)
         setFilteredBookings(validBookings)
@@ -161,64 +166,66 @@ const BookingPage = () => {
     }
   }
 
-  if (loading) return <div className="flex justify-center items-center py-20"><Loader2 size={32} className="text-[#76ABAE] animate-spin" /></div>
+  if (loading) return <div className="flex justify-center items-center py-40"><Loader2 size={32} className="text-primary animate-spin" /></div>
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-12 pb-24">
-      <div className="mb-10 content-center text-center max-w-2xl mx-auto">
-        <h1 className="text-4xl font-bold text-gray-800 mb-3">My Bookings</h1>
-        <p className="text-gray-500">Manage your past and upcoming stays securely.</p>
+      <div className="mb-12 text-center max-w-2xl mx-auto">
+        <span className="font-body text-xs text-primary font-bold tracking-[0.2em] block mb-2 uppercase">YOUR STAYS</span>
+        <h1 className="font-display text-3xl md:text-4xl text-on-background">My Bookings</h1>
+        <p className="text-on-surface-variant font-body text-sm opacity-80 mt-2">Manage your past and upcoming stays securely.</p>
       </div>
 
-      <div className="bg-white/80 backdrop-blur-md border border-white shadow-lg rounded-2xl p-6 mb-10">
+      {/* Filters box */}
+      <div className="motionsite-card border border-glass-border rounded-3xl p-6 mb-12 shadow-lg">
         <div className="flex items-center gap-2 mb-6">
-          <Filter size={20} className="text-[#76ABAE]" />
-          <h3 className="font-semibold text-gray-800 text-lg">Filter Bookings</h3>
+          <Filter size={18} className="text-primary" />
+          <h3 className="font-display font-semibold text-on-background">Filter Bookings</h3>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 font-body text-xs tracking-wider uppercase font-semibold">
           <div>
-            <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Location</label>
+            <label className="block text-on-surface-variant mb-2 opacity-75">Location</label>
             <div className="relative">
-              <Search size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <Search size={14} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-on-surface-variant/60" />
               <input
                 type="text"
                 placeholder="Where to?"
                 value={filters.location}
                 onChange={(e) => handleFilterChange("location", e.target.value)}
-                className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#76ABAE]/30 focus:border-[#76ABAE] transition-all outline-none"
+                className="w-full pl-9 pr-4 py-3 bg-surface border border-glass-border rounded-2xl text-on-background focus:ring-1 focus:ring-primary focus:border-transparent outline-none transition-all"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Min Price</label>
+            <label className="block text-on-surface-variant mb-2 opacity-75">Min Price</label>
             <input
               type="number"
               placeholder="₹ Min"
               value={filters.minPrice}
               onChange={(e) => handleFilterChange("minPrice", e.target.value)}
-              className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#76ABAE]/30 focus:border-[#76ABAE] transition-all outline-none"
+              className="w-full px-4 py-3 bg-surface border border-glass-border rounded-2xl text-on-background focus:ring-1 focus:ring-primary focus:border-transparent outline-none transition-all"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Max Price</label>
+            <label className="block text-on-surface-variant mb-2 opacity-75">Max Price</label>
             <input
               type="number"
               placeholder="₹ Max"
               value={filters.maxPrice}
               onChange={(e) => handleFilterChange("maxPrice", e.target.value)}
-              className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#76ABAE]/30 focus:border-[#76ABAE] transition-all outline-none"
+              className="w-full px-4 py-3 bg-surface border border-glass-border rounded-2xl text-on-background focus:ring-1 focus:ring-primary focus:border-transparent outline-none transition-all"
             />
           </div>
 
           <div>
-             <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Sort By</label>
+            <label className="block text-on-surface-variant mb-2 opacity-75">Sort By</label>
             <select
               value={filters.sortBy}
               onChange={(e) => handleFilterChange("sortBy", e.target.value)}
-              className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#76ABAE]/30 focus:border-[#76ABAE] transition-all outline-none"
+              className="w-full px-4 py-3 bg-surface border border-glass-border rounded-2xl text-on-background focus:ring-1 focus:ring-primary focus:border-transparent outline-none transition-all appearance-none"
             >
               <option value="newest">Latest Bookings</option>
               <option value="price-low">Price: Low to High</option>
@@ -228,20 +235,20 @@ const BookingPage = () => {
           </div>
         </div>
 
-        <div className="flex justify-between items-center mt-6 pt-6 border-t border-gray-100">
-          <p className="text-sm text-gray-500">
-             Found <strong className="text-gray-800">{filteredBookings.length}</strong> bookings
+        <div className="flex justify-between items-center mt-6 pt-6 border-t border-glass-border/30 text-xs font-body tracking-wider uppercase font-semibold">
+          <p className="text-on-surface-variant opacity-80">
+             Found <strong className="text-on-background">{filteredBookings.length}</strong> bookings
           </p>
-          <button onClick={clearFilters} className="text-sm text-[#76ABAE] hover:text-[#5a878a] font-semibold transition-colors">
+          <button onClick={clearFilters} className="text-primary hover:underline transition-colors">
             Reset Filters
           </button>
         </div>
       </div>
 
       {error && (
-        <div className="mb-8 p-4 bg-red-50 border border-red-200 rounded-xl text-red-600 flex items-center gap-3">
-          <AlertCircle size={20} />
-          <p className="font-medium">{error}</p>
+        <div className="mb-8 p-4 bg-error/15 border border-error/25 rounded-2xl text-error flex items-center gap-3 text-sm font-semibold font-body">
+          <AlertCircle size={18} />
+          <p>{error}</p>
         </div>
       )}
 
@@ -250,59 +257,70 @@ const BookingPage = () => {
           {filteredBookings.map((booking) => (
             <div
               key={booking._id}
-              className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all group"
+              className="motionsite-card rounded-3xl border border-glass-border overflow-hidden hover:shadow-xl transition-all group flex flex-col h-full"
             >
-              <div className="relative h-48 overflow-hidden bg-gray-200">
-                 <img src={booking.flat?.images || "https://images.unsplash.com/photo-1554995207-c18c203602cb?auto=format&fit=crop&q=80"} alt={booking.flat?.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                 <div className="absolute top-4 right-4 shadow-md backdrop-blur-md bg-white/90 px-3 py-1 rounded-full text-xs font-bold text-gray-800 uppercase tracking-wider">
-                   {booking.paymentStatus === 'paid' ? <span className="text-emerald-600">Paid</span> : <span className="text-orange-500">Pending</span>}
+              <div className="relative h-48 overflow-hidden z-0">
+                 <img 
+                   src={booking.flat?.images || "https://images.unsplash.com/photo-1554995207-c18c203602cb?auto=format&fit=crop&q=80"} 
+                   alt={booking.flat?.name} 
+                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                 />
+                 <div className="absolute top-4 right-4 shadow-md backdrop-blur-md bg-background/90 border border-glass-border px-3.5 py-1.5 rounded-full text-[9px] font-bold text-on-background uppercase tracking-widest">
+                   {booking.paymentStatus === 'paid' ? <span className="text-success">Paid</span> : <span className="text-secondary">Pending</span>}
                  </div>
               </div>
 
-              <div className="p-6">
-                <Link to={booking.flat?._id ? `/flat/${booking.flat._id}` : "#"} className="hover:text-[#76ABAE] transition-colors">
-                  <h2 className="text-xl font-bold text-gray-800 mb-2 truncate">{booking.flat?.name || "Booked Property"}</h2>
+              <div className="p-6 flex flex-col flex-grow">
+                <Link to={booking.flat?._id ? `/flat/${booking.flat._id}` : "#"} className="hover:text-primary transition-colors duration-300">
+                  <h2 className="font-display text-lg font-bold text-on-background mb-2 truncate">{booking.flat?.name || "Booked Property"}</h2>
                 </Link>
                 
-                <div className="flex items-center text-gray-500 text-sm mb-6">
-                  <MapPin size={16} className="mr-1 text-[#76ABAE]" />
+                <div className="flex items-center text-on-surface-variant text-xs font-semibold uppercase tracking-wider mb-6 opacity-80">
+                  <MapPin size={12} className="mr-1 text-primary" />
                   {booking.flat?.location}, India
                 </div>
 
-                <div className="bg-gray-50 rounded-xl p-4 mb-6">
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-gray-500 text-sm flex items-center gap-2"><Calendar size={14} /> Duration</span>
-                    <span className="font-semibold text-gray-800">{booking.timePeriod} mo</span>
-                  </div>
+                <div className="bg-surface-container/60 rounded-2xl border border-glass-border/30 p-4 mb-6 space-y-2.5 font-body text-xs tracking-wider uppercase font-semibold">
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-500 text-sm">Total</span>
-                    <span className="font-bold text-[#76ABAE] text-lg">₹{booking.totalPrice.toLocaleString()}</span>
+                    <span className="text-on-surface-variant opacity-80 flex items-center gap-1.5"><Calendar size={12} /> Duration</span>
+                    <span className="font-bold text-on-background">{booking.timePeriod} mo</span>
+                  </div>
+                  <div className="flex justify-between items-center pt-2.5 border-t border-glass-border/20">
+                    <span className="text-on-surface-variant opacity-80">Total Price</span>
+                    <span className="font-bold text-primary">₹{booking.totalPrice.toLocaleString()}</span>
                   </div>
                 </div>
 
-                <div className="flex gap-3">
+                <div className="flex gap-3 mt-auto">
                   {booking.paymentStatus === 'paid' ? (
-                    <button
+                    <Button
+                      name={
+                        <div className="flex items-center gap-1.5">
+                          <MessageSquare size={14} /> Write Review
+                        </div>
+                      }
+                      variant="secondary"
                       onClick={() => handleReviewClick(booking)}
-                      className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-purple-50 text-purple-700 font-semibold rounded-xl hover:bg-purple-100 transition-colors"
-                    >
-                      <MessageSquare size={18} />
-                      Write Review
-                    </button>
+                      fullWidth
+                    />
                   ) : (
                     <>
                       <button
                         onClick={() => handleDeleteClick(booking._id)}
-                        className="w-12 flex items-center justify-center text-gray-400 bg-gray-50 rounded-xl hover:bg-red-50 hover:text-red-500 transition-colors"
+                        className="w-12 h-10 flex items-center justify-center text-on-surface-variant hover:text-error motionsite-card rounded-2xl border border-glass-border hover:bg-error/5 hover:border-error/30 transition-all duration-300 active:scale-[0.98]"
                         title="Cancel Booking"
                       >
-                        <Trash2 size={18} />
+                        <Trash2 size={16} />
                       </button>
                       <Link to={`/checkout/${booking._id}`} className="flex-1">
-                        <button className="w-full shadow-lg shadow-[#76ABAE]/20 flex items-center justify-center gap-2 px-4 py-3 bg-[#76ABAE] text-white font-semibold rounded-xl hover:bg-[#5a878a] transition-colors">
-                          <CreditCard size={18} />
-                          Pay Now
-                        </button>
+                        <Button 
+                          name={
+                            <div className="flex items-center gap-1.5">
+                              <CreditCard size={14} /> Pay Now
+                            </div>
+                          }
+                          fullWidth
+                        />
                       </Link>
                     </>
                   )}
@@ -312,85 +330,81 @@ const BookingPage = () => {
           ))}
         </div>
       ) : (
-        <div className="text-center py-20 bg-white/50 backdrop-blur-md rounded-3xl border border-white">
-          <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <Calendar size={32} className="text-gray-400" />
+        <div className="text-center py-20 motionsite-card border border-glass-border rounded-3xl">
+          <div className="w-16 h-16 bg-surface-container rounded-full flex items-center justify-center mx-auto mb-6 border border-glass-border">
+            <Calendar size={28} className="text-primary" />
           </div>
-          <h3 className="text-2xl font-bold text-gray-800 mb-3">No bookings found</h3>
-          <p className="text-gray-500 mb-8 max-w-sm mx-auto">
+          <h3 className="font-display text-xl font-bold text-on-background mb-3">No bookings found</h3>
+          <p className="text-on-surface-variant font-body text-sm mb-8 max-w-sm mx-auto opacity-75">
             {bookings.length === 0 ? "You haven't made any bookings yet." : "No bookings match your current filter criteria."}
           </p>
-          <button onClick={() => window.location.href='/'} className="px-8 py-3 bg-[#76ABAE] text-white font-bold rounded-xl hover:bg-[#5a878a] transition-colors shadow-lg shadow-[#76ABAE]/20">
-            Explore Properties
-          </button>
+          <Button name="Explore Properties" onClick={() => window.location.href='/'} css="mx-auto" />
         </div>
       )}
 
-      {/* Delete Confirmation Modal */}
+      {/* Cancel Confirmation Modal */}
       <Modal
         isOpen={isModalOpen}
         setIsOpen={setIsModalOpen}
-        header={<h2 className="text-2xl font-bold text-gray-800">Cancel Booking</h2>}
+        header={<h2 className="font-display text-xl font-bold text-on-background">Cancel Booking</h2>}
         footer={
-          <div className="flex justify-end gap-3 mt-8">
-            <button onClick={() => setIsModalOpen(false)} className="px-6 py-3 font-semibold text-gray-600 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors">
-              Keep It
-            </button>
+          <div className="flex justify-end gap-3">
+            <Button name="Keep It" variant="secondary" onClick={() => setIsModalOpen(false)} />
             <button
               onClick={confirmDelete}
               disabled={isDeleting}
-              className="px-6 py-3 font-semibold bg-red-500 text-white rounded-xl hover:bg-red-600 transition-colors shadow-lg shadow-red-500/20 disabled:opacity-50 flex items-center gap-2"
+              className="px-5 py-3 rounded-full font-body font-bold text-xs uppercase tracking-wider bg-error text-white hover:brightness-110 active:scale-95 disabled:opacity-50 transition-all flex items-center gap-1.5"
             >
-              {isDeleting ? <Loader2 size={18} className="animate-spin" /> : <Trash2 size={18} />}
+              {isDeleting ? <Loader2 size={14} className="animate-spin" /> : <Trash2 size={14} />}
               Confirm Cancel
             </button>
           </div>
         }
       >
-        <p className="text-gray-600 text-lg">Are you sure you want to cancel this booking? This action cannot be undone.</p>
+        <p className="text-on-surface-variant font-body text-sm leading-relaxed opacity-90">Are you sure you want to cancel this booking? This action cannot be undone.</p>
       </Modal>
 
       {/* Write Review Modal */}
       <Modal
         isOpen={isReviewOpen}
         setIsOpen={setIsReviewOpen}
-        header={<h2 className="text-2xl font-bold text-gray-800">Rate your stay</h2>}
+        header={<h2 className="font-display text-xl font-bold text-on-background">Rate your stay</h2>}
         footer={
-           <div className="flex justify-end gap-3 mt-8">
-            <button onClick={() => setIsReviewOpen(false)} className="px-6 py-3 font-semibold text-gray-600 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors">
-              Cancel
-            </button>
+           <div className="flex justify-end gap-3">
+            <Button name="Cancel" variant="secondary" onClick={() => setIsReviewOpen(false)} />
             <button
               onClick={submitReview}
               disabled={isSubmittingReview || !reviewData.text.trim()}
-              className="px-6 py-3 font-semibold bg-purple-600 text-white rounded-xl hover:bg-purple-700 transition-colors shadow-lg shadow-purple-600/20 disabled:opacity-50 flex items-center gap-2"
+              className="px-5 py-3 rounded-full font-body font-bold text-xs uppercase tracking-wider bg-primary text-on-primary hover:shadow-[0_0_15px_rgba(0,245,255,0.4)] disabled:opacity-50 transition-all flex items-center gap-1.5"
             >
-              {isSubmittingReview ? <Loader2 size={18} className="animate-spin" /> : <MessageSquare size={18} />}
+              {isSubmittingReview ? <Loader2 size={14} className="animate-spin" /> : <MessageSquare size={14} />}
               Submit Review
             </button>
           </div>
         }
       >
-        <div>
-           <div className="flex justify-center gap-2 mb-8">
+        <div className="space-y-6">
+           <div className="flex justify-center gap-2">
              {[1,2,3,4,5].map(s => (
                 <Star 
                   key={s} 
-                  size={40} 
-                  className={`cursor-pointer transition-colors ${s <= reviewData.rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-200'}`}
+                  size={32} 
+                  className={`cursor-pointer transition-all duration-300 ${s <= reviewData.rating ? 'text-primary fill-primary hover:scale-110' : 'text-on-surface-variant/30 hover:text-primary'}`}
                   onClick={() => setReviewData({...reviewData, rating: s})} 
                 />
              ))}
            </div>
            
-           <label className="block text-sm font-bold text-gray-700 mb-2">Share your experience</label>
-           <textarea 
-             rows={4}
-             value={reviewData.text}
-             onChange={(e) => setReviewData({...reviewData, text: e.target.value})}
-             placeholder="What did you like about this property?"
-             className="w-full p-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-400 outline-none resize-none"
-           />
+           <div className="space-y-2">
+             <label className="block text-xs font-bold text-on-surface-variant tracking-wider uppercase opacity-75">Share your experience</label>
+             <textarea 
+               rows={4}
+               value={reviewData.text}
+               onChange={(e) => setReviewData({...reviewData, text: e.target.value})}
+               placeholder="What did you like about this sanctuary?"
+               className="w-full bg-surface border border-glass-border rounded-2xl focus:ring-1 focus:ring-primary outline-none p-4 text-on-background font-body text-sm resize-none"
+             />
+           </div>
         </div>
       </Modal>
 
