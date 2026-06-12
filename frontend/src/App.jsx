@@ -40,6 +40,23 @@ const AnalyticsTracker = () => {
   return null
 }
 
+const MainLayout = ({ children }) => {
+  const location = useLocation()
+  const isSellerRoute = 
+    location.pathname.startsWith("/seller") || 
+    location.pathname.startsWith("/mylistings") || 
+    location.pathname.startsWith("/add-flat") || 
+    location.pathname.startsWith("/updatePage")
+
+  return (
+    <>
+      {!isSellerRoute && <Navbar />}
+      {children}
+      {!isSellerRoute && <Footer />}
+    </>
+  )
+}
+
 const App = () => {
   const [loading, setLoading] = useState(true)
 
@@ -71,30 +88,31 @@ const App = () => {
 
             <NavScrollTop>
               <Suspense fallback={<LoadingScreen minimal />}>
-                <Navbar />
-                <AnimatePresence mode="wait">
-                  <Routes>
-                    <Route path="/" element={<PageTransition><HomePage /></PageTransition>} />
-                    <Route path="/flat/:id" element={<PageTransition><FlatDetailPage /></PageTransition>} />
-                    <Route path="/search" element={<PageTransition><SearchResultsPage /></PageTransition>} />
-                    <Route path="/category" element={<PageTransition><Category /></PageTransition>} />
-                    <Route path="/success" element={<PageTransition><Success /></PageTransition>} />
-                    <Route path="/logout" element={<PageTransition><LogoutPage /></PageTransition>} />
-                    <Route path="/bookings" element={<PageTransition><BookingPage /></PageTransition>} />
-                    <Route path="/checkout/:id" element={<PageTransition><Checkout /></PageTransition>} />
-                    <Route path="/login" element={<PageTransition><LoginPage /></PageTransition>} />
-                    <Route path="/register" element={<PageTransition><RegisterPage /></PageTransition>} />
-                    <Route element={<PageTransition><SellerLayout /></PageTransition>}>
-                      <Route path="/seller/dashboard" element={<SellerDashboard />} />
-                      <Route path="/seller/profile" element={<SellerProfilePage />} />
-                      <Route path="/seller/analytics" element={<SellerAnalytics />} />
-                      <Route path="/mylistings" element={<MyListings />} />
-                      <Route path="/add-flat" element={<AddFlatPage />} />
-                    </Route>
-                    <Route path="/*" element={<PageTransition><Error404 /></PageTransition>} />
-                  </Routes>
-                </AnimatePresence>
-                <Footer />
+                <MainLayout>
+                  <AnimatePresence mode="wait">
+                    <Routes>
+                      <Route path="/" element={<PageTransition><HomePage /></PageTransition>} />
+                      <Route path="/flat/:id" element={<PageTransition><FlatDetailPage /></PageTransition>} />
+                      <Route path="/search" element={<PageTransition><SearchResultsPage /></PageTransition>} />
+                      <Route path="/category" element={<PageTransition><Category /></PageTransition>} />
+                      <Route path="/success" element={<PageTransition><Success /></PageTransition>} />
+                      <Route path="/logout" element={<PageTransition><LogoutPage /></PageTransition>} />
+                      <Route path="/bookings" element={<PageTransition><BookingPage /></PageTransition>} />
+                      <Route path="/checkout/:id" element={<PageTransition><Checkout /></PageTransition>} />
+                      <Route path="/login" element={<PageTransition><LoginPage /></PageTransition>} />
+                      <Route path="/register" element={<PageTransition><RegisterPage /></PageTransition>} />
+                      <Route element={<SellerLayout />}>
+                        <Route path="/seller/dashboard" element={<SellerDashboard />} />
+                        <Route path="/seller/profile" element={<SellerProfilePage />} />
+                        <Route path="/seller/analytics" element={<SellerAnalytics />} />
+                        <Route path="/mylistings" element={<MyListings />} />
+                        <Route path="/add-flat" element={<AddFlatPage />} />
+                        <Route path="/updatePage/:id" element={<UpdatePage />} />
+                      </Route>
+                      <Route path="/*" element={<PageTransition><Error404 /></PageTransition>} />
+                    </Routes>
+                  </AnimatePresence>
+                </MainLayout>
               </Suspense>
             </NavScrollTop>
           </Router>

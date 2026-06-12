@@ -10,13 +10,13 @@ import { addFlat } from "../graphql/queries" // import your GraphQL function
 
 const Modal = ({ message, type, onClose }) => (
   <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50">
-    <div className={`bg-white rounded-xl p-6 shadow-lg text-center w-[90%] max-w-md ${type === "error" ? "border-red-500" : "border-green-500"} border`}>
-      <p className={`text-lg font-semibold mb-4 ${type === "error" ? "text-red-600" : "text-green-600"}`}>
+    <div className={`bg-white rounded-3xl p-6 shadow-xl text-center w-[90%] max-w-md border border-gray-100`}>
+      <p className={`text-base font-bold mb-6 ${type === "error" ? "text-red-600" : "text-[#0B5A42]"}`}>
         {message}
       </p>
       <button
         onClick={onClose}
-        className="px-4 py-2 bg-[#76ABAE] text-white rounded-md hover:bg-[#5a8f92] transition"
+        className="px-6 py-2.5 bg-[#0B5A42] text-white rounded-xl hover:bg-[#186a54] transition shadow-md shadow-[#0B5A42]/10 text-xs font-bold uppercase tracking-wider"
       >
         OK
       </button>
@@ -173,149 +173,148 @@ const AddFlatPage = () => {
   ]
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-6 relative">
+    <div className="max-w-4xl mx-auto relative">
       {showConfetti && <Confetti width={window.innerWidth} height={window.innerHeight} />}
       {showModal && <Modal message={modalMessage} type={modalType} onClose={closeModal} />}
 
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-        <h1 className="text-3xl font-bold mb-8">Add New Property</h1>
-
-        <div className="bg-white rounded-xl shadow-md overflow-hidden">
-          <div className="p-6 md:p-8">
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium flex items-center mb-2">
-                    <Home size={16} className="mr-2 text-[#76ABAE]" /> Property Name
-                  </label>
-                  <input 
-                    type="text" 
-                    value={name} 
-                    onChange={(e) => setName(e.target.value)} 
-                    required 
-                    className="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:border-[#76ABAE] focus:ring-1 focus:ring-[#76ABAE]" 
-                    placeholder="Enter property name"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium flex items-center mb-2">
-                    <DollarSign size={16} className="mr-2 text-[#76ABAE]" /> Monthly Price (₹)
-                  </label>
-                  <input 
-                    type="number" 
-                    value={price} 
-                    onChange={(e) => setPrice(e.target.value)} 
-                    required 
-                    min="0"
-                    className="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:border-[#76ABAE] focus:ring-1 focus:ring-[#76ABAE]" 
-                    placeholder="Enter monthly rent"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium flex items-center mb-2">
-                    <MapPin size={16} className="mr-2 text-[#76ABAE]" /> Location
-                  </label>
-                  <select 
-                    value={location} 
-                    onChange={(e) => setLocation(e.target.value)} 
-                    className="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:border-[#76ABAE] focus:ring-1 focus:ring-[#76ABAE]"
-                  >
-                    {locations.map((loc) => (
-                      <option key={loc} value={loc}>{loc}</option>
-                    ))}
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium flex items-center mb-2">
-                    <Users size={16} className="mr-2 text-[#76ABAE]" /> Guests Allowed
-                  </label>
-                  <input 
-                    type="number" 
-                    value={capacity} 
-                    onChange={(e) => setCapacity(e.target.value)} 
-                    required 
-                    min="1"
-                    className="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:border-[#76ABAE] focus:ring-1 focus:ring-[#76ABAE]" 
-                    placeholder="Number of guests"
-                  />
-                </div>
-              </div>
-
+        <div className="bg-white rounded-3xl border border-gray-100 p-8 shadow-sm">
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium flex items-center mb-3">
-                  <CheckSquare size={16} className="mr-2 text-[#76ABAE]" /> Amenities
+                <label className="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-2 flex items-center">
+                  <Home size={14} className="mr-2 text-[#0B5A42]" /> Property Name
                 </label>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  {AVAILABLE_AMENITIES.map((amenity) => {
-                    const Icon = amenity.icon
-                    const isSelected = amenities.includes(amenity.id)
-                    return (
-                      <div 
-                        key={amenity.id}
-                        onClick={() => handleAmenityToggle(amenity.id)}
-                        className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all ${
-                          isSelected 
-                            ? "bg-[#76ABAE]/10 border-[#76ABAE] text-[#76ABAE] shadow-sm" 
-                            : "bg-gray-50/50 border-gray-200 text-gray-600 hover:bg-gray-50"
-                        }`}
-                      >
-                        <Icon size={18} className={isSelected ? "text-[#76ABAE]" : "text-gray-400"} />
-                        <span className="font-medium text-sm">{amenity.id}</span>
-                      </div>
-                    )
-                  })}
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium flex items-center mb-2">
-                  <FileText size={16} className="mr-2 text-[#76ABAE]" /> Property Description
-                </label>
-                <textarea 
-                  value={description} 
-                  onChange={(e) => setDescription(e.target.value)} 
-                  rows={4} 
+                <input 
+                  type="text" 
+                  value={name} 
+                  onChange={(e) => setName(e.target.value)} 
                   required 
-                  className="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:border-[#76ABAE] focus:ring-1 focus:ring-[#76ABAE]" 
-                  placeholder="Describe your property..."
+                  className="w-full px-4 py-3 rounded-xl bg-gray-50/50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#0B5A42]/10 focus:border-[#0B5A42] focus:bg-white transition-all text-sm font-semibold text-gray-800 placeholder:text-gray-400" 
+                  placeholder="Enter property name"
                 />
               </div>
-
               <div>
-                <label className="block text-sm font-medium flex items-center mb-2">
-                  <Upload size={16} className="mr-2 text-[#76ABAE]" /> Property Image
+                <label className="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-2 flex items-center">
+                  <DollarSign size={14} className="mr-2 text-[#0B5A42]" /> Monthly Price (₹)
                 </label>
-                <div className="flex items-center justify-center w-full">
-                  <label className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
-                    {imagePreview ? (
-                      <img src={imagePreview} alt="Preview" className="h-full w-full object-cover rounded-lg" />
-                    ) : (
-                      <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                        <Upload className="w-10 h-10 mb-3 text-gray-400" />
-                        <p className="text-sm text-gray-500">Click to upload or drag & drop</p>
-                        <p className="text-xs text-gray-500">PNG, JPG or JPEG (MAX. 2MB)</p>
-                      </div>
-                    )}
-                    <input type="file" className="hidden" onChange={handleFileChange} accept="image/*" required />
-                  </label>
-                </div>
-              </div>
-
-              <div className="pt-4">
-                <Button
-                  type="submit"
-                  name={isSubmitting ? (
-                    <div className="flex items-center justify-center">
-                      <Loader2 size={18} className="animate-spin mr-2" /> Adding Property...
-                    </div>
-                  ) : "Add Property"}
-                  fullWidth
-                  css="py-3"
-                  disabled={isSubmitting}
+                <input 
+                  type="number" 
+                  value={price} 
+                  onChange={(e) => setPrice(e.target.value)} 
+                  required 
+                  min="0"
+                  className="w-full px-4 py-3 rounded-xl bg-gray-50/50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#0B5A42]/10 focus:border-[#0B5A42] focus:bg-white transition-all text-sm font-semibold text-gray-800 placeholder:text-gray-400" 
+                  placeholder="Enter monthly rent"
                 />
               </div>
-            </form>
-          </div>
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-2 flex items-center">
+                  <MapPin size={14} className="mr-2 text-[#0B5A42]" /> Location
+                </label>
+                <select 
+                  value={location} 
+                  onChange={(e) => setLocation(e.target.value)} 
+                  className="w-full px-4 py-3 rounded-xl bg-gray-50/50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#0B5A42]/10 focus:border-[#0B5A42] focus:bg-white transition-all text-sm font-semibold text-gray-800 placeholder:text-gray-400"
+                >
+                  {locations.map((loc) => (
+                    <option key={loc} value={loc}>{loc}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-2 flex items-center">
+                  <Users size={14} className="mr-2 text-[#0B5A42]" /> Guests Allowed
+                </label>
+                <input 
+                  type="number" 
+                  value={capacity} 
+                  onChange={(e) => setCapacity(e.target.value)} 
+                  required 
+                  min="1"
+                  className="w-full px-4 py-3 rounded-xl bg-gray-50/50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#0B5A42]/10 focus:border-[#0B5A42] focus:bg-white transition-all text-sm font-semibold text-gray-800 placeholder:text-gray-400" 
+                  placeholder="Number of guests"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-3 flex items-center">
+                <CheckSquare size={14} className="mr-2 text-[#0B5A42]" /> Amenities
+              </label>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {AVAILABLE_AMENITIES.map((amenity) => {
+                  const Icon = amenity.icon
+                  const isSelected = amenities.includes(amenity.id)
+                  return (
+                    <div 
+                      key={amenity.id}
+                      onClick={() => handleAmenityToggle(amenity.id)}
+                      className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all ${
+                        isSelected 
+                          ? "bg-[#EAF4F0] border-[#0B5A42] text-[#0B5A42] shadow-sm font-semibold" 
+                          : "bg-white border-gray-200 text-gray-500 hover:border-gray-300 hover:bg-gray-50/50"
+                      }`}
+                    >
+                      <Icon size={16} className={isSelected ? "text-[#0B5A42]" : "text-gray-400"} />
+                      <span className="font-semibold text-xs">{amenity.id}</span>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-2 flex items-center">
+                <FileText size={14} className="mr-2 text-[#0B5A42]" /> Property Description
+              </label>
+              <textarea 
+                value={description} 
+                onChange={(e) => setDescription(e.target.value)} 
+                rows={4} 
+                required 
+                className="w-full px-4 py-3 rounded-xl bg-gray-50/50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#0B5A42]/10 focus:border-[#0B5A42] focus:bg-white transition-all text-sm font-semibold text-gray-800 placeholder:text-gray-400" 
+                placeholder="Describe your property..."
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-2 flex items-center">
+                <Upload size={14} className="mr-2 text-[#0B5A42]" /> Property Image
+              </label>
+              <div className="flex items-center justify-center w-full">
+                <label className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-200 border-dashed rounded-2xl cursor-pointer bg-gray-50/50 hover:bg-gray-50 hover:border-[#0B5A42]/50 transition-all">
+                  {imagePreview ? (
+                    <img src={imagePreview} alt="Preview" className="h-full w-full object-cover rounded-2xl" />
+                  ) : (
+                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                      <Upload className="w-8 h-8 mb-3 text-gray-400" />
+                      <p className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-1">Click to upload or drag & drop</p>
+                      <p className="text-[10px] text-gray-400">PNG, JPG or JPEG (MAX. 2MB)</p>
+                    </div>
+                  )}
+                  <input type="file" className="hidden" onChange={handleFileChange} accept="image/*" required />
+                </label>
+              </div>
+            </div>
+
+            <div className="pt-4">
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full flex items-center justify-center gap-1.5 px-6 py-3 bg-[#0B5A42] text-white rounded-xl hover:bg-[#186a54] transition-all text-xs font-bold uppercase tracking-wider shadow-md shadow-[#0B5A42]/10 disabled:opacity-70"
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 size={14} className="animate-spin" />
+                    <span>Adding Property...</span>
+                  </>
+                ) : (
+                  "Add Property"
+                )}
+              </button>
+            </div>
+          </form>
         </div>
       </motion.div>
     </div>

@@ -61,77 +61,80 @@ export default function SellerAnalytics() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-6">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4">
-        <div>
-          <h1 className="text-3xl font-medium text-gray-800">Performance Analytics</h1>
-          <p className="text-gray-500 mt-2">Track your revenue and booking trends</p>
-        </div>
-        
+    <div className="max-w-7xl mx-auto">
+      <div className="flex justify-end mb-6">
         <div className="flex gap-4">
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-1 flex">
+          <div className="bg-white rounded-2xl border border-gray-100 p-1 flex shadow-sm">
             <button 
               onClick={() => setReportType("revenue")}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${reportType === "revenue" ? "bg-[#76ABAE] text-white" : "text-gray-600 hover:bg-gray-50"}`}
+              className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all ${
+                reportType === "revenue" 
+                  ? "bg-[#0B5A42] text-white shadow-sm" 
+                  : "text-gray-500 hover:text-gray-800 hover:bg-gray-50/50"
+              }`}
             >
               Revenue
             </button>
             <button 
               onClick={() => setReportType("bookings")}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${reportType === "bookings" ? "bg-[#76ABAE] text-white" : "text-gray-600 hover:bg-gray-50"}`}
+              className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all ${
+                reportType === "bookings" 
+                  ? "bg-[#0B5A42] text-white shadow-sm" 
+                  : "text-gray-500 hover:text-gray-800 hover:bg-gray-50/50"
+              }`}
             >
               Bookings
             </button>
           </div>
           <button 
             onClick={handleDownloadCSV}
-            className="flex items-center gap-2 px-6 py-2 bg-white text-[#76ABAE] border border-[#76ABAE]/20 hover:bg-[#76ABAE]/5 transition-colors rounded-xl shadow-sm text-sm font-medium"
+            className="flex items-center gap-2 px-5 py-2.5 bg-white text-[#0B5A42] border border-[#0B5A42]/20 hover:bg-[#EAF4F0]/50 transition-all rounded-2xl shadow-sm text-xs font-bold uppercase tracking-wider"
           >
-            <Download size={18} />
+            <Download size={14} />
             Export CSV
           </button>
         </div>
       </div>
 
-      <div className="bg-white/80 backdrop-blur-md rounded-2xl shadow-xl border border-white p-6 mb-8">
+      <div className="bg-white rounded-3xl border border-gray-100 p-6 shadow-sm mb-8">
         <div className="flex items-center gap-3 mb-6">
-          <div className="p-3 bg-purple-50 rounded-xl">
-            {reportType === "revenue" ? <TrendingUp size={24} className="text-purple-600" /> : <Calendar size={24} className="text-purple-600" />}
+          <div className="p-3 bg-[#EAF4F0] rounded-2xl text-[#0B5A42]">
+            {reportType === "revenue" ? <TrendingUp size={20} /> : <Calendar size={20} />}
           </div>
           <div>
-            <h2 className="text-xl font-medium text-gray-800">
+            <h2 className="text-lg font-bold text-gray-900">
               {reportType === "revenue" ? "6-Month Revenue Trend" : "6-Month Booking Volume"}
             </h2>
-            <p className="text-sm text-gray-500">
+            <p className="text-xs text-gray-400 font-medium mt-0.5">
               {reportType === "revenue" ? "Total earnings per month in INR" : "Number of successful bookings per month"}
             </p>
           </div>
         </div>
         
-        <div className="h-[400px] w-full">
+        <div className="h-[250px] w-full">
           <ResponsiveContainer width="100%" height="100%">
             {reportType === "revenue" ? (
               <BarChart data={analytics.monthlyData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
-                <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fill: '#6b7280' }} dy={10} />
-                <YAxis axisLine={false} tickLine={false} tickFormatter={(value) => `₹${value}`} tick={{ fill: '#6b7280' }} />
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f3f4f6" />
+                <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fill: '#9ca3af', fontSize: 11, fontWeight: 600 }} dy={10} />
+                <YAxis axisLine={false} tickLine={false} tickFormatter={(value) => `₹${value}`} tick={{ fill: '#9ca3af', fontSize: 11, fontWeight: 600 }} />
                 <Tooltip 
                   cursor={{ fill: '#f9fafb' }}
-                  contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                  contentStyle={{ borderRadius: '16px', border: '1px solid #f3f4f6', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.05)', fontFamily: 'inherit' }}
                   formatter={(value) => [`₹${value}`, "Revenue"]}
                 />
-                <Bar dataKey="revenue" fill="#76ABAE" radius={[6, 6, 0, 0]} maxBarSize={50} />
+                <Bar dataKey="revenue" fill="#0B5A42" radius={[6, 6, 0, 0]} maxBarSize={40} />
               </BarChart>
             ) : (
               <LineChart data={analytics.monthlyData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
-                <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fill: '#6b7280' }} dy={10} />
-                <YAxis axisLine={false} tickLine={false} tick={{ fill: '#6b7280' }} allowDecimals={false} />
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f3f4f6" />
+                <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fill: '#9ca3af', fontSize: 11, fontWeight: 600 }} dy={10} />
+                <YAxis axisLine={false} tickLine={false} tick={{ fill: '#9ca3af', fontSize: 11, fontWeight: 600 }} allowDecimals={false} />
                 <Tooltip 
-                  contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                  contentStyle={{ borderRadius: '16px', border: '1px solid #f3f4f6', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.05)', fontFamily: 'inherit' }}
                   formatter={(value) => [value, "Bookings"]}
                 />
-                <Line type="monotone" dataKey="bookings" stroke="#9333ea" strokeWidth={3} dot={{ strokeWidth: 2, r: 6, fill: '#fff' }} activeDot={{ r: 8 }} />
+                <Line type="monotone" dataKey="bookings" stroke="#0B5A42" strokeWidth={3} dot={{ strokeWidth: 2, r: 5, fill: '#fff', stroke: '#0B5A42' }} activeDot={{ r: 7, fill: '#0B5A42' }} />
               </LineChart>
             )}
           </ResponsiveContainer>
@@ -139,22 +142,43 @@ export default function SellerAnalytics() {
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl p-6 border border-emerald-100/50">
-           <h3 className="text-lg font-medium text-gray-800 mb-2">Total Earnings To Date</h3>
-           <p className="text-4xl font-bold text-emerald-600">₹{analytics.totalRevenue.toLocaleString()}</p>
+        <div className="bg-[#0B5A42] text-white rounded-3xl p-6 shadow-sm relative overflow-hidden min-h-36 flex flex-col justify-between">
+          <div className="absolute -right-6 -bottom-6 w-24 h-24 rounded-full bg-white/5" />
+          <div>
+            <p className="text-[10px] font-bold text-white/80 tracking-widest uppercase mb-1">
+              Total Earnings To Date
+            </p>
+            <h3 className="text-4xl font-extrabold mt-2 tracking-tight">₹{analytics.totalRevenue.toLocaleString()}</h3>
+          </div>
+          <span className="inline-block mt-4 px-3 py-1 rounded-full bg-white/15 text-white text-[10px] font-bold w-fit">
+            All-Time Revenue
+          </span>
         </div>
-        <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-6 border border-blue-100/50">
-           <h3 className="text-lg font-medium text-gray-800 mb-2">Platform Average Rating</h3>
-           <div className="flex items-center gap-3">
-             <p className="text-4xl font-bold text-blue-600">{analytics.avgRating.toFixed(1)}</p>
-             <div className="flex">
-               {[1,2,3,4,5].map(star => (
-                 <svg key={star} className={`w-6 h-6 ${star <= analytics.avgRating ? 'text-blue-500' : 'text-gray-300'}`} fill="currentColor" viewBox="0 0 20 20">
-                   <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                 </svg>
-               ))}
-             </div>
-           </div>
+
+        <div className="bg-white border border-gray-100 text-gray-900 rounded-3xl p-6 shadow-sm relative overflow-hidden min-h-36 flex flex-col justify-between">
+          <div>
+            <p className="text-[10px] font-bold text-gray-400 tracking-widest uppercase mb-1">
+              Platform Average Rating
+            </p>
+            <div className="flex items-end gap-3 mt-2">
+              <h3 className="text-4xl font-extrabold tracking-tight leading-none">{analytics.avgRating.toFixed(1)}</h3>
+              <div className="flex mb-0.5">
+                {[1, 2, 3, 4, 5].map(star => (
+                  <svg 
+                    key={star} 
+                    className={`w-5 h-5 ${star <= analytics.avgRating ? 'text-[#0B5A42]' : 'text-gray-200'}`} 
+                    fill="currentColor" 
+                    viewBox="0 0 20 20"
+                  >
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                  </svg>
+                ))}
+              </div>
+            </div>
+          </div>
+          <span className="inline-block mt-4 px-3 py-1 rounded-full bg-[#EAF4F0] text-[#0B5A42] text-[10px] font-bold w-fit">
+            Guest Satisfaction
+          </span>
         </div>
       </div>
     </div>

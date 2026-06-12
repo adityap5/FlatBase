@@ -76,22 +76,17 @@ export default function SellerProfilePage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-6">
-      <div className="bg-white/70 backdrop-blur-md rounded-2xl shadow-xl border border-white p-8">
-        <h1 className="text-3xl font-medium text-gray-800 mb-8 flex items-center gap-3">
-          <User className="text-[#76ABAE]" size={32} />
-          Seller Profile
-        </h1>
-
+    <div className="max-w-4xl mx-auto">
+      <div className="bg-white rounded-3xl border border-gray-100 p-8 shadow-sm">
         {success && (
-          <div className="mb-6 p-4 bg-emerald-50 text-emerald-700 rounded-lg flex items-center gap-2">
-            <CheckCircle size={20} />
+          <div className="mb-6 p-4 bg-[#EAF4F0] text-[#0B5A42] border border-emerald-100 rounded-2xl flex items-center gap-2.5 text-sm font-semibold">
+            <CheckCircle size={18} />
             <span>Profile updated successfully!</span>
           </div>
         )}
         
         {error && (
-          <div className="mb-6 p-4 bg-red-50 text-red-700 rounded-lg">
+          <div className="mb-6 p-4 bg-red-50 text-red-700 border border-red-100 rounded-2xl flex items-center gap-2.5 text-sm font-semibold">
             <span>{error}</span>
           </div>
         )}
@@ -99,54 +94,54 @@ export default function SellerProfilePage() {
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
-                <User size={16} className="text-[#76ABAE]" /> Full Name
+              <label className="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-2 flex items-center gap-2">
+                <User size={14} className="text-[#0B5A42]" /> Full Name
               </label>
               <input
                 type="text"
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                className="w-full px-4 py-3 rounded-xl bg-gray-50/50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#76ABAE]/50 transition-all"
+                className="w-full px-4 py-3 rounded-xl bg-gray-50/50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#0B5A42]/10 focus:border-[#0B5A42] focus:bg-white transition-all text-sm font-semibold text-gray-800 placeholder:text-gray-400"
                 required
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
-                <Mail size={16} className="text-[#76ABAE]" /> Email Address
+              <label className="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-2 flex items-center gap-2">
+                <Mail size={14} className="text-[#0B5A42]" /> Email Address
               </label>
               <input
                 type="email"
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full px-4 py-3 rounded-xl bg-gray-50/50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#76ABAE]/50 transition-all"
+                className="w-full px-4 py-3 rounded-xl bg-gray-50/50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#0B5A42]/10 focus:border-[#0B5A42] focus:bg-white transition-all text-sm font-semibold text-gray-800 placeholder:text-gray-400"
                 required
               />
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
-                <Phone size={16} className="text-[#76ABAE]" /> Phone Number
+              <label className="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-2 flex items-center gap-2">
+                <Phone size={14} className="text-[#0B5A42]" /> Phone Number
               </label>
               <input
                 type="tel"
                 name="phone"
                 value={formData.phone}
                 onChange={handleChange}
-                className="w-full px-4 py-3 rounded-xl bg-gray-50/50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#76ABAE]/50 transition-all"
+                className="w-full px-4 py-3 rounded-xl bg-gray-50/50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#0B5A42]/10 focus:border-[#0B5A42] focus:bg-white transition-all text-sm font-semibold text-gray-800 placeholder:text-gray-400"
                 placeholder="Enter your contact number"
               />
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
-                <FileText size={16} className="text-[#76ABAE]" /> Bio
+              <label className="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-2 flex items-center gap-2">
+                <FileText size={14} className="text-[#0B5A42]" /> Bio
               </label>
               <textarea
                 name="bio"
                 value={formData.bio}
                 onChange={handleChange}
                 rows={4}
-                className="w-full px-4 py-3 rounded-xl bg-gray-50/50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#76ABAE]/50 transition-all"
+                className="w-full px-4 py-3 rounded-xl bg-gray-50/50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#0B5A42]/10 focus:border-[#0B5A42] focus:bg-white transition-all text-sm font-semibold text-gray-800 placeholder:text-gray-400"
                 placeholder="Tell guests about yourself..."
               />
             </div>
@@ -156,9 +151,9 @@ export default function SellerProfilePage() {
             <button
               type="submit"
               disabled={loading}
-              className="px-8 py-3 bg-[#76ABAE] text-white rounded-xl font-medium hover:bg-[#76ABAE]/90 transition-all flex items-center gap-2 shadow-lg shadow-[#76ABAE]/20 disabled:opacity-70"
+              className="flex items-center gap-1.5 px-6 py-2.5 bg-[#0B5A42] text-white rounded-xl hover:bg-[#186a54] transition-all text-xs font-bold uppercase tracking-wider shadow-md shadow-[#0B5A42]/10 disabled:opacity-70"
             >
-              {loading ? <Loader2 size={20} className="animate-spin" /> : <CheckCircle size={20} />}
+              {loading ? <Loader2 size={14} className="animate-spin" /> : <CheckCircle size={14} />}
               Save Changes
             </button>
           </div>

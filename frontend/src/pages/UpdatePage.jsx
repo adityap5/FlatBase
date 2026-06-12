@@ -153,7 +153,7 @@ function UpdatePage() {
               ease: "easeInOut" 
             }}
           >
-            <Loader2 size={32} className="text-[#76ABAE]" />
+            <Loader2 size={32} className="text-[#0B5A42]" />
           </motion.div>
           <p className="text-gray-500 mt-3">Loading property details...</p>
         </motion.div>
@@ -162,197 +162,174 @@ function UpdatePage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="max-w-4xl mx-auto relative">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
         
         {/* Header with back button */}
-        <div className="flex items-center mb-8">
+        <div className="flex items-center mb-6">
           <button
             onClick={() => navigate("/mylistings")}
-            className="mr-4 p-2 rounded-lg hover:bg-gray-100 transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-white text-gray-700 border border-gray-200 rounded-xl hover:bg-gray-50 transition-all text-xs font-bold uppercase tracking-wider shadow-sm font-semibold"
           >
-            <ArrowLeft size={20} className="text-gray-600" />
+            <ArrowLeft size={14} />
+            Back to listings
           </button>
-          <div>
-            <h1 className="text-3xl font-bold">Update Property</h1>
-            <p className="text-gray-600 mt-1">Edit your property details</p>
-          </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-md overflow-hidden">
-          <div className="p-6 md:p-8">
-            {error && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="mb-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded flex items-start"
-              >
-                <AlertCircle size={20} className="mr-2 mt-0.5 flex-shrink-0" />
-                <div>
-                  <p>{error}</p>
-                  <button
-                    onClick={() => window.location.reload()}
-                    className="text-sm underline mt-2 hover:no-underline"
-                  >
-                    Try again
-                  </button>
-                </div>
-              </motion.div>
-            )}
-
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 flex items-center">
-                    <Home size={16} className="mr-2 text-[#76ABAE]" />
-                    Property Name
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#76ABAE] focus:border-transparent"
-                    placeholder="Enter property name"
-                    required
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label htmlFor="price" className="block text-sm font-medium text-gray-700 flex items-center">
-                    <DollarSign size={16} className="mr-2 text-[#76ABAE]" />
-                    Monthly Price (₹)
-                  </label>
-                  <input
-                    type="number"
-                    id="price"
-                    value={price}
-                    onChange={(e) => setPrice(e.target.value)}
-                    className="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#76ABAE] focus:border-transparent"
-                    placeholder="Enter monthly rent"
-                    min="0"
-                    required
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label htmlFor="location" className="block text-sm font-medium text-gray-700 flex items-center">
-                    <MapPin size={16} className="mr-2 text-[#76ABAE]" />
-                    Location
-                  </label>
-                  <select
-                    id="location"
-                    value={location}
-                    onChange={(e) => setLocation(e.target.value)}
-                    className="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#76ABAE] focus:border-transparent"
-                    required
-                  >
-                    {locations.map((loc) => (
-                      <option key={loc} value={loc}>
-                        {loc}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="space-y-2">
-                  <label htmlFor="capacity" className="block text-sm font-medium text-gray-700 flex items-center">
-                    <Users size={16} className="mr-2 text-[#76ABAE]" />
-                    Guests Allowed
-                  </label>
-                  <input
-                    type="number"
-                    id="capacity"
-                    value={capacity}
-                    onChange={(e) => setCapacity(e.target.value)}
-                    className="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#76ABAE] focus:border-transparent"
-                    placeholder="Number of guests"
-                    min="1"
-                    required
-                  />
-                </div>
+        <div className="bg-white rounded-3xl border border-gray-100 p-8 shadow-sm">
+          {error && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mb-6 p-4 bg-red-50 border border-red-100 text-red-700 rounded-2xl flex items-start gap-2.5"
+            >
+              <AlertCircle size={20} className="text-red-500 mt-0.5 flex-shrink-0" />
+              <div>
+                <p className="font-semibold text-sm">{error}</p>
+                <button
+                  onClick={() => window.location.reload()}
+                  className="text-xs underline mt-2 hover:no-underline font-bold"
+                >
+                  Try again
+                </button>
               </div>
+            </motion.div>
+          )}
 
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700 flex items-center mb-3">
-                  <CheckSquare size={16} className="mr-2 text-[#76ABAE]" /> Amenities
+                <label htmlFor="name" className="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-2 flex items-center">
+                  <Home size={14} className="mr-2 text-[#0B5A42]" /> Property Name
                 </label>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  {AVAILABLE_AMENITIES.map((amenity) => {
-                    const Icon = amenity.icon
-                    const isSelected = amenities.includes(amenity.id)
-                    return (
-                      <div 
-                        key={amenity.id}
-                        onClick={() => handleAmenityToggle(amenity.id)}
-                        className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all ${
-                          isSelected 
-                            ? "bg-[#76ABAE]/10 border-[#76ABAE] text-[#76ABAE] shadow-sm" 
-                            : "bg-gray-50/50 border-gray-200 text-gray-600 hover:bg-gray-50"
-                        }`}
-                      >
-                        <Icon size={18} className={isSelected ? "text-[#76ABAE]" : "text-gray-400"} />
-                        <span className="font-medium text-sm">{amenity.id}</span>
-                      </div>
-                    )
-                  })}
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <label htmlFor="description" className="block text-sm font-medium text-gray-700 flex items-center">
-                  <FileText size={16} className="mr-2 text-[#76ABAE]" />
-                  Property Description
-                </label>
-                <textarea
-                  id="description"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  rows={4}
-                  className="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#76ABAE] focus:border-transparent"
-                  placeholder="Describe your property..."
+                <input
+                  type="text"
+                  id="name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="w-full px-4 py-3 rounded-xl bg-gray-50/50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#0B5A42]/10 focus:border-[#0B5A42] focus:bg-white transition-all text-sm font-semibold text-gray-800 placeholder:text-gray-400"
+                  placeholder="Enter property name"
                   required
                 />
               </div>
 
-              <div className="pt-4 flex gap-4">
-                <Button
-                  type="button"
-                  onClick={() => navigate("/mylistings")}
-                  name="Cancel"
-                  css="flex-1 py-3 bg-gray-200 text-gray-800 hover:bg-gray-300"
-                />
-                <Button
-                  type="submit"
-                  name={
-                    isSubmitting ? (
-                      <div className="flex items-center justify-center">
-                        <motion.div
-                          animate={{ 
-                            scale: [1, 1.1, 1],
-                            opacity: [0.5, 1, 0.5]
-                          }}
-                          transition={{ 
-                            duration: 1, 
-                            repeat: Number.POSITIVE_INFINITY, 
-                            ease: "easeInOut" 
-                          }}
-                        >
-                          <Loader2 size={18} className="mr-2" />
-                        </motion.div>
-                        <span>Updating...</span>
-                      </div>
-                    ) : (
-                      "Update Property"
-                    )
-                  }
-                  fullWidth
-                  css="flex-1 py-3"
-                  disabled={isSubmitting}
+              <div className="space-y-2">
+                <label htmlFor="price" className="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-2 flex items-center">
+                  <DollarSign size={14} className="mr-2 text-[#0B5A42]" /> Monthly Price (₹)
+                </label>
+                <input
+                  type="number"
+                  id="price"
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value)}
+                  className="w-full px-4 py-3 rounded-xl bg-gray-50/50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#0B5A42]/10 focus:border-[#0B5A42] focus:bg-white transition-all text-sm font-semibold text-gray-800 placeholder:text-gray-400"
+                  placeholder="Enter monthly rent"
+                  min="0"
+                  required
                 />
               </div>
-            </form>
-          </div>
+
+              <div className="space-y-2">
+                <label htmlFor="location" className="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-2 flex items-center">
+                  <MapPin size={14} className="mr-2 text-[#0B5A42]" /> Location
+                </label>
+                <select
+                  id="location"
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                  className="w-full px-4 py-3 rounded-xl bg-gray-50/50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#0B5A42]/10 focus:border-[#0B5A42] focus:bg-white transition-all text-sm font-semibold text-gray-800 placeholder:text-gray-400"
+                  required
+                >
+                  {locations.map((loc) => (
+                    <option key={loc} value={loc}>
+                      {loc}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="space-y-2">
+                <label htmlFor="capacity" className="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-2 flex items-center">
+                  <Users size={14} className="mr-2 text-[#0B5A42]" /> Guests Allowed
+                </label>
+                <input
+                  type="number"
+                  id="capacity"
+                  value={capacity}
+                  onChange={(e) => setCapacity(e.target.value)}
+                  className="w-full px-4 py-3 rounded-xl bg-gray-50/50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#0B5A42]/10 focus:border-[#0B5A42] focus:bg-white transition-all text-sm font-semibold text-gray-800 placeholder:text-gray-400"
+                  placeholder="Number of guests"
+                  min="1"
+                  required
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-3 flex items-center">
+                <CheckSquare size={14} className="mr-2 text-[#0B5A42]" /> Amenities
+              </label>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {AVAILABLE_AMENITIES.map((amenity) => {
+                  const Icon = amenity.icon
+                  const isSelected = amenities.includes(amenity.id)
+                  return (
+                    <div 
+                      key={amenity.id}
+                      onClick={() => handleAmenityToggle(amenity.id)}
+                      className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all ${
+                        isSelected 
+                          ? "bg-[#EAF4F0] border-[#0B5A42] text-[#0B5A42] shadow-sm font-semibold" 
+                          : "bg-white border-gray-200 text-gray-500 hover:border-gray-300 hover:bg-gray-50/50"
+                      }`}
+                    >
+                      <Icon size={16} className={isSelected ? "text-[#0B5A42]" : "text-gray-400"} />
+                      <span className="font-semibold text-xs">{amenity.id}</span>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <label htmlFor="description" className="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-2 flex items-center">
+                <FileText size={14} className="mr-2 text-[#0B5A42]" /> Property Description
+              </label>
+              <textarea
+                id="description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                rows={4}
+                className="w-full px-4 py-3 rounded-xl bg-gray-50/50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#0B5A42]/10 focus:border-[#0B5A42] focus:bg-white transition-all text-sm font-semibold text-gray-800 placeholder:text-gray-400"
+                placeholder="Describe your property..."
+                required
+              />
+            </div>
+
+            <div className="pt-4 flex gap-4">
+              <button
+                type="button"
+                onClick={() => navigate("/mylistings")}
+                className="flex-1 py-3 bg-white text-gray-700 border border-gray-200 rounded-xl hover:bg-gray-50 transition-all text-xs font-bold uppercase tracking-wider shadow-sm font-bold"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="flex-1 flex items-center justify-center gap-1.5 px-6 py-3 bg-[#0B5A42] text-white rounded-xl hover:bg-[#186a54] transition-all text-xs font-bold uppercase tracking-wider shadow-md shadow-[#0B5A42]/10 disabled:opacity-70"
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 size={14} className="animate-spin" />
+                    <span>Updating...</span>
+                  </>
+                ) : (
+                  "Update Property"
+                )}
+              </button>
+            </div>
+          </form>
         </div>
       </motion.div>
     </div>
