@@ -117,11 +117,7 @@
   transform: translateY(-2px);
 }
 
-/* =============================================
-   FOOTER STYLES
-   (Extracted from Footer.jsx inline <style> block
-    to enable browser caching & avoid per-render injection)
-   ============================================= */
+/* FOOTER STYLES */
 
 :root {
   --hero-max-width: 1820px;

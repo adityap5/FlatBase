@@ -24,14 +24,10 @@ function UpdatePage() {
     const fetchFlat = async () => {
       try {
         setLoading(true)
-        console.log("Fetching flat with ID:", id) // Debug log
-        
         const response = await getFlat(id)
-        console.log("Flat data:", response) // Debug log
-        
         // Handle different response structures
         const flatData = response.data?.flat || response.data || response
-        
+
         if (!flatData) {
           throw new Error("Property not found")
         }
@@ -43,7 +39,7 @@ function UpdatePage() {
         setDescription(flatData.description || "")
         setAmenities(flatData.amenities || [])
         setError(null)
-        
+
       } catch (err) {
         console.error("Error fetching flat:", err)
         setError("Failed to load property details. Please try again.")
@@ -75,19 +71,17 @@ function UpdatePage() {
         amenities,
       }
 
-      console.log("Updating flat with data:", formData) // Debug log
-
       await updateListing(id, formData)
-      
+
       // Show success and navigate back
-      navigate("/mylistings", { 
+      navigate("/mylistings", {
         state: { message: "Property updated successfully!" }
       })
-      
+
     } catch (err) {
       console.error("Update error:", err)
       let errorMessage = "Failed to update property. Please try again."
-      
+
       if (err.graphQLErrors && err.graphQLErrors.length > 0) {
         errorMessage = err.graphQLErrors[0].message
       } else if (err.networkError) {
@@ -95,7 +89,7 @@ function UpdatePage() {
       } else if (err.message) {
         errorMessage = err.message
       }
-      
+
       setError(errorMessage)
     } finally {
       setIsSubmitting(false)
@@ -104,7 +98,7 @@ function UpdatePage() {
 
   const locations = [
     "Chandigarh",
-    "Agra", 
+    "Agra",
     "Jaipur",
     "NewDelhi",
     "Banglore",
@@ -117,7 +111,7 @@ function UpdatePage() {
   ]
 
   const handleAmenityToggle = (amenity) => {
-    setAmenities(prev => 
+    setAmenities(prev =>
       prev.includes(amenity) ? prev.filter(a => a !== amenity) : [...prev, amenity]
     )
   }
@@ -143,14 +137,14 @@ function UpdatePage() {
           className="flex flex-col items-center"
         >
           <motion.div
-            animate={{ 
+            animate={{
               scale: [1, 1.1, 1],
               opacity: [0.5, 1, 0.5]
             }}
-            transition={{ 
-              duration: 1.5, 
-              repeat: Number.POSITIVE_INFINITY, 
-              ease: "easeInOut" 
+            transition={{
+              duration: 1.5,
+              repeat: Number.POSITIVE_INFINITY,
+              ease: "easeInOut"
             }}
           >
             <Loader2 size={32} className="text-[#0B5A42]" />
@@ -164,7 +158,7 @@ function UpdatePage() {
   return (
     <div className="max-w-4xl mx-auto relative">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-        
+
         {/* Header with back button */}
         <div className="flex items-center mb-6">
           <button
@@ -274,14 +268,13 @@ function UpdatePage() {
                   const Icon = amenity.icon
                   const isSelected = amenities.includes(amenity.id)
                   return (
-                    <div 
+                    <div
                       key={amenity.id}
                       onClick={() => handleAmenityToggle(amenity.id)}
-                      className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all ${
-                        isSelected 
-                          ? "bg-[#EAF4F0] border-[#0B5A42] text-[#0B5A42] shadow-sm font-semibold" 
+                      className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all ${isSelected
+                          ? "bg-[#EAF4F0] border-[#0B5A42] text-[#0B5A42] shadow-sm font-semibold"
                           : "bg-white border-gray-200 text-gray-500 hover:border-gray-300 hover:bg-gray-50/50"
-                      }`}
+                        }`}
                     >
                       <Icon size={16} className={isSelected ? "text-[#0B5A42]" : "text-gray-400"} />
                       <span className="font-semibold text-xs">{amenity.id}</span>

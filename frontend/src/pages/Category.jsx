@@ -25,14 +25,12 @@ const Category = () => {
   const observerRef = useRef()
   const ITEMS_PER_PAGE = 8
 
-  // Whenever data changes, update sortedFlats
   useEffect(() => {
     if (data?.flats) {
       setSortedFlats(data.flats)
     }
   }, [data])
 
-  // Filter and sort flats whenever filters or data change
   useEffect(() => {
     if (!data?.flats) return
 
@@ -66,7 +64,7 @@ const Category = () => {
     }
 
     setSortedFlats(filtered)
-    setCurrentPage(1) // Reset pagination when filters change
+    setCurrentPage(1)
   }, [filters, data])
 
   // Update displayed flats when sortedFlats or currentPage changes
@@ -84,8 +82,6 @@ const Category = () => {
     if (!hasMore || isLoadingMore) return
     
     setIsLoadingMore(true)
-    
-    // Simulate loading delay (remove this in production if not needed)
     setTimeout(() => {
       setCurrentPage(prev => prev + 1)
       setIsLoadingMore(false)
@@ -103,7 +99,7 @@ const Category = () => {
       }
     }, {
       threshold: 0.1,
-      rootMargin: '100px' // Start loading 100px before the element comes into view
+      rootMargin: '100px'
     })
     
     if (node) observerRef.current.observe(node)

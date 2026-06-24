@@ -5,8 +5,7 @@ import { motion } from "framer-motion"
 import { useNavigate } from "react-router-dom"
 import { Home, MapPin, Users, DollarSign, FileText, Upload, Loader2, Wifi, Car, Utensils, Wind, Waves, ShieldCheck, Dumbbell, Tv, CheckSquare } from "lucide-react"
 import Confetti from "react-confetti"
-import Button from "../components/Button"
-import { addFlat } from "../graphql/queries" // import your GraphQL function
+import { addFlat } from "../graphql/queries"
 
 const Modal = ({ message, type, onClose }) => (
   <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50">
@@ -55,7 +54,7 @@ const AddFlatPage = () => {
     }
 
     const reader = new FileReader()
-    reader.onloadend = () => setImage(reader.result) // base64 string
+    reader.onloadend = () => setImage(reader.result)
     reader.readAsDataURL(file)
     setImagePreview(URL.createObjectURL(file))
   }
@@ -109,18 +108,13 @@ const AddFlatPage = () => {
         capacity: parseInt(capacity),
         description,
         amenities,
-        images: image, // base64 string
+        images: image,
         seller: userId
       }
 
-      console.log("Submitting flat data:", flatData) // Debug log
-
-      // Use the addFlat function from queries.js
       const response = await addFlat(flatData)
       
-      console.log("Response:", response) // Debug log
-
-      setModalMessage("Property added successfully! 🎉")
+      setModalMessage("Property added successfully!")
       setModalType("success")
       setShowModal(true)
       setShowConfetti(true)

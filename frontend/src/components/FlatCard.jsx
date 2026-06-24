@@ -14,7 +14,6 @@ const FlatCard = memo(function FlatCard({ flat }) {
       className="motionsite-card rounded-3xl overflow-hidden flex flex-col h-full group shadow-xl border border-glass-border"
     >
       <div className="relative h-40 sm:h-48 md:h-64 overflow-hidden z-0">
-        {/* Native lazy loading — defers off-screen images until near viewport */}
         <img
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
           src={flat.images || "/placeholder.svg"}

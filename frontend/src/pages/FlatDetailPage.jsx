@@ -24,8 +24,6 @@ import {
 } from "lucide-react"
 import MonthCalendar from "../components/MonthCalendar"
 
-// Defined outside component — this is a constant lookup table, no need
-// to rebuild it on every render cycle.
 const ICON_MAP = {
   "WiFi": Wifi,
   "Parking": Car,
@@ -40,13 +38,13 @@ const ICON_MAP = {
 const FlatDetailPage = () => {
   const navigate = useNavigate()
   const { id } = useParams()
-  
+
   const [startMonth, setStartMonth] = useState("")
   const [endMonth, setEndMonth] = useState("")
   const [monthsCount, setMonthsCount] = useState(0)
   const [isBooking, setIsBooking] = useState(false)
   const [errorMsg, setErrorMsg] = useState(null)
-  
+
   const [reviews, setReviews] = useState([])
   const [loadingReviews, setLoadingReviews] = useState(true)
 
@@ -83,7 +81,6 @@ const FlatDetailPage = () => {
     }
   }, [startMonth, endMonth])
 
-  // Dynamic SEO title per listing — critical for property page indexability
   useEffect(() => {
     if (flat) {
       document.title = `${flat.name || `Rooms in ${flat.location}`} | FlatBase`
@@ -109,16 +106,16 @@ const FlatDetailPage = () => {
 
   const checkAvailability = () => {
     if (!startMonth || !endMonth || monthsCount <= 0) return false
-    
+
     const blocked = flat?.blockedMonths || []
     const start = new Date(startMonth)
     const end = new Date(endMonth)
     let current = new Date(start.getFullYear(), start.getMonth(), 1)
-    
+
     while (current <= end) {
       const monthStr = `${current.getFullYear()}-${String(current.getMonth() + 1).padStart(2, '0')}`
       if (blocked.includes(monthStr)) {
-        return false // Conflict
+        return false
       }
       current.setMonth(current.getMonth() + 1)
     }
@@ -128,16 +125,16 @@ const FlatDetailPage = () => {
   const handleBooking = async () => {
     const token = localStorage.getItem("token")
     const role = localStorage.getItem("role")
-    const userId = localStorage.getItem("userId") 
+    const userId = localStorage.getItem("userId")
 
     if (!token) {
-       navigate("/login")
-       return
+      navigate("/login")
+      return
     }
 
     if (role !== "customer") {
-       setErrorMsg("Only customers can book properties.")
-       return
+      setErrorMsg("Only customers can book properties.")
+      return
     }
 
     if (!startMonth || !endMonth || monthsCount <= 0) {
@@ -175,8 +172,8 @@ const FlatDetailPage = () => {
     return (
       <div className="flex justify-center items-center py-40">
         <motion.div
-           animate={{ scale: [1, 1.2, 1] }}
-           transition={{ duration: 1.5, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
+          animate={{ scale: [1, 1.2, 1] }}
+          transition={{ duration: 1.5, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
         >
           <Loader2 size={32} className="text-primary animate-spin" />
         </motion.div>
@@ -199,7 +196,7 @@ const FlatDetailPage = () => {
           {/* Hero Gallery Section */}
           <section className="mt-8">
             <div className="grid grid-cols-1 md:grid-cols-12 gap-4 h-[300px] md:h-[500px]">
-              {/* Featured Image — above fold, load eagerly for best LCP */}
+              {/* Featured Image */}
               <div className="md:col-span-8 overflow-hidden rounded-3xl group relative border border-glass-border">
                 <img
                   alt={flat.name}
@@ -212,7 +209,7 @@ const FlatDetailPage = () => {
                 />
                 <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-500"></div>
               </div>
-              {/* Thumbnail Stack — below the hero, lazy load is fine */}
+
               <div className="hidden md:col-span-4 md:flex flex-col gap-4">
                 <div className="h-1/2 overflow-hidden rounded-3xl border border-glass-border group">
                   <img
@@ -247,9 +244,7 @@ const FlatDetailPage = () => {
 
           {/* Details & Booking Layout */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 relative">
-            {/* Left Column: Info details */}
             <div className="col-span-12 lg:col-span-8 space-y-12">
-              {/* Header Info */}
               <div className="space-y-4">
                 <div className="flex flex-wrap gap-2.5">
                   <span className="bg-secondary/20 text-on-secondary px-3.5 py-1 rounded-full font-body text-[10px] font-bold tracking-widest uppercase border border-secondary/30">
@@ -323,7 +318,7 @@ const FlatDetailPage = () => {
                 <h3 className="font-display text-xl font-bold text-on-background flex items-center gap-2">
                   <MessageSquare className="text-primary" /> Guest Reviews
                 </h3>
-                
+
                 {loadingReviews ? (
                   <div className="flex justify-center p-4"><Loader2 className="animate-spin text-primary" /></div>
                 ) : reviews.length > 0 ? (
@@ -331,15 +326,15 @@ const FlatDetailPage = () => {
                     {reviews.map(review => (
                       <div key={review._id} className="bg-surface-container/60 p-5 rounded-2xl border border-glass-border/30">
                         <div className="flex justify-between items-start mb-3">
-                           <div>
-                             <p className="font-display font-semibold text-on-background text-sm">{review.user?.name || "Guest"}</p>
-                             <p className="text-[10px] text-on-surface-variant font-body opacity-60 mt-0.5">{new Date(Number(review.createdAt)).toLocaleDateString()}</p>
-                           </div>
-                           <div className="flex gap-0.5">
-                             {[1,2,3,4,5].map(star => (
-                               <Star key={star} size={12} className={star <= review.rating ? "text-primary fill-primary" : "text-on-surface-variant/30"} />
-                             ))}
-                           </div>
+                          <div>
+                            <p className="font-display font-semibold text-on-background text-sm">{review.user?.name || "Guest"}</p>
+                            <p className="text-[10px] text-on-surface-variant font-body opacity-60 mt-0.5">{new Date(Number(review.createdAt)).toLocaleDateString()}</p>
+                          </div>
+                          <div className="flex gap-0.5">
+                            {[1, 2, 3, 4, 5].map(star => (
+                              <Star key={star} size={12} className={star <= review.rating ? "text-primary fill-primary" : "text-on-surface-variant/30"} />
+                            ))}
+                          </div>
                         </div>
                         <p className="text-on-surface-variant font-body text-sm leading-relaxed opacity-95">{review.text}</p>
                       </div>
@@ -382,11 +377,11 @@ const FlatDetailPage = () => {
 
                   <div className="space-y-4">
                     <label className="block font-body text-xs font-bold text-on-surface-variant tracking-widest uppercase">Select Stays</label>
-                    <MonthCalendar 
+                    <MonthCalendar
                       blockedMonths={flat.blockedMonths || []}
                       onDateSelect={({ start, end }) => {
-                         setStartMonth(start);
-                         setEndMonth(end);
+                        setStartMonth(start);
+                        setEndMonth(end);
                       }}
                     />
                   </div>

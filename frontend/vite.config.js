@@ -1,7 +1,6 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
   base: '/',
@@ -11,8 +10,6 @@ export default defineConfig({
     rollupOptions: {
       input: 'index.html',
       output: {
-        // Manual chunk splitting — keeps vendor code separate from app code.
-        // This allows browsers to cache stable vendor bundles independently.
         manualChunks: {
           'vendor-react':  ['react', 'react-dom', 'react-router-dom'],
           'vendor-redux':  ['@reduxjs/toolkit', 'react-redux'],

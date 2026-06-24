@@ -6,8 +6,6 @@ import { GET_FLATS, SEARCH_FLATS } from '../graphql/queries';
 export const fetchFlats = createAsyncThunk('flats/fetchFlats', async () => {
   const result = await client.query({
     query: GET_FLATS,
-    // cache-first: serve from InMemoryCache on repeat visits,
-    // only fetch from network when no cached data exists.
     fetchPolicy: 'cache-first',
   });
   return result.data.flats;
@@ -22,7 +20,7 @@ export const fetchFlatsByLocation = createAsyncThunk(
       variables: { location },
       fetchPolicy: 'network-only',
     });
-    return result.data.searchFlats; // Apollo query result
+    return result.data.searchFlats;
   }
 );
 

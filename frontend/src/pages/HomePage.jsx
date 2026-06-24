@@ -56,7 +56,6 @@ const HomePage = () => {
     visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
   }), [])
 
-  // Bento layout data slices — memoized to avoid recomputing on unrelated re-renders
   const featuredFlat = useMemo(() => (flats && flats.length > 0 ? flats[0] : null), [flats])
   const sideFlats = useMemo(() => (flats && flats.length > 1 ? flats.slice(1, 3) : []), [flats])
   const remainingFlats = useMemo(() => (flats && flats.length > 3 ? flats.slice(3, 7) : []), [flats])
@@ -66,7 +65,6 @@ const HomePage = () => {
       {/* Hero Banner */}
       <Banner />
 
-      {/* Content wrapper with custom margins */}
       <div className="w-full flex flex-col space-y-20 md:space-y-28">
 
         {/* Popular Cities Section (Trending Destinations) */}
@@ -153,7 +151,7 @@ const HomePage = () => {
           </section>
         )}
 
-        {/* All Flats / Bento Layout Section */}
+        {/* All Flats */}
         <section className="max-w-[1440px] mx-auto px-4 md:px-10 w-full">
           <div className="flex justify-between items-end mb-12">
             <div>
@@ -178,17 +176,17 @@ const HomePage = () => {
             </div>
           ) : (
             <div className="flex flex-col gap-12">
-              {/* Bento Grid */}
+
               {featuredFlat && (
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-8 h-auto md:h-[600px]">
-                  {/* Large Featured Card — above the fold, load eagerly */}
+                  {/* Large Featured Card  */}
                   <div className="md:col-span-8 h-80 md:h-full motionsite-card rounded-3xl overflow-hidden relative group border border-glass-border">
                     <img
                       className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                      fetchpriority="high"
+                      loading="eager"
                       src={featuredFlat.images}
                       alt={featuredFlat.name}
-                      loading="eager"
-                      decoding="async"
                       width="900"
                       height="600"
                     />
