@@ -24,6 +24,19 @@ import {
 } from "lucide-react"
 import MonthCalendar from "../components/MonthCalendar"
 
+// Defined outside component — this is a constant lookup table, no need
+// to rebuild it on every render cycle.
+const ICON_MAP = {
+  "WiFi": Wifi,
+  "Parking": Car,
+  "Kitchen": Utensils,
+  "TV": Tv,
+  "AC": Wind,
+  "Pool": Waves,
+  "Security": ShieldCheck,
+  "Gym": Dumbbell
+}
+
 const FlatDetailPage = () => {
   const navigate = useNavigate()
   const { id } = useParams()
@@ -69,6 +82,16 @@ const FlatDetailPage = () => {
       }
     }
   }, [startMonth, endMonth])
+
+  // Dynamic SEO title per listing — critical for property page indexability
+  useEffect(() => {
+    if (flat) {
+      document.title = `${flat.name || `Rooms in ${flat.location}`} | FlatBase`
+    }
+    return () => {
+      document.title = "FlatBase | Premium Luxury Rentals"
+    }
+  }, [flat])
 
   useEffect(() => {
     const fetchReviews = async () => {
@@ -169,17 +192,6 @@ const FlatDetailPage = () => {
     )
   }
 
-  const ICON_MAP = {
-    "WiFi": Wifi,
-    "Parking": Car,
-    "Kitchen": Utensils,
-    "TV": Tv,
-    "AC": Wind,
-    "Pool": Waves,
-    "Security": ShieldCheck,
-    "Gym": Dumbbell
-  }
-
   return (
     <div className="w-full min-h-screen pb-20 max-w-container-max mx-auto px-6 md:px-margin-desktop">
       {flat && (
@@ -187,29 +199,41 @@ const FlatDetailPage = () => {
           {/* Hero Gallery Section */}
           <section className="mt-8">
             <div className="grid grid-cols-1 md:grid-cols-12 gap-4 h-[300px] md:h-[500px]">
-              {/* Featured Image */}
+              {/* Featured Image — above fold, load eagerly for best LCP */}
               <div className="md:col-span-8 overflow-hidden rounded-3xl group relative border border-glass-border">
-                <img 
-                  alt={flat.name} 
-                  className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" 
+                <img
+                  alt={flat.name}
+                  className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
                   src={flat.images || "/placeholder.svg"}
+                  loading="eager"
+                  decoding="async"
+                  width="900"
+                  height="500"
                 />
                 <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-500"></div>
               </div>
-              {/* Thumbnail Stack */}
+              {/* Thumbnail Stack — below the hero, lazy load is fine */}
               <div className="hidden md:col-span-4 md:flex flex-col gap-4">
                 <div className="h-1/2 overflow-hidden rounded-3xl border border-glass-border group">
-                  <img 
-                    alt="Interior 1" 
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+                  <img
+                    alt="Interior 1"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                     src="https://images.unsplash.com/photo-1554995207-c18c203602cb?auto=format&fit=crop&q=80"
+                    loading="lazy"
+                    decoding="async"
+                    width="400"
+                    height="250"
                   />
                 </div>
                 <div className="h-1/2 overflow-hidden rounded-3xl border border-glass-border relative group">
-                  <img 
-                    alt="Interior 2" 
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+                  <img
+                    alt="Interior 2"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                     src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&q=80"
+                    loading="lazy"
+                    decoding="async"
+                    width="400"
+                    height="250"
                   />
                   <div className="absolute inset-0 bg-background/50 flex items-center justify-center cursor-pointer">
                     <span className="font-body text-xs font-bold text-white bg-glass-white px-4 py-2 rounded-full border border-glass-border backdrop-blur-md">

@@ -1,6 +1,5 @@
-"use client"
 
-import { useState, useEffect, Suspense, lazy } from "react"
+import { useEffect, useMemo, Suspense, lazy } from "react"
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom"
 import { AnimatePresence } from "framer-motion"
 import ReactGA from "react-ga4"
@@ -42,11 +41,14 @@ const AnalyticsTracker = () => {
 
 const MainLayout = ({ children }) => {
   const location = useLocation()
-  const isSellerRoute = 
-    location.pathname.startsWith("/seller") || 
-    location.pathname.startsWith("/mylistings") || 
-    location.pathname.startsWith("/add-flat") || 
-    location.pathname.startsWith("/updatePage")
+  const isSellerRoute = useMemo(
+    () =>
+      location.pathname.startsWith("/seller") ||
+      location.pathname.startsWith("/mylistings") ||
+      location.pathname.startsWith("/add-flat") ||
+      location.pathname.startsWith("/updatePage"),
+    [location.pathname]
+  )
 
   return (
     <>
@@ -58,11 +60,7 @@ const MainLayout = ({ children }) => {
 }
 
 const App = () => {
-  const [loading, setLoading] = useState(true)
-
   useEffect(() => {
-    setTimeout(() => setLoading(false), 1000)
-
     ReactGA.initialize("G-34YS1ZRZTT")
   }, [])
 
@@ -73,50 +71,44 @@ const App = () => {
         <div className="glowing-blob w-[500px] h-[500px] bg-primary/10 top-[-10%] right-[5%]" />
         <div className="glowing-blob w-[600px] h-[600px] bg-secondary/5 top-[30%] left-[-10%]" style={{ animationDelay: '-5s' }} />
         <div className="glowing-blob w-[400px] h-[400px] bg-accent/10 bottom-[10%] right-[10%]" style={{ animationDelay: '-10s' }} />
-        
+
         {/* Subtle grid lines overlay */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.01)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.01)_1px,transparent_1px)] bg-[size:32px_32px]" />
       </div>
 
       <div className="min-h-screen w-full flex flex-col font-body bg-background text-on-background">
-        {loading ? (
-          <LoadingScreen />
-        ) : (
-          <Router>
-
-            <AnalyticsTracker />
-
-            <NavScrollTop>
-              <Suspense fallback={<LoadingScreen minimal />}>
-                <MainLayout>
-                  <AnimatePresence mode="wait">
-                    <Routes>
-                      <Route path="/" element={<PageTransition><HomePage /></PageTransition>} />
-                      <Route path="/flat/:id" element={<PageTransition><FlatDetailPage /></PageTransition>} />
-                      <Route path="/search" element={<PageTransition><SearchResultsPage /></PageTransition>} />
-                      <Route path="/category" element={<PageTransition><Category /></PageTransition>} />
-                      <Route path="/success" element={<PageTransition><Success /></PageTransition>} />
-                      <Route path="/logout" element={<PageTransition><LogoutPage /></PageTransition>} />
-                      <Route path="/bookings" element={<PageTransition><BookingPage /></PageTransition>} />
-                      <Route path="/checkout/:id" element={<PageTransition><Checkout /></PageTransition>} />
-                      <Route path="/login" element={<PageTransition><LoginPage /></PageTransition>} />
-                      <Route path="/register" element={<PageTransition><RegisterPage /></PageTransition>} />
-                      <Route element={<SellerLayout />}>
-                        <Route path="/seller/dashboard" element={<SellerDashboard />} />
-                        <Route path="/seller/profile" element={<SellerProfilePage />} />
-                        <Route path="/seller/analytics" element={<SellerAnalytics />} />
-                        <Route path="/mylistings" element={<MyListings />} />
-                        <Route path="/add-flat" element={<AddFlatPage />} />
-                        <Route path="/updatePage/:id" element={<UpdatePage />} />
-                      </Route>
-                      <Route path="/*" element={<PageTransition><Error404 /></PageTransition>} />
-                    </Routes>
-                  </AnimatePresence>
-                </MainLayout>
-              </Suspense>
-            </NavScrollTop>
-          </Router>
-        )}
+        <Router>
+          <AnalyticsTracker />
+          <NavScrollTop>
+            <Suspense fallback={<LoadingScreen minimal />}>
+              <MainLayout>
+                <AnimatePresence mode="wait">
+                  <Routes>
+                    <Route path="/" element={<PageTransition><HomePage /></PageTransition>} />
+                    <Route path="/flat/:id" element={<PageTransition><FlatDetailPage /></PageTransition>} />
+                    <Route path="/search" element={<PageTransition><SearchResultsPage /></PageTransition>} />
+                    <Route path="/category" element={<PageTransition><Category /></PageTransition>} />
+                    <Route path="/success" element={<PageTransition><Success /></PageTransition>} />
+                    <Route path="/logout" element={<PageTransition><LogoutPage /></PageTransition>} />
+                    <Route path="/bookings" element={<PageTransition><BookingPage /></PageTransition>} />
+                    <Route path="/checkout/:id" element={<PageTransition><Checkout /></PageTransition>} />
+                    <Route path="/login" element={<PageTransition><LoginPage /></PageTransition>} />
+                    <Route path="/register" element={<PageTransition><RegisterPage /></PageTransition>} />
+                    <Route element={<SellerLayout />}>
+                      <Route path="/seller/dashboard" element={<SellerDashboard />} />
+                      <Route path="/seller/profile" element={<SellerProfilePage />} />
+                      <Route path="/seller/analytics" element={<SellerAnalytics />} />
+                      <Route path="/mylistings" element={<MyListings />} />
+                      <Route path="/add-flat" element={<AddFlatPage />} />
+                      <Route path="/updatePage/:id" element={<UpdatePage />} />
+                    </Route>
+                    <Route path="/*" element={<PageTransition><Error404 /></PageTransition>} />
+                  </Routes>
+                </AnimatePresence>
+              </MainLayout>
+            </Suspense>
+          </NavScrollTop>
+        </Router>
       </div>
     </>
   )

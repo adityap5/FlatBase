@@ -1,3 +1,4 @@
+import { useMemo, useCallback } from "react"
 import { Outlet, NavLink, useLocation } from "react-router-dom"
 import { 
   LayoutDashboard, 
@@ -72,12 +73,15 @@ export default function SellerLayout() {
     }
   }
 
-  const headerInfo = getHeaderInfo()
+  const headerInfo = useMemo(() => getHeaderInfo(), [location.pathname])
 
-  const navClass = ({ isActive }) =>
-    isActive
-      ? "flex items-center gap-3 px-4 py-3 text-[#0B5A42] bg-[#EAF4F0] rounded-xl transition-all text-sm font-bold relative group"
-      : "flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-xl transition-all text-sm font-semibold group"
+  const navClass = useCallback(
+    ({ isActive }) =>
+      isActive
+        ? "flex items-center gap-3 px-4 py-3 text-[#0B5A42] bg-[#EAF4F0] rounded-xl transition-all text-sm font-bold relative group"
+        : "flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-xl transition-all text-sm font-semibold group",
+    []
+  )
 
   return (
     <div className="flex min-h-screen bg-[#F9FAFB] text-gray-800 font-body">
@@ -158,7 +162,8 @@ export default function SellerLayout() {
                   )}
                 </NavLink>
 
-                <button 
+                <button
+                  type="button"
                   onClick={handleLogout}
                   className="w-full flex items-center gap-3 px-4 py-3 text-gray-500 hover:bg-red-50 hover:text-red-600 rounded-xl transition-all text-sm font-semibold text-left group"
                 >
@@ -196,9 +201,11 @@ export default function SellerLayout() {
           {/* Search bar */}
           <div className="relative max-w-md w-full">
             <Search size={16} className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
-            <input 
+            <input
+              id="seller-search"
               type="text"
               placeholder="Search property or booking..."
+              aria-label="Search properties or bookings"
               className="w-full bg-[#F3F4F6] border border-transparent rounded-full py-2.5 pl-10 pr-12 text-sm focus:outline-none focus:border-gray-200 focus:bg-white transition-all text-gray-800 placeholder:text-gray-400 font-medium"
             />
             <span className="absolute right-4 top-1/2 transform -translate-y-1/2 text-[10px] font-bold text-gray-400 bg-white border border-gray-200 px-1.5 py-0.5 rounded shadow-sm">

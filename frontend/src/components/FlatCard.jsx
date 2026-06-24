@@ -1,10 +1,9 @@
-"use client"
-
+import { memo } from "react"
 import { motion } from "framer-motion"
 import { Link } from "react-router-dom"
 import { MapPin, Star } from "lucide-react"
 
-const FlatCard = ({ flat }) => {
+const FlatCard = memo(function FlatCard({ flat }) {
   return (
     <motion.div
       variants={{
@@ -15,12 +14,17 @@ const FlatCard = ({ flat }) => {
       className="motionsite-card rounded-3xl overflow-hidden flex flex-col h-full group shadow-xl border border-glass-border"
     >
       <div className="relative h-40 sm:h-48 md:h-64 overflow-hidden z-0">
-        <motion.img
+        {/* Native lazy loading — defers off-screen images until near viewport */}
+        <img
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
           src={flat.images || "/placeholder.svg"}
           alt={flat.name || `Rooms in ${flat.location}`}
+          loading="lazy"
+          decoding="async"
+          width="400"
+          height="256"
         />
-        
+
         {/* Price tag */}
         <div className="absolute top-3 right-3 bg-primary text-on-primary px-3 py-1 rounded-full font-body font-bold text-[10px] sm:text-xs tracking-wider uppercase shadow-lg hover:shadow-[0_0_15px_rgba(0,245,255,0.4)] transition-all">
           ₹{flat.price?.toLocaleString()}
@@ -61,6 +65,6 @@ const FlatCard = ({ flat }) => {
       </div>
     </motion.div>
   )
-}
+})
 
 export default FlatCard

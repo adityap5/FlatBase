@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useMemo } from "react"
 import { motion } from "framer-motion"
 import FlatCard from "../components/FlatCard"
 import HomeCardShimmer from "../components/HomeCardShimmer"
@@ -14,7 +14,7 @@ const HomePage = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const role = localStorage.getItem("role")
-  
+
   const [popularFlats, setPopularFlats] = useState([])
   const [popularCities, setPopularCities] = useState([])
   const [loadingPopular, setLoadingPopular] = useState(true)
@@ -23,7 +23,7 @@ const HomePage = () => {
     dispatch(fetchFlatsByLocation(loc))
     navigate(`/search?location=${loc}`)
   }
-  
+
   const { flats, loading } = useSelector((state) => state.flats)
 
   useEffect(() => {
@@ -33,7 +33,7 @@ const HomePage = () => {
     }
 
     dispatch(fetchFlats())
-    
+
     const fetchPopular = async () => {
       try {
         const [flatsRes, citiesRes] = await Promise.all([
@@ -51,15 +51,15 @@ const HomePage = () => {
     fetchPopular()
   }, [dispatch])
 
-  const containerVariants = {
+  const containerVariants = useMemo(() => ({
     hidden: { opacity: 0 },
     visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
-  }
+  }), [])
 
-  // Bento layout data slices
-  const featuredFlat = flats && flats.length > 0 ? flats[0] : null
-  const sideFlats = flats && flats.length > 1 ? flats.slice(1, 3) : []
-  const remainingFlats = flats && flats.length > 3 ? flats.slice(3, 7) : []
+  // Bento layout data slices — memoized to avoid recomputing on unrelated re-renders
+  const featuredFlat = useMemo(() => (flats && flats.length > 0 ? flats[0] : null), [flats])
+  const sideFlats = useMemo(() => (flats && flats.length > 1 ? flats.slice(1, 3) : []), [flats])
+  const remainingFlats = useMemo(() => (flats && flats.length > 3 ? flats.slice(3, 7) : []), [flats])
 
   return (
     <div className="w-full flex flex-col bg-background text-on-background">
@@ -68,13 +68,13 @@ const HomePage = () => {
 
       {/* Content wrapper with custom margins */}
       <div className="w-full flex flex-col space-y-20 md:space-y-28">
-        
+
         {/* Popular Cities Section (Trending Destinations) */}
         {popularCities && popularCities.length > 0 && (
           <section className="max-w-[1440px] mx-auto px-4 md:px-10 w-full">
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }} 
-              whileInView={{ opacity: 1, y: 0 }} 
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               className="flex items-center gap-3 mb-10"
             >
@@ -85,7 +85,7 @@ const HomePage = () => {
                 Trending Destinations
               </h2>
             </motion.div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-gutter">
               {popularCities.slice(0, 3).map((cityData) => (
                 <motion.div
@@ -94,10 +94,14 @@ const HomePage = () => {
                   onClick={() => handleSeeAll(cityData.city)}
                   className="group relative h-80 rounded-3xl overflow-hidden cursor-pointer shadow-lg border border-glass-border/30"
                 >
-                  <img 
-                    src={cityData.image} 
-                    alt={cityData.city} 
-                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+                  <img
+                    src={cityData.image}
+                    alt={cityData.city}
+                    loading="lazy"
+                    decoding="async"
+                    width="480"
+                    height="320"
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-background/95 via-background/40 to-transparent flex flex-col justify-end p-8">
                     <h3 className="font-display text-2xl font-bold text-on-background mb-2 group-hover:text-primary transition-colors duration-300">
@@ -120,9 +124,9 @@ const HomePage = () => {
         {popularFlats && popularFlats.length > 0 && (
           <section className="bg-surface-container-lowest py-16 w-full">
             <div className="max-w-[1440px] mx-auto px-4 md:px-10 w-full">
-              <motion.div 
-                initial={{ opacity: 0, y: 20 }} 
-                whileInView={{ opacity: 1, y: 0 }} 
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 className="flex items-center gap-3 mb-10"
               >
@@ -133,10 +137,10 @@ const HomePage = () => {
                   Most Booked Properties
                 </h2>
               </motion.div>
-              
-              <motion.div 
-                variants={containerVariants} 
-                initial="hidden" 
+
+              <motion.div
+                variants={containerVariants}
+                initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
                 className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-gutter"
@@ -160,8 +164,8 @@ const HomePage = () => {
                 Recently Added
               </h2>
             </div>
-            <button 
-              onClick={() => navigate('/search')} 
+            <button
+              onClick={() => navigate('/search')}
               className="text-primary hover:underline font-body font-bold text-sm tracking-wide uppercase transition-all"
             >
               View All
@@ -177,12 +181,16 @@ const HomePage = () => {
               {/* Bento Grid */}
               {featuredFlat && (
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-8 h-auto md:h-[600px]">
-                  {/* Large Featured Card */}
+                  {/* Large Featured Card — above the fold, load eagerly */}
                   <div className="md:col-span-8 h-80 md:h-full motionsite-card rounded-3xl overflow-hidden relative group border border-glass-border">
-                    <img 
-                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" 
-                      src={featuredFlat.images} 
-                      alt={featuredFlat.name} 
+                    <img
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                      src={featuredFlat.images}
+                      alt={featuredFlat.name}
+                      loading="eager"
+                      decoding="async"
+                      width="900"
+                      height="600"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent"></div>
                     <div className="absolute bottom-0 left-0 p-8 md:p-12 w-full">
@@ -207,10 +215,14 @@ const HomePage = () => {
                   <div className="md:col-span-4 flex flex-col gap-8 h-full">
                     {sideFlats.map((flat) => (
                       <div key={flat._id} className="flex-grow h-60 md:h-1/2 motionsite-card rounded-3xl overflow-hidden relative group border border-glass-border">
-                        <img 
-                          className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
-                          src={flat.images} 
-                          alt={flat.name} 
+                        <img
+                          className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                          src={flat.images}
+                          alt={flat.name}
+                          loading="lazy"
+                          decoding="async"
+                          width="400"
+                          height="300"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-background/90 to-transparent"></div>
                         <div className="absolute bottom-0 left-0 p-6 w-full">
@@ -220,7 +232,7 @@ const HomePage = () => {
                           <p className="text-on-surface-variant text-xs font-body opacity-80 mb-4 flex items-center gap-1">
                             <MapPin size={12} className="text-primary" /> {flat.location}
                           </p>
-                          <Link 
+                          <Link
                             to={`/flat/${flat._id}`}
                             className="text-primary hover:underline text-xs font-body font-bold tracking-wider uppercase"
                           >

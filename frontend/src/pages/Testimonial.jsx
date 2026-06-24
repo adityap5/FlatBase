@@ -1,8 +1,9 @@
-"use client"
-
 import { useEffect, useRef } from "react"
 import { motion } from "framer-motion"
 import Glide from "@glidejs/glide"
+// Import Glide CSS via Vite's module system — replaces the broken node_modules HTML links
+import "@glidejs/glide/dist/css/glide.core.min.css"
+import "@glidejs/glide/dist/css/glide.theme.min.css"
 import { Quote, Star } from "lucide-react"
 
 const Testimonial = () => {

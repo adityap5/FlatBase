@@ -1,9 +1,7 @@
-"use client"
-
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo, memo } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { useNavigate, NavLink } from "react-router-dom"
-import { Menu, X, Compass, Bell, User, LayoutDashboard, BookOpen } from "lucide-react"
+import { Menu, X, Compass, User, LayoutDashboard, BookOpen } from "lucide-react"
 import { Logout } from "../components/Logout"
 
 const Navbar = () => {
@@ -27,42 +25,41 @@ const Navbar = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 20) {
-        setIsScrolled(true)
-      } else {
-        setIsScrolled(false)
-      }
+      setIsScrolled(window.scrollY > 20)
     }
-    window.addEventListener("scroll", handleScroll)
+    window.addEventListener("scroll", handleScroll, { passive: true })
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
-  const navItems = [
-    {
-      name: "Destinations",
-      path: "/category",
-      icon: <Compass size={16} />,
-      show: !isSeller,
-    },
-    {
-      name: "Register",
-      path: "/register",
-      icon: <User size={16} />,
-      show: !token,
-    },
-    {
-      name: "Dashboard",
-      path: "/seller/dashboard",
-      icon: <LayoutDashboard size={16} />,
-      show: isSeller,
-    },
-    {
-      name: "My Bookings",
-      path: "/bookings",
-      icon: <BookOpen size={16} />,
-      show: isBuyer,
-    },
-  ]
+  const navItems = useMemo(
+    () => [
+      {
+        name: "Destinations",
+        path: "/category",
+        icon: <Compass size={16} />,
+        show: !isSeller,
+      },
+      {
+        name: "Register",
+        path: "/register",
+        icon: <User size={16} />,
+        show: !token,
+      },
+      {
+        name: "Dashboard",
+        path: "/seller/dashboard",
+        icon: <LayoutDashboard size={16} />,
+        show: isSeller,
+      },
+      {
+        name: "My Bookings",
+        path: "/bookings",
+        icon: <BookOpen size={16} />,
+        show: isBuyer,
+      },
+    ],
+    [token, isSeller, isBuyer]
+  )
 
   return (
     <>
@@ -223,4 +220,4 @@ const Navbar = () => {
   )
 }
 
-export default Navbar
+export default memo(Navbar)
