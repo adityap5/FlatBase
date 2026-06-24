@@ -179,7 +179,7 @@ export default function SellerLayout() {
             </svg>
           </div>
           <p className="text-xs font-bold mb-1">Host Premium Stays</p>
-          <p className="text-[10px] text-white/70 mb-3">FlatBase Donezo app</p>
+          <p className="text-[10px] text-white/70 mb-3">FlatBase</p>
           <NavLink 
             to="/"
             className="block text-center w-full bg-[#186a54] hover:bg-[#1d7d63] text-white py-2 rounded-xl text-[10px] font-bold transition-all"
