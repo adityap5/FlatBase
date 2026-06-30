@@ -33,6 +33,7 @@ const RegisterPage = () => {
       if (data?.register) {
         localStorage.setItem("token", data.register.token)
         localStorage.setItem("role", data.register.user.role)
+        localStorage.setItem("userId", data.register.user._id)  // ← was missing; booking API needs this
         navigate("/")
       } else {
         setError("Registration failed. Please try again.")
