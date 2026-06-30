@@ -7,97 +7,63 @@ export default defineConfig({
   ],
   base: '/',
   build: {
-    target: 'es2018',        // Wider browser support than es2015, smaller output than esnext
+    target: 'es2018',
     sourcemap: false,
-    minify: 'terser',        // Terser produces smaller output than esbuild's default
+    minify: 'terser',
     terserOptions: {
       compress: {
-        drop_console: true,  // Remove all console.* calls
+        drop_console: true,
         drop_debugger: true,
         pure_funcs: ['console.log', 'console.warn', 'console.info'],
-        passes: 2,           // 2-pass compression for extra savings
+        passes: 2,
       },
       mangle: {
-        safari10: true,      // Fix Safari 10 bug with let in for loops
+        safari10: true,
       },
     },
-    cssCodeSplit: true,      // Each chunk gets its own CSS — only load what you need
-    reportCompressedSize: false, // Faster builds (we use a separate plugin for analysis)
+    cssCodeSplit: true,
+    reportCompressedSize: false,
     chunkSizeWarningLimit: 800,
     rollupOptions: {
       input: 'index.html',
       output: {
-        // Keep hashed filenames for long-term caching
         entryFileNames: 'assets/[name]-[hash].js',
         chunkFileNames: 'assets/[name]-[hash].js',
         assetFileNames: 'assets/[name]-[hash][extname]',
-        manualChunks(id) {
-          // ── Core React runtime (loads on every route) ───────────────────
-          if (id.includes('node_modules/react/') ||
-              id.includes('node_modules/react-dom/') ||
-              id.includes('node_modules/react-router-dom/') ||
-              id.includes('node_modules/scheduler/')) {
-            return 'vendor-react'
-          }
+        /*
+         * IMPORTANT: Use the object form (entry-point arrays), NOT a function.
+         *
+         * The function form with id.includes() can miss Apollo's transitive deps
+         * (e.g. @apollo/client/link/context, ts-invariant, @wry/equality, optimism).
+         * When those land in a different chunk, Apollo's React context is split across
+         * two module instances — causing Invariant Violation #54:
+         *   "Could not find 'client' in context. Wrap the root in <ApolloProvider>."
+         *
+         * The object form hands Rollup explicit entry points and it automatically
+         * co-locates ALL transitive deps in the same chunk — safe for React context.
+         */
+        manualChunks: {
+          // Core React runtime — loaded on every route
+          'vendor-react':  ['react', 'react-dom', 'react-router-dom'],
 
-          // ── State management (loads on every route) ──────────────────────
-          if (id.includes('node_modules/@reduxjs/') ||
-              id.includes('node_modules/react-redux/') ||
-              id.includes('node_modules/immer/') ||
-              id.includes('node_modules/redux/')) {
-            return 'vendor-redux'
-          }
+          // State management — loaded on every route
+          'vendor-redux':  ['@reduxjs/toolkit', 'react-redux'],
 
-          // ── GraphQL / Apollo (loads on every route that queries) ─────────
-          if (id.includes('node_modules/@apollo/') ||
-              id.includes('node_modules/graphql/') ||
-              id.includes('node_modules/zen-observable/') ||
-              id.includes('node_modules/optimism/')) {
-            return 'vendor-apollo'
-          }
+          // Apollo + GraphQL — Rollup resolves @apollo/client/link/*, ts-invariant,
+          // @wry/* etc. together so they all share the same module instance
+          'vendor-apollo': ['@apollo/client', 'graphql'],
 
-          // ── Framer Motion (animations — needed on most pages) ────────────
-          if (id.includes('node_modules/framer-motion/')) {
-            return 'vendor-motion'
-          }
+          // Framer Motion — used on most pages
+          'vendor-motion': ['framer-motion'],
 
-          // ── MUI + Emotion (used on forms / seller pages only) ────────────
-          if (id.includes('node_modules/@mui/') ||
-              id.includes('node_modules/@emotion/')) {
-            return 'vendor-mui'
-          }
+          // MUI + Emotion — used on forms and seller pages
+          'vendor-mui':    ['@mui/material', '@mui/icons-material', '@emotion/react', '@emotion/styled'],
 
-          // ── Recharts (only on SellerAnalytics page) ──────────────────────
-          // With lazy-loading this chunk will NOT be fetched until that page
-          if (id.includes('node_modules/recharts/') ||
-              id.includes('node_modules/d3-') ||
-              id.includes('node_modules/victory-')) {
-            return 'vendor-charts'
-          }
+          // Recharts — only fetched when /seller/analytics lazy-loads
+          'vendor-charts': ['recharts'],
 
-          // ── Three.js + R3F (3D — heavy, deferred until needed) ───────────
-          // With lazy-loading this chunk will NOT be fetched until that route
-          if (id.includes('node_modules/three/') ||
-              id.includes('node_modules/@react-three/') ||
-              id.includes('node_modules/troika-') ||
-              id.includes('node_modules/meshline/')) {
-            return 'vendor-three'
-          }
-
-          // ── Utility libraries ─────────────────────────────────────────────
-          if (id.includes('node_modules/axios/') ||
-              id.includes('node_modules/lucide-react/') ||
-              id.includes('node_modules/react-toastify/') ||
-              id.includes('node_modules/react-spinners/') ||
-              id.includes('node_modules/react-confetti/')) {
-            return 'vendor-utils'
-          }
-
-          // ── Date / Calendar ───────────────────────────────────────────────
-          if (id.includes('node_modules/react-date-range/') ||
-              id.includes('node_modules/date-fns/')) {
-            return 'vendor-dates'
-          }
+          // Three.js + R3F — only fetched when a 3D route lazy-loads
+          'vendor-three':  ['three', '@react-three/fiber', '@react-three/drei'],
         },
       },
     },
