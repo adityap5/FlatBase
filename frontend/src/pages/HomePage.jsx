@@ -143,8 +143,8 @@ const HomePage = () => {
                 viewport={{ once: true }}
                 className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-gutter"
               >
-                {popularFlats.slice(0, 4).map((flat) => (
-                  <FlatCard key={`pop-${flat._id}`} flat={flat} />
+                {popularFlats.slice(0, 4).map((flat, idx) => (
+                  <FlatCard key={`pop-${flat._id}`} flat={flat} isFirst={idx === 0} />
                 ))}
               </motion.div>
             </div>

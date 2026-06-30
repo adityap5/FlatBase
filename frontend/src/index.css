@@ -3,10 +3,20 @@
 @tailwind utilities;
 
 @layer base {
+  /* font-display: swap ensures text is visible during font load (no FOIT) */
+  @font-face {
+    font-family: 'Hanken Grotesk';
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Playfair Display';
+    font-display: swap;
+  }
+
   body {
     background-color: #030305;
     color: #f8fafc;
-    font-family: 'Hanken Grotesk', sans-serif;
+    font-family: 'Hanken Grotesk', system-ui, -apple-system, sans-serif;
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
   }
@@ -82,30 +92,53 @@
 
 /* Radial Glow Blobs */
 @keyframes blob-float {
-  0% {
-    transform: translate(0px, 0px) scale(1);
-  }
-  33% {
-    transform: translate(30px, -50px) scale(1.1);
-  }
-  66% {
-    transform: translate(-20px, 20px) scale(0.95);
-  }
-  100% {
-    transform: translate(0px, 0px) scale(1);
-  }
+  0%   { transform: translate(0px, 0px) scale(1); }
+  33%  { transform: translate(30px, -50px) scale(1.1); }
+  66%  { transform: translate(-20px, 20px) scale(0.95); }
+  100% { transform: translate(0px, 0px) scale(1); }
 }
 
 .glowing-blob {
   position: absolute;
   border-radius: 9999px;
-  filter: blur(120px);
-  opacity: 0.15;
+  /*
+    Reduced from blur(120px) → blur(80px).
+    Gaussian blur is O(r²) — 80px is ~56% cheaper than 120px on the GPU
+    while still producing a visually identical ambient glow effect.
+  */
+  filter: blur(80px);
+  opacity: 0.18;
   mix-blend-mode: screen;
   pointer-events: none;
-  animation: blob-float 15s infinite alternate ease-in-out;
-  /* Promote to GPU compositor layer to avoid repaints on animation */
+  animation: blob-float 18s infinite alternate ease-in-out;
+  /*
+    will-change: transform tells the browser to promote this element to its
+    own compositor layer, avoiding main-thread repaints during the animation.
+    Only set it here (on elements that ARE animating).
+  */
   will-change: transform;
+}
+
+/* ── Reduced Motion ─────────────────────────────────────────────────────────
+   Respects the user's OS-level "reduce motion" preference.
+   Disabling costly animations here improves both accessibility (WCAG 2.1 §2.3.3)
+   and performance for those users.
+*/
+@media (prefers-reduced-motion: reduce) {
+  .glowing-blob {
+    animation: none;
+    will-change: auto; /* release GPU layer when not animating */
+  }
+
+  /* Freeze framer-motion transitions */
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* Custom transitions and interactive details */

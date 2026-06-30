@@ -3,7 +3,15 @@ import { motion } from "framer-motion"
 import { Link } from "react-router-dom"
 import { MapPin, Star } from "lucide-react"
 
-const FlatCard = memo(function FlatCard({ flat }) {
+/**
+ * FlatCard — individual property listing card.
+ *
+ * @param {object}  flat      — flat data object
+ * @param {boolean} isFirst   — pass true for the FIRST card in the grid so it gets
+ *                              fetchpriority="high" + eager loading (above-fold LCP hint).
+ *                              All other cards use lazy loading (default).
+ */
+const FlatCard = memo(function FlatCard({ flat, isFirst = false }) {
   return (
     <motion.div
       variants={{
@@ -13,13 +21,15 @@ const FlatCard = memo(function FlatCard({ flat }) {
       whileHover={{ y: -5 }}
       className="motionsite-card rounded-3xl overflow-hidden flex flex-col h-full group shadow-xl border border-glass-border"
     >
-      <div className="relative h-40 sm:h-48 md:h-64 overflow-hidden z-0">
+      {/* Image wrapper — explicit aspect-ratio prevents CLS while image loads */}
+      <div className="relative h-40 sm:h-48 md:h-64 overflow-hidden z-0" style={{ aspectRatio: '16/10' }}>
         <img
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
           src={flat.images || "/placeholder.svg"}
           alt={flat.name || `Rooms in ${flat.location}`}
-          loading="lazy"
-          decoding="async"
+          loading={isFirst ? "eager" : "lazy"}
+          fetchpriority={isFirst ? "high" : "auto"}
+          decoding={isFirst ? "sync" : "async"}
           width="400"
           height="256"
         />
@@ -41,7 +51,7 @@ const FlatCard = memo(function FlatCard({ flat }) {
       <div className="p-3.5 sm:p-5 md:p-6 flex flex-col flex-grow">
         {/* Location */}
         <div className="flex items-center gap-1.5 text-on-surface-variant mb-1.5">
-          <MapPin size={10} className="text-primary" />
+          <MapPin size={10} className="text-primary" aria-hidden="true" />
           <span className="font-body text-[8px] sm:text-[10px] uppercase tracking-widest font-bold opacity-80">{flat.location}</span>
         </div>
 
