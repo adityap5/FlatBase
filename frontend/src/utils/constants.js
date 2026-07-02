@@ -4,19 +4,9 @@
  * Extracted from AddFlatPage.jsx to avoid duplication.
  */
 
-export const LOCATIONS = [
-  'Chandigarh',
-  'Agra',
-  'Jaipur',
-  'NewDelhi',
-  'Banglore',
-  'Hyderabad',
-  'Haryana',
-  'Mathura',
-  'Varanasi',
-  'Shimla',
-  'Noida',
-];
+import { CITY_COORDINATES } from './cityCoordinates';
+
+export const LOCATIONS = Object.keys(CITY_COORDINATES).sort();
 
 export const AMENITIES = [
   'WiFi',

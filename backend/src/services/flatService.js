@@ -34,14 +34,20 @@ async function getPopularFlats() {
 
 async function getPopularCities() {
   const cities = await Flat.aggregate([
-    { $group: { _id: '$location', count: { $sum: '$bookingCount' } } },
-    { $sort: { count: -1 } },
-    { $limit: 3 },
+    { 
+      $group: { 
+        _id: '$location', 
+        count: { $sum: '$bookingCount' },
+        flatCount: { $sum: 1 }
+      } 
+    },
+    { $sort: { count: -1 } }
   ]);
 
   return cities.map((c) => ({
     city: c._id,
     count: c.count,
+    flatCount: c.flatCount,
     image: getCityImage(c._id),
   }));
 }

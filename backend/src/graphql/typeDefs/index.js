@@ -85,6 +85,7 @@ const typeDefs = `#graphql
   type CityStats {
     city: String!
     count: Int!
+    flatCount: Int!
     image: String
   }
 

@@ -70,8 +70,13 @@ export const GET_POPULAR_FLATS = gql`
 `;
 
 export const GET_POPULAR_CITIES = gql`
-  query PopularCities {
-    popularCities { city count image }
+  query GetPopularCities {
+    popularCities {
+      city
+      count
+      flatCount
+      image
+    }
   }
 `;
 
