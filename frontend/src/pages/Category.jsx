@@ -1,11 +1,9 @@
-"use client"
-
 import { useState, useEffect, useRef, useCallback } from "react"
 import { motion } from "framer-motion"
 import { useQuery } from "@apollo/client"
-import { GET_FLATS } from "../graphql/queries"
-import FlatCard from "../components/FlatCardName"
-import HomeCardShimmer from "../components/HomeCardShimmer"
+import { GET_FLATS } from "../services/queries"
+import FlatCard from "../components/cards/FlatCard"
+import HomeCardShimmer from "../components/skeletons/HomeCardShimmer"
 import { Search, SlidersHorizontal, X, Loader2 } from "lucide-react"
 
 const Category = () => {

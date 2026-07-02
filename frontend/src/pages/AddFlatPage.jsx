@@ -1,27 +1,14 @@
-"use client"
-
 import { useState } from "react"
 import { motion } from "framer-motion"
 import { useNavigate } from "react-router-dom"
 import { Home, MapPin, Users, DollarSign, FileText, Upload, Loader2, Wifi, Car, Utensils, Wind, Waves, ShieldCheck, Dumbbell, Tv, CheckSquare } from "lucide-react"
 import Confetti from "react-confetti"
-import { addFlat } from "../graphql/queries"
+import { addFlat } from "../services/queries"
+import Modal from "../components/ui/Modal"
+import { LOCATIONS, AMENITIES } from "../utils/constants"
 
-const Modal = ({ message, type, onClose }) => (
-  <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50">
-    <div className={`bg-white rounded-3xl p-6 shadow-xl text-center w-[90%] max-w-md border border-gray-100`}>
-      <p className={`text-base font-bold mb-6 ${type === "error" ? "text-red-600" : "text-[#0B5A42]"}`}>
-        {message}
-      </p>
-      <button
-        onClick={onClose}
-        className="px-6 py-2.5 bg-[#0B5A42] text-white rounded-xl hover:bg-[#186a54] transition shadow-md shadow-[#0B5A42]/10 text-xs font-bold uppercase tracking-wider"
-      >
-        OK
-      </button>
-    </div>
-  </div>
-)
+const AMENITY_ICONS = { WiFi: Wifi, Parking: Car, Kitchen: Utensils, AC: Wind, Pool: Waves, Security: ShieldCheck, Gym: Dumbbell, TV: Tv }
+
 
 const AddFlatPage = () => {
   const [name, setName] = useState("")
@@ -65,16 +52,7 @@ const AddFlatPage = () => {
     )
   }
 
-  const AVAILABLE_AMENITIES = [
-    { id: "WiFi", icon: Wifi },
-    { id: "Parking", icon: Car },
-    { id: "Kitchen", icon: Utensils },
-    { id: "AC", icon: Wind },
-    { id: "Pool", icon: Waves },
-    { id: "Security", icon: ShieldCheck },
-    { id: "Gym", icon: Dumbbell },
-    { id: "TV", icon: Tv },
-  ]
+  const AVAILABLE_AMENITIES = AMENITIES.map((id) => ({ id, icon: AMENITY_ICONS[id] }))
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -161,16 +139,21 @@ const AddFlatPage = () => {
     setShowConfetti(false)
   }
 
-  const locations = [
-    "Chandigarh", "Agra", "Jaipur", "NewDelhi", "Banglore", "Hyderabad",
-    "Haryana", "Mathura", "Varanasi", "Shimla", "Noida"
-  ]
+  const locations = LOCATIONS
 
   return (
     <div className="max-w-4xl mx-auto relative">
       {showConfetti && <Confetti width={window.innerWidth} height={window.innerHeight} />}
-      {showModal && <Modal message={modalMessage} type={modalType} onClose={closeModal} />}
-
+      {showModal && (
+        <Modal
+          message={modalMessage}
+          onClose={closeModal}
+          isOpen={showModal}
+          setIsOpen={(v) => { if (!v) closeModal() }}
+        >
+          <p className={`text-base font-bold ${modalType === "error" ? "text-red-600" : "text-[#0B5A42]"}`}>{modalMessage}</p>
+        </Modal>
+      )}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
         <div className="bg-white rounded-3xl border border-gray-100 p-8 shadow-sm">
           <form onSubmit={handleSubmit} className="space-y-6">

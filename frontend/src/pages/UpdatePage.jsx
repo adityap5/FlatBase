@@ -1,11 +1,10 @@
-"use client"
 
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { useNavigate, useParams } from "react-router-dom"
-import { getFlat, updateListing } from "../graphql/queries"
+import { getFlat, updateListing } from "../services/queries"
 import { Home, MapPin, Users, DollarSign, FileText, Loader2, AlertCircle, ArrowLeft, Wifi, Car, Utensils, Wind, Waves, ShieldCheck, Dumbbell, Tv, CheckSquare } from "lucide-react"
-import Button from "../components/Button"
+import Button from "../components/ui/Button"
 
 function UpdatePage() {
   const { id } = useParams()

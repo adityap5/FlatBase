@@ -1,13 +1,12 @@
-"use client"
 
 import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import { useSelector, useDispatch } from "react-redux"
 import { useLocation, useNavigate } from "react-router-dom"
 import { SlidersHorizontal, ArrowUpDown, Search, MapPin } from "lucide-react"
-import FlatCard from "../components/FlatCard"
-import HomeCardShimmer from "../components/HomeCardShimmer"
-import { fetchFlats, fetchFlatsByLocation } from "../redux/flatsSlice"
+import FlatCard from "../components/cards/FlatCard"
+import HomeCardShimmer from "../components/skeletons/HomeCardShimmer"
+import { fetchFlats, fetchFlatsByLocation } from "../store/flatsSlice"
 
 const SearchResultsPage = () => {
   const dispatch = useDispatch()

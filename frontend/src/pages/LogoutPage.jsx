@@ -1,10 +1,9 @@
-"use client"
 
 import { motion } from "framer-motion"
 import { Link, useNavigate } from "react-router-dom"
 import { useEffect } from "react"
 import { LogOut, Home, ArrowRight } from "lucide-react"
-import Button from "../components/Button"
+import Button from "../components/ui/Button"
 
 const LogoutPage = () => {
   const navigate = useNavigate();

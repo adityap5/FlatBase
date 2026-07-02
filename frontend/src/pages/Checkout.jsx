@@ -1,40 +1,10 @@
-"use client"
-
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { useNavigate, useParams } from "react-router-dom"
 import { useMutation } from "@apollo/client"
-import { gql } from "@apollo/client"
-import { getBooking } from "../graphql/queries"
+import { getBooking, CREATE_ORDER, VERIFY_PAYMENT } from "../services/queries"
+import { RAZORPAY_KEY } from "../config/api"
 import { CreditCard, Shield, MapPin, Loader2, ArrowLeft } from "lucide-react"
-
-// GraphQL Mutations for Razorpay
-const CREATE_ORDER = gql`
-  mutation CreateOrder($amount: Float!, $currency: String) {
-    createOrder(amount: $amount, currency: $currency) {
-      id
-      amount
-      currency
-      receipt
-    }
-  }
-`
-
-const VERIFY_PAYMENT = gql`
-  mutation VerifyPayment(
-    $razorpay_order_id: String!
-    $razorpay_payment_id: String!
-    $razorpay_signature: String!
-    $bookingId: ID!
-  ) {
-    verifyPayment(
-      razorpay_order_id: $razorpay_order_id
-      razorpay_payment_id: $razorpay_payment_id
-      razorpay_signature: $razorpay_signature
-      bookingId: $bookingId
-    )
-  }
-`
 
 function Checkout() {
   const navigate = useNavigate()
@@ -107,7 +77,7 @@ function Checkout() {
       const order = orderData.createOrder
 
       const options = {
-        key: "rzp_test_POjN4Ulq8Q6my8",
+        key: RAZORPAY_KEY,
         amount: order.amount,
         currency: order.currency,
         name: "Flat Booking",

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { updateSellerProfile, getUser } from "../graphql/queries"
+import { updateSellerProfile, getUser } from "../services/queries"
 import { User, Mail, Phone, FileText, CheckCircle, Loader2 } from "lucide-react"
 
 export default function SellerProfilePage() {

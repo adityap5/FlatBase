@@ -1,8 +1,7 @@
-"use client"
 
 import { useState } from "react"
 import { motion } from "framer-motion"
-import { register } from "../graphql/queries" 
+import { register } from "../services/queries" 
 import { useNavigate, Link } from "react-router-dom"
 import { Mail, Lock, User, UserPlus, Building, Users, Loader2, AlertCircle } from "lucide-react"
 

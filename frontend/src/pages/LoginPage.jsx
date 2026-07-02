@@ -1,8 +1,7 @@
-"use client"
-
 import { useState } from "react"
 import { motion } from "framer-motion"
-import { login } from "../graphql/queries" 
+import { login } from "../services/queries"
+import { setAuthData } from "../utils/auth"
 import { useNavigate, Link } from "react-router-dom"
 import { Mail, Lock, LogIn, AlertCircle, Loader2 } from "lucide-react"
 
@@ -29,9 +28,7 @@ const LoginPage = () => {
       })
 
       if (data?.login) {
-        localStorage.setItem("token", data.login.token)
-        localStorage.setItem("role", data.login.user.role)
-        localStorage.setItem("userId", data.login.user._id)
+        setAuthData({ token: data.login.token, user: data.login.user })
         navigate("/")
       } else {
         setError("Login failed. Please try again.")

@@ -1,10 +1,9 @@
-"use client"
 
 import { useEffect, useState } from "react"
-import { getMyListings, deleteListing } from "../graphql/queries"
+import { getMyListings, deleteListing } from "../services/queries"
 import { useNavigate, Link } from "react-router-dom"
 import { MapPin, Users, DollarSign, Pencil, Trash2, Plus, AlertCircle, Search, Filter } from "lucide-react"
-import Modal from "../components/Modal"
+import Modal from "../components/ui/Modal"
 
 function MyListings() {
   const [listings, setListings] = useState([])
