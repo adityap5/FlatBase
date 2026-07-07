@@ -62,8 +62,7 @@ export default defineConfig({
           // Recharts — only fetched when /seller/analytics lazy-loads
           'vendor-charts': ['recharts'],
 
-          // Three.js + R3F — only fetched when a 3D route lazy-loads
-          'vendor-three':  ['three', '@react-three/fiber', '@react-three/drei'],
+
         },
       },
     },
