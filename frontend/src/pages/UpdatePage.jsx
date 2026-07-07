@@ -1,11 +1,11 @@
-"use client"
 
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { useNavigate, useParams } from "react-router-dom"
-import { getFlat, updateListing } from "../graphql/queries"
+import { getFlat, updateListing } from "../services/queries"
 import { Home, MapPin, Users, DollarSign, FileText, Loader2, AlertCircle, ArrowLeft, Wifi, Car, Utensils, Wind, Waves, ShieldCheck, Dumbbell, Tv, CheckSquare } from "lucide-react"
-import Button from "../components/Button"
+import Button from "../components/ui/Button"
+import { LOCATIONS} from "../utils/constants"
 
 function UpdatePage() {
   const { id } = useParams()
@@ -96,19 +96,7 @@ function UpdatePage() {
     }
   }
 
-  const locations = [
-    "Chandigarh",
-    "Agra",
-    "Jaipur",
-    "NewDelhi",
-    "Banglore",
-    "Hyderabad",
-    "Haryana",
-    "Mathura",
-    "Varanasi",
-    "Shimla",
-    "Noida",
-  ]
+
 
   const handleAmenityToggle = (amenity) => {
     setAmenities(prev =>
@@ -234,7 +222,7 @@ function UpdatePage() {
                   className="w-full px-4 py-3 rounded-xl bg-gray-50/50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#0B5A42]/10 focus:border-[#0B5A42] focus:bg-white transition-all text-sm font-semibold text-gray-800 placeholder:text-gray-400"
                   required
                 >
-                  {locations.map((loc) => (
+                  {LOCATIONS.map((loc) => (
                     <option key={loc} value={loc}>
                       {loc}
                     </option>

@@ -2,8 +2,8 @@ import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { useNavigate, useParams } from "react-router-dom"
 import { useQuery, useMutation } from "@apollo/client"
-import { GET_FLAT, CREATE_BOOKING } from "../graphql/queries"
-import { getFlatReviews } from "../graphql/queries"
+import { GET_FLAT, CREATE_BOOKING } from "../services/queries"
+import { getFlatReviews } from "../services/queries"
 import {
   Users,
   MapPin,
@@ -22,7 +22,7 @@ import {
   MessageSquare,
   ShieldAlert
 } from "lucide-react"
-import MonthCalendar from "../components/MonthCalendar"
+import MonthCalendar from "../components/shared/MonthCalendar"
 
 const ICON_MAP = {
   "WiFi": Wifi,

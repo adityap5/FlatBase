@@ -3,12 +3,12 @@ import { useEffect, useMemo, Suspense, lazy, memo } from "react"
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom"
 import { AnimatePresence } from "framer-motion"
 import ReactGA from "react-ga4"
-import NavScrollTop from "./components/NavScrollTop"
-import Navbar from "./components/Navbar"
-import PageTransition from "./components/PageTransition"
-import LoadingScreen from "./components/LoadingScreen"
-import Error404 from "./components/Error404"
-import { Footer } from "./components/Footer"
+import NavScrollTop from "./components/shared/NavScrollTop"
+import Navbar from "./components/layout/Navbar"
+import PageTransition from "./components/ui/PageTransition"
+import LoadingScreen from "./components/ui/LoadingScreen"
+import Error404 from "./components/ui/Error404"
+import { Footer } from "./components/layout/Footer"
 
 // lazy imports...
 const HomePage = lazy(() => import("./pages/HomePage"))
@@ -23,11 +23,11 @@ const MyListings = lazy(() => import("./pages/MyListings"))
 const Checkout = lazy(() => import("./pages/Checkout"))
 const UpdatePage = lazy(() => import("./pages/UpdatePage"))
 const Category = lazy(() => import("./pages/Category"))
-const Success = lazy(() => import("./components/Success"))
+const Success = lazy(() => import("./components/ui/Success"))
 const SellerDashboard = lazy(() => import("./pages/SellerDashboard"))
 const SellerProfilePage = lazy(() => import("./pages/SellerProfilePage"))
 const SellerAnalytics = lazy(() => import("./pages/SellerAnalytics"))
-const SellerLayout = lazy(() => import("./components/SellerLayout"))
+const SellerLayout = lazy(() => import("./components/layout/SellerLayout"))
 
 // ── Background blobs are static — memoize so they never re-render ──────────
 const BackgroundBlobs = memo(function BackgroundBlobs() {

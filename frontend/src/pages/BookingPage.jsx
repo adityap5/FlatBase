@@ -1,39 +1,9 @@
 import { useState, useEffect } from "react"
 import { MapPin, Calendar, Trash2, CreditCard, Loader2, AlertCircle, Filter, Search, Star, MessageSquare, ArrowRight } from "lucide-react"
 import { Link } from "react-router-dom"
-import { getBookings, deleteBooking, addReview } from "../graphql/queries"
-
-const Button = ({ name, onClick, css = "", variant = "primary", fullWidth = false, ...props }) => {
-  const baseClasses = "px-4 py-3 rounded-2xl font-body font-bold text-xs uppercase tracking-wider transition-all duration-300 active:scale-[0.98] flex items-center justify-center gap-1.5"
-  const variantClasses = variant === "primary"
-    ? "bg-primary text-on-primary hover:shadow-[0_0_15px_rgba(0,245,255,0.3)] hover:brightness-110"
-    : "bg-surface-container border border-glass-border text-on-surface hover:text-white hover:bg-glass-white hover:border-primary"
-  const widthClass = fullWidth ? "w-full" : ""
-
-  return (
-    <button
-      onClick={onClick}
-      className={`${baseClasses} ${variantClasses} ${widthClass} ${css}`}
-      {...props}
-    >
-      {name}
-    </button>
-  )
-}
-
-const Modal = ({ isOpen, setIsOpen, header, footer, children }) => {
-  if (!isOpen) return null
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
-      <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" onClick={() => setIsOpen(false)} />
-      <div className="relative motionsite-card rounded-3xl border border-glass-border shadow-2xl max-w-md w-full p-8 z-10">
-        {header && <div className="mb-6">{header}</div>}
-        <div className="mb-6">{children}</div>
-        {footer && <div className="mt-8">{footer}</div>}
-      </div>
-    </div>
-  )
-}
+import { getBookings, deleteBooking, addReview } from "../services/queries"
+import Button from "../components/ui/Button"
+import Modal from "../components/ui/Modal"
 
 const BookingPage = () => {
   const [bookings, setBookings] = useState([])

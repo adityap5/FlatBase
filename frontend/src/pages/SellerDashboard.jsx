@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { getSellerAnalytics, getSellerBookings } from "../graphql/queries"
+import { getSellerAnalytics, getSellerBookings } from "../services/queries"
 import { motion } from "framer-motion"
 import { 
   Building, 
