@@ -1,0 +1,7 @@
+import{c as a}from"./index-C7zuadLy.js";
+/**
+ * @license lucide-react v0.510.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */const y=a("square-check-big",[["path",{d:"M21 10.5V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h12.5",key:"1uzm8b"}],["path",{d:"m9 11 3 3L22 4",key:"1pflzl"}]]),x={Agra:{x:101.5,y:101.4},NewDelhi:{x:92.2,y:85.8},Delhi:{x:92.2,y:85.8},Jaipur:{x:78.7,y:104.1},Hyderabad:{x:106.4,y:201.7},Mumbai:{x:48.9,y:184.4},Bangalore:{x:97.3,y:246.9},Bengaluru:{x:97.3,y:246.9},Chennai:{x:124.7,y:245.8},Kolkata:{x:207.6,y:148.6},Pune:{x:59,y:190.1},Ahmedabad:{x:45.8,y:144},Surat:{x:48.5,y:162.9},Lucknow:{x:131.6,y:104.8},Kanpur:{x:125.3,y:108.9},Nagpur:{x:112.6,y:163.2},Indore:{x:79.5,y:147.1},Bhopal:{x:95.4,y:141.5},Patna:{x:174.5,y:117.6},Vadodara:{x:52,y:151.3},Ghaziabad:{x:95.8,y:86.1},Chandigarh:{x:88.9,y:65},Kochi:{x:83.7,y:278.1},Goa:{x:61.7,y:223.1},Panaji:{x:58.7,y:221.1},Amritsar:{x:69.4,y:55.8},Varanasi:{x:152.4,y:120.5},Coimbatore:{x:90.7,y:266.9},Visakhapatnam:{x:154.9,y:198.6},Guwahati:{x:242.1,y:112},Dehradun:{x:101.7,y:69.3},Udaipur:{x:57.5,y:128},Shimla:{x:92.9,y:61.2},Manali:{x:93.1,y:49.5},Rishikesh:{x:104.1,y:71.6},Mysore:{x:87.5,y:253.8},Mysuru:{x:87.5,y:253.8},Noida:{x:95.2,y:87.5},Gurgaon:{x:91.4,y:88.3},Gurugram:{x:91.4,y:88.3}},r=Object.keys(x).sort(),i=["WiFi","Parking","Kitchen","AC","Pool","Security","Gym","TV"];export{i as A,x as C,r as L,y as S};

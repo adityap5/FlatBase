@@ -30,18 +30,7 @@ export default defineConfig({
         entryFileNames: 'assets/[name]-[hash].js',
         chunkFileNames: 'assets/[name]-[hash].js',
         assetFileNames: 'assets/[name]-[hash][extname]',
-        /*
-         * IMPORTANT: Use the object form (entry-point arrays), NOT a function.
-         *
-         * The function form with id.includes() can miss Apollo's transitive deps
-         * (e.g. @apollo/client/link/context, ts-invariant, @wry/equality, optimism).
-         * When those land in a different chunk, Apollo's React context is split across
-         * two module instances — causing Invariant Violation #54:
-         *   "Could not find 'client' in context. Wrap the root in <ApolloProvider>."
-         *
-         * The object form hands Rollup explicit entry points and it automatically
-         * co-locates ALL transitive deps in the same chunk — safe for React context.
-         */
+        
         manualChunks: {
           // Core React runtime — loaded on every route
           'vendor-react':  ['react', 'react-dom', 'react-router-dom'],
@@ -61,8 +50,6 @@ export default defineConfig({
 
           // Recharts — only fetched when /seller/analytics lazy-loads
           'vendor-charts': ['recharts'],
-
-
         },
       },
     },
