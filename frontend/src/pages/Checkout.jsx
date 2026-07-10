@@ -63,14 +63,9 @@ function Checkout() {
     }
 
     try {
-      const securityDeposit = 999
-      const advancePayment = Math.round(booking.totalPrice / parseInt(booking.timePeriod || "1"))
-      const totalAmount = booking.totalPrice + securityDeposit + advancePayment
-
       const { data: orderData } = await createOrder({
         variables: {
-          amount: totalAmount,
-          currency: "INR",
+          bookingId: booking._id,
         },
       })
 

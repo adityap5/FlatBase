@@ -192,8 +192,8 @@ export const ADD_REVIEW = gql`
 
 // Razorpay mutations — previously defined inline in Checkout.jsx, now centralised here
 export const CREATE_ORDER = gql`
-  mutation CreateOrder($amount: Float!, $currency: String) {
-    createOrder(amount: $amount, currency: $currency) {
+  mutation CreateOrder($bookingId: ID!) {
+    createOrder(bookingId: $bookingId) {
       id amount currency receipt
     }
   }

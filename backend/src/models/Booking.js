@@ -30,6 +30,10 @@ const BookingSchema = new mongoose.Schema({
     type: String,
     default: '',
   },
+  orderId: {
+    type: String,
+    default: '',
+  },
   startDate: {
     type: String, // "YYYY-MM"
     default: '',

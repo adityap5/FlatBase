@@ -206,6 +206,10 @@ async function markBookingPaid(bookingId, paymentId) {
   );
 }
 
+async function updateBookingOrderId(bookingId, orderId) {
+  return Booking.findByIdAndUpdate(bookingId, { orderId }, { new: true });
+}
+
 module.exports = {
   getMyBookings,
   getBookingById,
@@ -216,4 +220,5 @@ module.exports = {
   cancelBooking,
   confirmPaymentAtomic,
   markBookingPaid,
+  updateBookingOrderId,
 };

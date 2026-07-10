@@ -27,6 +27,40 @@ connectDB();
   app.use(limiter);
   app.use(cors());
 
+  // ── Webhook endpoint ───────────────────────────────────────────────────────
+  const { verifyWebhookSignature } = require('./src/services/paymentService');
+  const bookingService = require('./src/services/bookingService');
+  const BookingModel = require('./src/models/Booking');
+
+  app.post('/api/webhooks/razorpay', express.raw({ type: 'application/json' }), async (req, res) => {
+    try {
+      const signature = req.headers['x-razorpay-signature'];
+      if (!signature) return res.status(400).send('Missing signature');
+
+      const isValid = verifyWebhookSignature(req.body, signature);
+      if (!isValid) return res.status(400).send('Invalid signature');
+
+      const event = JSON.parse(req.body.toString());
+
+      if (event.event === 'order.paid' || event.event === 'payment.captured') {
+        const orderId = event.payload.payment?.entity?.order_id || event.payload.order?.entity?.id;
+        const paymentId = event.payload.payment?.entity?.id;
+
+        if (orderId && paymentId) {
+          const booking = await BookingModel.findOne({ orderId });
+          if (booking) {
+            await bookingService.confirmPaymentAtomic(booking._id, paymentId);
+            logger.info(`Webhook confirmed order ${orderId} for booking ${booking._id}`);
+          }
+        }
+      }
+      res.status(200).send('OK');
+    } catch (err) {
+      logger.error('Webhook processing failed', err);
+      res.status(500).send('Webhook Error');
+    }
+  });
+
   // ── GraphQL endpoint ───────────────────────────────────────────────────────
   app.use(
     '/graphql',
