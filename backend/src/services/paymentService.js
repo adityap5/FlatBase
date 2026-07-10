@@ -29,7 +29,7 @@ function getRazorpay() {
  */
 async function createOrder(amount, currency = 'INR') {
   return getRazorpay().orders.create({
-    amount: amount * 100, // convert to paisa
+    amount: Math.round(amount * 100), // convert to paisa safely
     currency,
     receipt: `receipt_${Date.now()}`,
   });
@@ -44,7 +44,29 @@ function verifySignature(orderId, paymentId, signature) {
     .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
     .update(`${orderId}|${paymentId}`)
     .digest('hex');
-  return expected === signature;
+  try {
+    return crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(signature));
+  } catch (e) {
+    return false;
+  }
 }
 
-module.exports = { createOrder, verifySignature };
+/**
+ * Verifies Razorpay webhook HMAC signature.
+ * @param {Buffer} rawBody - Raw unparsed request body buffer
+ * @param {string} signature - x-razorpay-signature header
+ * @returns {boolean} true if signature matches
+ */
+function verifyWebhookSignature(rawBody, signature) {
+  const expected = crypto
+    .createHmac('sha256', process.env.RAZORPAY_WEBHOOK_SECRET)
+    .update(rawBody)
+    .digest('hex');
+  try {
+    return crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(signature));
+  } catch (e) {
+    return false;
+  }
+}
+
+module.exports = { createOrder, verifySignature, verifyWebhookSignature };

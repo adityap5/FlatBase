@@ -155,7 +155,7 @@ const typeDefs = `#graphql
     addReview(flat: ID!, user: ID!, rating: Int!, text: String): Review
 
     # Razorpay
-    createOrder(amount: Float!, currency: String): RazorpayOrder
+    createOrder(bookingId: ID!): RazorpayOrder
     verifyPayment(
       razorpay_order_id: String!
       razorpay_payment_id: String!

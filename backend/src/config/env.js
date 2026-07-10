@@ -15,6 +15,7 @@ const REQUIRED_VARS = [
   'CLOUDINARY_SECRET_KEY',
   'RAZORPAY_KEY_ID',
   'RAZORPAY_KEY_SECRET',
+  'RAZORPAY_WEBHOOK_SECRET',
 ];
 
 function validateEnv() {

@@ -21,9 +21,33 @@ function requireAuth(context) {
 }
 
 const paymentMutations = {
-  createOrder: async (_, { amount, currency = 'INR' }, context) => {
+  createOrder: async (_, { bookingId }, context) => {
     requireAuth(context);
-    return paymentService.createOrder(amount, currency);
+    const booking = await bookingService.getBookingById(bookingId);
+    
+    if (!booking) {
+      throw new GraphQLError('Booking not found', { extensions: { code: 'NOT_FOUND' } });
+    }
+    if (booking.user._id.toString() !== context.user.id.toString()) {
+      throw new GraphQLError('Unauthorized', { extensions: { code: 'FORBIDDEN' } });
+    }
+    if (booking.paymentStatus === 'paid') {
+      throw new GraphQLError('Booking already paid', { extensions: { code: 'BAD_REQUEST' } });
+    }
+
+    // Server-side amount calculation
+    const securityDeposit = 999;
+    const timePeriod = parseInt(booking.timePeriod || '1');
+    const advancePayment = Math.round(booking.totalPrice / timePeriod);
+    const totalAmount = booking.totalPrice + securityDeposit + advancePayment;
+
+    // We explicitly supersede any existing order to avoid ambiguity and ensure amount accuracy
+    const order = await paymentService.createOrder(totalAmount, 'INR');
+
+    // Bind the new order to the booking
+    await bookingService.updateBookingOrderId(bookingId, order.id);
+
+    return order;
   },
 
   verifyPayment: async (
@@ -33,6 +57,18 @@ const paymentMutations = {
   ) => {
     requireAuth(context);
 
+    const booking = await bookingService.getBookingById(bookingId);
+    if (!booking) {
+      throw new GraphQLError('Booking not found', { extensions: { code: 'NOT_FOUND' } });
+    }
+
+    // Backward compatibility for in-flight bookings & Strict Order-Booking Binding
+    if (!booking.orderId) {
+      await bookingService.updateBookingOrderId(bookingId, razorpay_order_id);
+    } else if (booking.orderId !== razorpay_order_id) {
+      throw new GraphQLError('Order ID mismatch. Potential replay attack.', { extensions: { code: 'BAD_REQUEST' } });
+    }
+
     const isValid = paymentService.verifySignature(
       razorpay_order_id,
       razorpay_payment_id,
@@ -41,7 +77,7 @@ const paymentMutations = {
 
     if (!isValid) {
       // Payment verification failed. Immediately release lock.
-      await bookingService.cancelBooking(bookingId, context.user._id);
+      await bookingService.cancelBooking(bookingId, context.user.id);
       throw new GraphQLError('Payment verification failed.', {
         extensions: { code: 'BAD_USER_INPUT' },
       });
