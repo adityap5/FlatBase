@@ -1,12 +1,5 @@
 'use strict';
 
-/**
- * src/utils/logger.js
- * Lightweight structured logger that writes JSON to stdout/stderr.
- * Drop-in replacement for console.log / console.error throughout the app.
- * Respects LOG_LEVEL env var: error | warn | info | debug  (default: info)
- */
-
 const LEVELS = { error: 0, warn: 1, info: 2, debug: 3 };
 const currentLevelName = (process.env.LOG_LEVEL || 'info').toLowerCase();
 const currentLevel = LEVELS[currentLevelName] ?? LEVELS.info;

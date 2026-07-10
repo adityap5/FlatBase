@@ -6,7 +6,7 @@ import { MapPin, Star } from "lucide-react"
 /**
  * FlatCard — individual property listing card.
  *
- * @param {object}  flat      — flat data object
+ * @param {object}  flat     
  * @param {boolean} isFirst   — pass true for the FIRST card in the grid so it gets
  *                              fetchpriority="high" + eager loading (above-fold LCP hint).
  *                              All other cards use lazy loading (default).

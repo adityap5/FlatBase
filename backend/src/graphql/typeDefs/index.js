@@ -1,11 +1,5 @@
 'use strict';
 
-/**
- * src/graphql/typeDefs/index.js
- * GraphQL SDL — type definitions only.
- * All field names and types are identical to the original schema.js to preserve the API contract.
- */
-
 const typeDefs = `#graphql
 
   type Seller {

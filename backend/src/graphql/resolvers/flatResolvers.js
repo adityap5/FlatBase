@@ -1,11 +1,5 @@
 'use strict';
 
-/**
- * src/graphql/resolvers/flatResolvers.js
- * Query and Mutation resolvers for the Flat type.
- * All DB logic delegated to flatService.
- */
-
 const { GraphQLError } = require('graphql');
 const flatService = require('../../services/flatService');
 
@@ -48,7 +42,6 @@ const flatMutations = {
   },
 };
 
-// Field-level resolver: guard against null/undefined price
 const flatFieldResolvers = {
   Flat: {
     price: (flat) =>

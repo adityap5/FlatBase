@@ -1,11 +1,5 @@
 'use strict';
 
-/**
- * src/services/flatService.js
- * All database operations related to Flat documents.
- * Resolvers call these functions; no HTTP/GraphQL concerns here.
- */
-
 const Flat = require('../models/Flat');
 const { getCityImage } = require('../utils/cityImages');
 
@@ -72,9 +66,6 @@ async function deleteFlatById(id) {
   return Flat.findByIdAndDelete(id);
 }
 
-/**
- * Increments bookingCount and, optionally, adds months to blockedMonths.
- */
 async function updateFlatAfterPayment(flatId, monthsToBlock = []) {
   if (monthsToBlock.length > 0) {
     return Flat.findByIdAndUpdate(flatId, {

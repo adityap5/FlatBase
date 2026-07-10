@@ -1,11 +1,5 @@
 'use strict';
 
-/**
- * src/graphql/resolvers/index.js
- * Merges all domain resolver maps into a single resolvers object
- * consumed by ApolloServer.
- */
-
 const { flatQueries, flatMutations, flatFieldResolvers } = require('./flatResolvers');
 const { userQueries, userMutations }                     = require('./userResolvers');
 const { bookingQueries, bookingMutations }               = require('./bookingResolvers');
@@ -26,7 +20,7 @@ const resolvers = {
     ...reviewMutations,
     ...paymentMutations,
   },
-  // Field-level resolvers
+
   ...flatFieldResolvers,
 };
 

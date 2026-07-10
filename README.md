@@ -18,6 +18,24 @@ password - ravi@gmail.com
 - Property Listing with Image Uploads
 - Responsive and Visually Appealing User Interface
 
+## Payment Flow & Race Condition Handling
+
+### Payment Flow Structure
+1. **Initialize Payment (Frontend)**: The user initiates a payment on the checkout page. The frontend sends a `bookingId` to the backend via the `createOrder` GraphQL mutation.
+2. **Server-Side Pricing & Order Creation**: The backend retrieves the booking, calculates the exact amount due (rent + security deposit + advance) securely, and creates an order via the Razorpay API.
+3. **Client-Side Checkout**: The frontend receives the Razorpay `order_id` and opens the Razorpay checkout portal for the user to complete the payment.
+4. **Fulfillment (Webhook & Verification)**: 
+   - Once payment is successful, Razorpay triggers the `order.paid` / `payment.captured` webhook directly to the backend.
+   - The frontend also calls the `verifyPayment` mutation with the payment signature.
+   - The backend securely verifies the HMAC signature using `crypto.timingSafeEqual` (using the raw buffer for webhooks to ensure accuracy). 
+   - Upon successful verification, the backend atomically confirms the payment and finalizes the booking.
+
+### Eliminating Race Conditions with Locking
+Handling payments on high-demand bookings often introduces race conditions, where two users attempt to book the same flat simultaneously. This is resolved via a **temporary lock and atomic updates**:
+
+1. **Temporary Lock (7-minute TTL)**: When a user starts a checkout, a temporary lock is placed on the requested flat for those specific dates. This prevents other users from booking the same dates while the user is completing the payment. An automated cron job continuously cleans up expired locks after 7 minutes if the payment is abandoned.
+2. **Atomic Idempotent Confirmation**: Both the webhook and the frontend validation rely on `confirmPaymentAtomic`. This method uses an atomic MongoDB conditional update (`findOneAndUpdate({ _id: bookingId, paymentStatus: { $ne: 'paid' } }, ...)`). If the webhook and frontend try to confirm the payment at the exact same millisecond, the database strictly allows only one update to succeed. The other request safely treats it as a no-op. This ensures no double-processing or state corruption occurs.
+
 ## Technologies Used
 
 ### Frontend

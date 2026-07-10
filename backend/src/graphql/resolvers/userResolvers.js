@@ -1,11 +1,5 @@
 'use strict';
 
-/**
- * src/graphql/resolvers/userResolvers.js
- * Query and Mutation resolvers for the User type.
- * All DB/auth logic delegated to userService.
- */
-
 const { GraphQLError } = require('graphql');
 const userService = require('../../services/userService');
 

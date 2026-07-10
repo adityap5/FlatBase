@@ -1,11 +1,5 @@
 'use strict';
 
-/**
- * src/utils/cityImages.js
- * Fallback image URLs for popular cities used by the popularCities resolver.
- * Extracted from graphql/schema.js to keep resolver code clean.
- */
-
 const CITY_IMAGES = {
   Delhi:
     'https://images.unsplash.com/photo-1587474260584-136574528ed5?auto=format&fit=crop&q=80',

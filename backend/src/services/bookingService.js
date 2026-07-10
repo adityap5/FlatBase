@@ -1,11 +1,5 @@
 'use strict';
 
-/**
- * src/services/bookingService.js
- * All database operations related to Booking documents,
- * including the seller analytics aggregation.
- */
-
 const Booking = require('../models/Booking');
 const Flat = require('../models/Flat');
 const Review = require('../models/Review');
@@ -47,7 +41,6 @@ async function getSellerAnalytics(sellerId) {
 
   const totalRevenue = bookings.reduce((sum, b) => sum + b.totalPrice, 0);
 
-  // Generate monthly data for the last 6 months
   const now = new Date();
   const monthlyData = [];
 
@@ -175,18 +168,13 @@ async function confirmPaymentAtomic(bookingId, paymentId) {
   const booking = await Booking.findOneAndUpdate(
     { _id: bookingId, paymentStatus: { $ne: 'paid' } },
     { $set: { paymentStatus: 'paid', paymentId: paymentId } },
-    { new: false } // returns the document BEFORE update
+    { new: false }
   );
 
   if (!booking) {
-    // If not found, it means it was already paid or doesn't exist. Someone else won the race or it's a duplicate webhook.
     return false;
   }
 
-  // Only the winner reaches here — safe to update Flat
-  // KNOWN RISK: Crash-window. If the process crashes right here, the booking is paid but the flat isn't blocked.
-  // This is an acceptable tradeoff avoiding replica-set transactions. Retries (e.g., from webhooks) will self-heal
-  // due to the idempotency check above returning false.
   await Flat.updateOne(
     { _id: booking.flat },
     {

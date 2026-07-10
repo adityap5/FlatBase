@@ -1,11 +1,5 @@
 'use strict';
 
-/**
- * src/graphql/resolvers/bookingResolvers.js
- * Query and Mutation resolvers for the Booking type.
- * All DB logic delegated to bookingService.
- */
-
 const { GraphQLError } = require('graphql');
 const bookingService = require('../../services/bookingService');
 

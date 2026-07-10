@@ -1,10 +1,5 @@
 'use strict';
 
-/**
- * src/services/reviewService.js
- * All database operations related to Review documents.
- */
-
 const Review = require('../models/Review');
 
 async function getFlatReviews(flatId) {

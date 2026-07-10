@@ -1,12 +1,5 @@
 'use strict';
 
-/**
- * src/config/env.js
- * Validates required environment variables at startup.
- * Call this before anything else in server.js to fail fast
- * with a clear message rather than cryptic runtime errors.
- */
-
 const REQUIRED_VARS = [
   'MONGO_URI',
   'JWT_SECRET',

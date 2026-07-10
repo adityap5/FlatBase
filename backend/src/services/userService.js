@@ -1,11 +1,5 @@
 'use strict';
 
-/**
- * src/services/userService.js
- * All database operations related to User documents,
- * plus JWT generation and password verification.
- */
-
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');

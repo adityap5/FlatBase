@@ -1,11 +1,5 @@
 'use strict';
 
-/**
- * src/graphql/resolvers/paymentResolvers.js
- * Razorpay order creation and payment verification resolvers.
- * All SDK and crypto logic delegated to paymentService.
- */
-
 const { GraphQLError } = require('graphql');
 const paymentService = require('../../services/paymentService');
 const bookingService = require('../../services/bookingService');
